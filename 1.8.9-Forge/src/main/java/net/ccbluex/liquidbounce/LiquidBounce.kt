@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.network.FMLEventChannel
 object LiquidBounce {
     lateinit var Users: String
     // Client information
+    //121132
 
     const val CLIENT_NAME = "Noteless"
     const val CLIENT_VERSION = "211221"
