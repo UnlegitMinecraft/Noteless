@@ -2,6 +2,6 @@
 
  -> Build
    
-run .\gradlew setupDevWorkSpace build
+run gradlew --debug setupDevWorkspace idea genIntellijRuns build
 
 Dev: _FengXiao Insane
