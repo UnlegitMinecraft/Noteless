@@ -51,7 +51,7 @@ public class Scaffold extends Module {
      */
 
     // Mode
-    public final ListValue modeValue = new ListValue("Mode", new String[] {"Normal", "Rewinside" , "Expand"}, "Expand");
+    public final ListValue modeValue = new ListValue("Mode", new String[]{"Normal", "Rewinside", "Expand"}, "Expand");
 
     // Delay
     private final IntegerValue maxDelayValue = new IntegerValue("MaxDelay", 0, 0, 1000) {
@@ -59,7 +59,7 @@ public class Scaffold extends Module {
         protected void onChanged(final Integer oldValue, final Integer newValue) {
             final int i = minDelayValue.get();
 
-            if(i > newValue)
+            if (i > newValue)
                 set(i);
         }
     };
@@ -69,7 +69,7 @@ public class Scaffold extends Module {
         protected void onChanged(final Integer oldValue, final Integer newValue) {
             final int i = maxDelayValue.get();
 
-            if(i < newValue)
+            if (i < newValue)
                 set(i);
         }
     };
@@ -85,8 +85,8 @@ public class Scaffold extends Module {
     private final BoolValue downValue = new BoolValue("Down", false);
     private final ListValue placeModeValue = new ListValue("PlaceTiming", new String[]{"Pre", "Post"}, "Post");
     private final BoolValue timerboost = new BoolValue("TimerBoost", false);
-    private IntegerValue Fasttimer = new IntegerValue("FastTimer",1200,0,3000);
-    private IntegerValue slowtimer = new IntegerValue("SlowTimer",1200,0,3000);
+    private IntegerValue Fasttimer = new IntegerValue("FastTimer", 1200, 0, 3000);
+    private IntegerValue slowtimer = new IntegerValue("SlowTimer", 1200, 0, 3000);
     private final FloatValue timerValue = new FloatValue("Timer", 1F, 0.1F, 10F);
     private final FloatValue timer2Value = new FloatValue("Timer2", 1F, 0.1F, 10F);
 
@@ -99,20 +99,20 @@ public class Scaffold extends Module {
     private final IntegerValue expandLengthValue = new IntegerValue("ExpandLength", 1, 1, 6);
 
     // Rotations
-    public final ListValue rotationsValue = new ListValue("Rotations",new String[]{"None","Custom","Vanilla","AAC","Hypixel"},"AAC");
+    public final ListValue rotationsValue = new ListValue("Rotations", new String[]{"None", "Custom", "Vanilla", "AAC", "Hypixel"}, "AAC");
     private final IntegerValue customyaw = new IntegerValue("CustomYaw", 79, 60, 100);
-    private final IntegerValue custompitch = new IntegerValue("CustomPitch", 79,60,100);
+    private final IntegerValue custompitch = new IntegerValue("CustomPitch", 79, 60, 100);
     private final BoolValue silentRotationValue = new BoolValue("Rotation", true);
     private final IntegerValue HypixelYawValue = new IntegerValue("HypixelYaw", 180, -360, 360);
     private final IntegerValue HypixelPitchValue = new IntegerValue("HypixelPitch", 79, 60, 100);
-    private final IntegerValue aacPitchValue = new IntegerValue("AACPitch", 79,60,100);
-    private final BoolValue aacSmartPitchValue = new BoolValue("AACSmartPitch",false);
-    private final IntegerValue aacYawValue = new IntegerValue("AACYaw",0,0,90);
+    private final IntegerValue aacPitchValue = new IntegerValue("AACPitch", 79, 60, 100);
+    private final BoolValue aacSmartPitchValue = new BoolValue("AACSmartPitch", false);
+    private final IntegerValue aacYawValue = new IntegerValue("AACYaw", 0, 0, 90);
     private final IntegerValue keepLengthValue = new IntegerValue("KeepRotationLength", 10, 0, 20);
 
     // Zitter
     private final BoolValue zitterValue = new BoolValue("Zitter", false);
-    private final ListValue zitterModeValue = new ListValue("ZitterMode", new String[] {"Teleport", "Smooth"}, "Teleport");
+    private final ListValue zitterModeValue = new ListValue("ZitterMode", new String[]{"Teleport", "Smooth"}, "Teleport");
     private final FloatValue zitterSpeed = new FloatValue("ZitterSpeed", 0.13F, 0.1F, 0.3F);
     private final FloatValue zitterStrength = new FloatValue("ZitterStrength", 0.072F, 0.05F, 0.2F);
 
@@ -169,7 +169,7 @@ public class Scaffold extends Module {
     private boolean zitterDirection;
 
     // Delay
-    private final MSTimer timer=new MSTimer();
+    private final MSTimer timer = new MSTimer();
     private final MSTimer rotationTimer = new MSTimer();
     private final MSTimer delayTimer = new MSTimer();
     private final MSTimer zitterTimer = new MSTimer();
@@ -220,7 +220,7 @@ public class Scaffold extends Module {
         progress = 0;
         if (mc.thePlayer == null) return;
 
-            launchY = (int) mc.thePlayer.posY;
+        launchY = (int) mc.thePlayer.posY;
         this.currentlyHolding = null;
     }
 
@@ -232,8 +232,7 @@ public class Scaffold extends Module {
     @EventTarget
     public void onUpdate(final UpdateEvent event) {
 
-        if (timerboost.get())
-        {
+        if (timerboost.get()) {
 
             if (stage) {
                 mc.timer.timerSpeed = timer2Value.get();
@@ -251,11 +250,11 @@ public class Scaffold extends Module {
 
         }
 
-        if(tower.get()&&Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !LiquidBounce.moduleManager.getModule(Speed.class).getState()){
+        if (tower.get() && Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !LiquidBounce.moduleManager.getModule(Speed.class).getState()) {
             mc.thePlayer.onGround = false;
             LiquidBounce.moduleManager.getModule(Tower.class).setState(true);
             //System.out.println("1");
-        }else{
+        } else {
             LiquidBounce.moduleManager.getModule(Tower.class).setState(false);
 
         }
@@ -332,7 +331,8 @@ public class Scaffold extends Module {
         //Auto Jump thingy
         if (shouldGoDown) launchY = (int) mc.thePlayer.posY - 1;
         else if (!sameYValue.get()) {
-            if ((!autoJumpValue.get() && !(smartSpeedValue.get() && LiquidBounce.moduleManager.getModule(Speed.class).getState())) || GameSettings.isKeyDown(mc.gameSettings.keyBindJump) || mc.thePlayer.posY < launchY) launchY = (int) mc.thePlayer.posY;
+            if ((!autoJumpValue.get() && !(smartSpeedValue.get() && LiquidBounce.moduleManager.getModule(Speed.class).getState())) || GameSettings.isKeyDown(mc.gameSettings.keyBindJump) || mc.thePlayer.posY < launchY)
+                launchY = (int) mc.thePlayer.posY;
             if (autoJumpValue.get() && !LiquidBounce.moduleManager.getModule(Speed.class).getState() && MovementUtils.isMoving() && mc.thePlayer.onGround && mc.thePlayer.jumpTicks == 0) {
                 mc.thePlayer.jump();
                 mc.thePlayer.jumpTicks = 10;
@@ -359,12 +359,12 @@ public class Scaffold extends Module {
     public void onMotion(final MotionEvent event) {
         final EventState eventState = event.getEventState();
 
-        if(rotationTimer.hasTimePassed(3000L) && debugValue.get()) {
+        if (rotationTimer.hasTimePassed(3000L) && debugValue.get()) {
             ClientUtils.displayChatMessage("§8[§9§lDebug§8] RotationYaw:" + mc.thePlayer.rotationYaw + " | RotationPitch:" + mc.thePlayer.rotationPitch);
             rotationTimer.reset();
         }
         // Lock Rotation
-        if (rotationsValue.get() != "None" && keepLengthValue.get()>0 && lockRotation != null && silentRotationValue.get()) {
+        if (rotationsValue.get() != "None" && keepLengthValue.get() > 0 && lockRotation != null && silentRotationValue.get()) {
             Rotation limitedRotation = RotationUtils.limitAngleChange(RotationUtils.serverRotation, lockRotation, getSpeed());
             RotationUtils.setTargetRotation(limitedRotation, keepLengthValue.get());
         }
@@ -395,6 +395,7 @@ public class Scaffold extends Module {
             return;
         findBlock(modeValue.get().equalsIgnoreCase("expand"));
     }
+
     /**
      * Search for new target block
      */
@@ -431,8 +432,8 @@ public class Scaffold extends Module {
      */
     private void place() {
         if (targetPlace == null) {
-                if (lastPlace == 0 && smart.get()) delayTimer.reset();
-                if (lastPlace> 0) lastPlace--;
+            if (lastPlace == 0 && smart.get()) delayTimer.reset();
+            if (lastPlace > 0) lastPlace--;
             return;
         }
         if (!delayTimer.hasTimePassed(delay) || (sameYValue.get() && launchY - 1 != (int) targetPlace.getVec3().yCoord))
@@ -464,8 +465,8 @@ public class Scaffold extends Module {
             delay = TimeUtils.randomDelay(minDelayValue.get(), maxDelayValue.get());
             if (mc.thePlayer.onGround) {
                 final float modifier = speedModifierValue.get();
-                mc.thePlayer.motionX=(mc.thePlayer.motionX * modifier);
-                mc.thePlayer.motionZ=(mc.thePlayer.motionZ * modifier);
+                mc.thePlayer.motionX = (mc.thePlayer.motionX * modifier);
+                mc.thePlayer.motionZ = (mc.thePlayer.motionZ * modifier);
             }
             lastPlace = 2;
             if (swingValue.get())
@@ -534,13 +535,13 @@ public class Scaffold extends Module {
         final ScaledResolution scaledResolution = new ScaledResolution(mc);
         final String info = getBlocksAmount() + " blocks";
         int infoWidth = Fonts.SFUI40.getStringWidth(info);
-        int infoWidth2 = Fonts.minecraftFont.getStringWidth(getBlocksAmount()+"");
+        int infoWidth2 = Fonts.minecraftFont.getStringWidth(getBlocksAmount() + "");
         if (counterMode.equalsIgnoreCase("simple")) {
-            Fonts.minecraftFont.drawString(getBlocksAmount()+"", scaledResolution.getScaledWidth() / 2 - (infoWidth2 / 2) - 1, scaledResolution.getScaledHeight() / 2 - 36, 0xFF000000, false);
-            Fonts.minecraftFont.drawString(getBlocksAmount()+"", scaledResolution.getScaledWidth() / 2 - (infoWidth2 / 2) + 1, scaledResolution.getScaledHeight() / 2 - 36, 0xFF000000, false);
-            Fonts.minecraftFont.drawString(getBlocksAmount()+"", scaledResolution.getScaledWidth() / 2 - (infoWidth2 / 2), scaledResolution.getScaledHeight() / 2 - 35, 0xFF000000, false);
-            Fonts.minecraftFont.drawString(getBlocksAmount()+"", scaledResolution.getScaledWidth() / 2 - (infoWidth2 / 2), scaledResolution.getScaledHeight() / 2 - 37, 0xFF000000, false);
-            Fonts.minecraftFont.drawString(getBlocksAmount()+"", scaledResolution.getScaledWidth() / 2 - (infoWidth2 / 2), scaledResolution.getScaledHeight() / 2 - 36, -1, false);
+            Fonts.minecraftFont.drawString(getBlocksAmount() + "", scaledResolution.getScaledWidth() / 2 - (infoWidth2 / 2) - 1, scaledResolution.getScaledHeight() / 2 - 36, 0xFF000000, false);
+            Fonts.minecraftFont.drawString(getBlocksAmount() + "", scaledResolution.getScaledWidth() / 2 - (infoWidth2 / 2) + 1, scaledResolution.getScaledHeight() / 2 - 36, 0xFF000000, false);
+            Fonts.minecraftFont.drawString(getBlocksAmount() + "", scaledResolution.getScaledWidth() / 2 - (infoWidth2 / 2), scaledResolution.getScaledHeight() / 2 - 35, 0xFF000000, false);
+            Fonts.minecraftFont.drawString(getBlocksAmount() + "", scaledResolution.getScaledWidth() / 2 - (infoWidth2 / 2), scaledResolution.getScaledHeight() / 2 - 37, 0xFF000000, false);
+            Fonts.minecraftFont.drawString(getBlocksAmount() + "", scaledResolution.getScaledWidth() / 2 - (infoWidth2 / 2), scaledResolution.getScaledHeight() / 2 - 36, -1, false);
         }
         if (counterMode.equalsIgnoreCase("advanced")) {
             boolean canRenderStack = (slot >= 0 && slot < 9 && mc.thePlayer.inventory.mainInventory[slot] != null && mc.thePlayer.inventory.mainInventory[slot].getItem() != null && mc.thePlayer.inventory.mainInventory[slot].getItem() instanceof ItemBlock);
@@ -595,7 +596,7 @@ public class Scaffold extends Module {
             }
             GlStateManager.resetColor();
 
-            Fonts.minecraftFont.drawString(getBlocksAmount()+" blocks", scaledResolution.getScaledWidth() / 2, scaledResolution.getScaledHeight() / 2 + 20, -1, true);
+            Fonts.minecraftFont.drawString(getBlocksAmount() + " blocks", scaledResolution.getScaledWidth() / 2, scaledResolution.getScaledHeight() / 2 + 20, -1, true);
         }
     }
 
@@ -629,11 +630,12 @@ public class Scaffold extends Module {
             final PlaceInfo placeInfo = PlaceInfo.get(blockPos);
 
             if (BlockUtils.isReplaceable(blockPos) && placeInfo != null) {
-                RenderUtils.drawBlockBox(blockPos, new Color( colorRedValue.get(), colorGreenValue.get(), colorBlueValue.get(), alphaValue.get()), true);
+                RenderUtils.drawBlockBox(blockPos, new Color(colorRedValue.get(), colorGreenValue.get(), colorBlueValue.get(), alphaValue.get()), true);
                 break;
             }
         }
     }
+
     /**
      * Search for placeable block
      *
@@ -664,7 +666,7 @@ public class Scaffold extends Module {
                         final double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
                         final Vec3 hitVec = posVec.add(new Vec3(dirVec.xCoord * 0.5, dirVec.yCoord * 0.5, dirVec.zCoord * 0.5));
 
-                        if (checks && (eyesPos.squareDistanceTo(hitVec) > 18D || distanceSqPosVec > eyesPos.squareDistanceTo(posVec.add(dirVec)) || mc.theWorld.rayTraceBlocks(eyesPos, hitVec, false, true, false) != null)){
+                        if (checks && (eyesPos.squareDistanceTo(hitVec) > 18D || distanceSqPosVec > eyesPos.squareDistanceTo(posVec.add(dirVec)) || mc.theWorld.rayTraceBlocks(eyesPos, hitVec, false, true, false) != null)) {
                             zSearch += 0.1;
                             continue;
                         }
@@ -685,7 +687,7 @@ public class Scaffold extends Module {
                         final Vec3 vector = eyesPos.addVector(rotationVector.xCoord * 4, rotationVector.yCoord * 4, rotationVector.zCoord * 4);
                         final MovingObjectPosition obj = mc.theWorld.rayTraceBlocks(eyesPos, vector, false, false, true);
 
-                        if (!(obj.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && obj.getBlockPos().equals(neighbor))){
+                        if (!(obj.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && obj.getBlockPos().equals(neighbor))) {
                             zSearch += 0.1;
                             continue;
                         }
@@ -701,23 +703,23 @@ public class Scaffold extends Module {
 
         if (placeRotation == null) return false;
         if ((!rotationsValue.get().equals("None"))) {
-            Rotation rotation = new Rotation(0,0);
+            Rotation rotation = new Rotation(0, 0);
 
-            switch (rotationsValue.get().toLowerCase()){
-                case "aac":{
-                    rotation = new Rotation(mc.thePlayer.rotationYaw + ((mc.thePlayer.movementInput.moveForward > 0) ? 180 : 0) + aacYawValue.get() , aacSmartPitchValue.get() ? placeRotation.getRotation().getPitch() : aacPitchValue.get());
+            switch (rotationsValue.get().toLowerCase()) {
+                case "aac": {
+                    rotation = new Rotation(mc.thePlayer.rotationYaw + ((mc.thePlayer.movementInput.moveForward > 0) ? 180 : 0) + aacYawValue.get(), aacSmartPitchValue.get() ? placeRotation.getRotation().getPitch() : aacPitchValue.get());
                     break;
                 }
-                case "vanilla":{
-                    rotation=placeRotation.getRotation();
+                case "vanilla": {
+                    rotation = placeRotation.getRotation();
                     break;
                 }
-                case "custom":{
-                    rotation= new Rotation(mc.thePlayer.rotationYaw + customyaw.get(), custompitch.get().floatValue());
+                case "custom": {
+                    rotation = new Rotation(mc.thePlayer.rotationYaw + customyaw.get(), custompitch.get().floatValue());
                     break;
                 }
-                case "hypixel":{
-                    rotation = new Rotation(mc.thePlayer.rotationYaw + ((mc.thePlayer.movementInput.moveForward > 0)?180:0) + HypixelYawValue.get(), HypixelPitchValue.get());
+                case "hypixel": {
+                    rotation = new Rotation(mc.thePlayer.rotationYaw + ((mc.thePlayer.movementInput.moveForward > 0) ? 180 : 0) + HypixelYawValue.get(), HypixelPitchValue.get());
                 }
             }
             if (rotation != null) {
@@ -725,8 +727,8 @@ public class Scaffold extends Module {
                     Rotation limitedRotation = RotationUtils.limitAngleChange(RotationUtils.serverRotation, rotation, getSpeed());
                     RotationUtils.setTargetRotation(limitedRotation, keepLengthValue.get());
                 } else {
-                    mc.thePlayer.rotationYaw=rotation.getYaw();
-                    mc.thePlayer.rotationPitch=rotation.getPitch();
+                    mc.thePlayer.rotationYaw = rotation.getYaw();
+                    mc.thePlayer.rotationPitch = rotation.getPitch();
                 }
             }
             lockRotation = rotation;
@@ -734,9 +736,11 @@ public class Scaffold extends Module {
         targetPlace = placeRotation.getPlaceInfo();
         return true;
     }
+
     private float getSpeed() {
         return (float) (Math.random() * (maxTurnSpeedValue.get() - minTurnSpeedValue.get()) + minTurnSpeedValue.get());
     }
+
     /**
      * @return hotbar blocks amount
      */

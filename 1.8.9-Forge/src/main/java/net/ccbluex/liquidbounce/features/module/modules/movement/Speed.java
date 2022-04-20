@@ -31,7 +31,7 @@ import java.util.List;
 @ModuleInfo(name = "Speed", description = "Allows you to move faster.", category = ModuleCategory.MOVEMENT)
 public class Speed extends Module {
 
-    private final SpeedMode[] speedModes = new SpeedMode[] {
+    private final SpeedMode[] speedModes = new SpeedMode[]{
             // NCP
             new NCPBHop(),
             new NCPFHop(),
@@ -58,13 +58,13 @@ public class Speed extends Module {
 
         @Override
         protected void onChange(final String oldValue, final String newValue) {
-            if(getState())
+            if (getState())
                 onDisable();
         }
 
         @Override
         protected void onChanged(final String oldValue, final String newValue) {
-            if(getState())
+            if (getState())
                 onEnable();
         }
     };
@@ -80,84 +80,84 @@ public class Speed extends Module {
 
     @EventTarget
     public void onUpdate(final UpdateEvent event) {
-        if(mc.thePlayer.isSneaking())
+        if (mc.thePlayer.isSneaking())
             return;
 
-        if(MovementUtils.isMoving())
+        if (MovementUtils.isMoving())
             mc.thePlayer.setSprinting(true);
 
         final SpeedMode speedMode = getMode();
 
-        if(speedMode != null)
+        if (speedMode != null)
             speedMode.onUpdate();
     }
 
     @EventTarget
     public void onMotion(final MotionEvent event) {
-        if(mc.thePlayer.isSneaking() || event.getEventState() != EventState.PRE)
+        if (mc.thePlayer.isSneaking() || event.getEventState() != EventState.PRE)
             return;
         final KillAura ka = (KillAura) LiquidBounce.moduleManager.getModule(KillAura.class);
 
 
-        if(MovementUtils.isMoving())
+        if (MovementUtils.isMoving())
             mc.thePlayer.setSprinting(true);
 
         final SpeedMode speedMode = getMode();
 
-        if(speedMode != null)
+        if (speedMode != null)
             speedMode.onMotion();
     }
 
     @EventTarget
     public void onMove(MoveEvent event) {
-        if(mc.thePlayer.isSneaking())
+        if (mc.thePlayer.isSneaking())
             return;
 
         final SpeedMode speedMode = getMode();
 
-        if(speedMode != null)
+        if (speedMode != null)
             speedMode.onMove(event);
     }
 
     @EventTarget
     public void onTick(final TickEvent event) {
-        if(mc.thePlayer.isSneaking())
+        if (mc.thePlayer.isSneaking())
             return;
 
         final SpeedMode speedMode = getMode();
 
-        if(speedMode != null)
+        if (speedMode != null)
             speedMode.onTick();
     }
 
     @Override
     public void onEnable() {
-        if(mc.thePlayer == null)
+        if (mc.thePlayer == null)
             return;
 
         mc.timer.timerSpeed = 1F;
 
         final SpeedMode speedMode = getMode();
 
-        if(speedMode != null)
+        if (speedMode != null)
             speedMode.onEnable();
     }
 
     @Override
     public void onDisable() {
-        if(mc.thePlayer == null)
+        if (mc.thePlayer == null)
             return;
         mc.timer.timerSpeed = 1F;
 
         final SpeedMode speedMode = getMode();
 
-        if(speedMode != null)
+        if (speedMode != null)
             speedMode.onDisable();
     }
 
     @EventTarget
     public void onPacket(final PacketEvent event) {
-        if(modeValue.get().equals("RiseVulcan")) {
+        if (modeValue.get().equals("RiseVulcan")) {
             if (event.getPacket() instanceof S08PacketPlayerPosLook && mc.thePlayer.ticksExisted > 20) {
                 S08PacketPlayerPosLook s08 = ((S08PacketPlayerPosLook) event.getPacket());
                 if (mc.thePlayer.getDistanceSq(s08.getX(), s08.getY(), s08.getZ()) < 25 * 4) {
@@ -175,8 +175,8 @@ public class Speed extends Module {
     private SpeedMode getMode() {
         final String mode = modeValue.get();
 
-        for(final SpeedMode speedMode : speedModes)
-            if(speedMode.modeName.equalsIgnoreCase(mode))
+        for (final SpeedMode speedMode : speedModes)
+            if (speedMode.modeName.equalsIgnoreCase(mode))
                 return speedMode;
 
         return null;
@@ -184,7 +184,7 @@ public class Speed extends Module {
 
     private String[] getModes() {
         final List<String> list = new ArrayList<>();
-        for(final SpeedMode speedMode : speedModes)
+        for (final SpeedMode speedMode : speedModes)
             list.add(speedMode.modeName);
         return list.toArray(new String[0]);
     }

@@ -5,7 +5,7 @@
  */
 package net.ccbluex.liquidbounce.ui.client.hud.element.elements
 
-import cn.NativeMethod
+import antiskidderobfuscate.NativeMethod
 import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.ui.client.hud.designer.GuiHudDesigner
 import net.ccbluex.liquidbounce.ui.client.hud.element.Border

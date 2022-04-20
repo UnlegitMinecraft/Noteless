@@ -1,6 +1,6 @@
 package core.Verify;
 
-import cn.NativeMethod;
+import antiskidderobfuscate.NativeMethod;
 import java.io.*;
 import java.security.*;
 

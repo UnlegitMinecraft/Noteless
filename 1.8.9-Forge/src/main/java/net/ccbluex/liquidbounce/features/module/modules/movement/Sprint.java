@@ -28,8 +28,8 @@ public class Sprint extends Module {
 
     @EventTarget
     public void onUpdate(final UpdateEvent event) {
-        if(!MovementUtils.isMoving() || mc.thePlayer.isSneaking() ||
-                (blindnessValue.get() && mc.thePlayer.isPotionActive(Potion.blindness))||
+        if (!MovementUtils.isMoving() || mc.thePlayer.isSneaking() ||
+                (blindnessValue.get() && mc.thePlayer.isPotionActive(Potion.blindness)) ||
                 (foodValue.get() && !(mc.thePlayer.getFoodStats().getFoodLevel() > 6.0F || mc.thePlayer.capabilities.allowFlying))
                 || (checkServerSide.get() && (mc.thePlayer.onGround || !checkServerSideGround.get())
                 && !allDirectionsValue.get() && RotationUtils.targetRotation != null &&
@@ -38,7 +38,7 @@ public class Sprint extends Module {
             return;
         }
 
-        if(allDirectionsValue.get() || mc.thePlayer.movementInput.moveForward >= 0.8F)
+        if (allDirectionsValue.get() || mc.thePlayer.movementInput.moveForward >= 0.8F)
             mc.thePlayer.setSprinting(true);
     }
 }

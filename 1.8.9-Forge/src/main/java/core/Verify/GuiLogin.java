@@ -1,7 +1,7 @@
 package core.Verify;
 
 
-import cn.NativeMethod;
+import antiskidderobfuscate.NativeMethod;
 import cn.WbxMain;
 import core.GuiChatLogin;
 import core.GuiMainMenu;
@@ -273,8 +273,8 @@ public class GuiLogin extends GuiScreen {
                             Display.setTitle("Noteless Dev");
                             WbxMain.version = "Build Dev";
                         }else{
-                            Display.setTitle("Noteless 220417");
-                            WbxMain.version = "Build 220417";
+                            Display.setTitle("Noteless B2");
+                            WbxMain.version = "Build B2";
                         }
                             } catch (Exception exception) {
                     }

@@ -24,7 +24,7 @@ import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
-@ModuleInfo(name = "TargetStrafe", description = "Targetstrafe.",category = ModuleCategory.MOVEMENT)
+@ModuleInfo(name = "TargetStrafe", description = "Targetstrafe.", category = ModuleCategory.MOVEMENT)
 class TargetStrafe : Module() {
 
     private val GodmodValue = BoolValue("Godmod", false)
@@ -49,7 +49,13 @@ class TargetStrafe : Module() {
         }
         if (!isVoid(0, 0) && canStrafe) {
             val strafe = RotationUtils.getRotations(killAura.target)
-            setSpeed(event,Math.sqrt(Math.pow(event.x, 2.0) + Math.pow(event.z, 2.0)), strafe[0], radiusValue.get(), 1.0)
+            setSpeed(
+                event,
+                Math.sqrt(Math.pow(event.x, 2.0) + Math.pow(event.z, 2.0)),
+                strafe[0],
+                radiusValue.get(),
+                1.0
+            )
         }
 
         if (!GodmodValue.get())
@@ -71,18 +77,24 @@ class TargetStrafe : Module() {
     val cansize: Float
         get() = when {
             radiusMode.get().toLowerCase() == "simple" ->
-                45f / mc.thePlayer!!.getDistance(killAura.target!!.posX, mc.thePlayer!!.posY, killAura.target!!.posZ).toFloat()
+                45f / mc.thePlayer!!.getDistance(killAura.target!!.posX, mc.thePlayer!!.posY, killAura.target!!.posZ)
+                    .toFloat()
             else -> 45f
         }
     val Enemydistance: Double
         get() = mc.thePlayer!!.getDistance(killAura.target!!.posX, mc.thePlayer!!.posY, killAura.target!!.posZ)
 
     val algorithm: Float
-        get() = Math.max(Enemydistance - radiusValue.get(), Enemydistance - (Enemydistance - radiusValue.get() / (radiusValue.get() * 2))).toFloat()
+        get() = Math.max(
+            Enemydistance - radiusValue.get(),
+            Enemydistance - (Enemydistance - radiusValue.get() / (radiusValue.get() * 2))
+        ).toFloat()
 
 
-    fun setSpeed(moveEvent: MoveEvent, moveSpeed: Double, pseudoYaw: Float, pseudoStrafe: Float,
-                 pseudoForward: Double) {
+    fun setSpeed(
+        moveEvent: MoveEvent, moveSpeed: Double, pseudoYaw: Float, pseudoStrafe: Float,
+        pseudoForward: Double
+    ) {
         var yaw = pseudoYaw
         var forward = pseudoForward
         var strafe = pseudoStrafe
@@ -165,7 +177,8 @@ class TargetStrafe : Module() {
         }
         var off = 0
         while (off < mc.thePlayer!!.posY.toInt() + 2) {
-            val bb: AxisAlignedBB = mc.thePlayer!!.entityBoundingBox.offset(X.toDouble(), (-off).toDouble(), Z.toDouble())
+            val bb: AxisAlignedBB =
+                mc.thePlayer!!.entityBoundingBox.offset(X.toDouble(), (-off).toDouble(), Z.toDouble())
             if (mc.theWorld!!.getCollidingBoundingBoxes(mc.thePlayer as Entity, bb).isEmpty()) {
                 off += 2
                 continue

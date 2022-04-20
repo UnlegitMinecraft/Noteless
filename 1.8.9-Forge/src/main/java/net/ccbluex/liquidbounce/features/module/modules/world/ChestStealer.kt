@@ -23,7 +23,12 @@ import net.minecraft.item.ItemSword
 import net.minecraft.item.ItemTool
 import net.minecraft.util.StatCollector
 
-@ModuleInfo(name = "ChestStealer", description = "ChestStealer", category = ModuleCategory.PLAYER,fakeName = "Chest Stealer")
+@ModuleInfo(
+    name = "ChestStealer",
+    description = "ChestStealer",
+    category = ModuleCategory.PLAYER,
+    fakeName = "Chest Stealer"
+)
 class ChestStealer : Module() {
     private val delay = IntegerValue("Delay", 200, 0, 1000)
     val silentValue = BoolValue("Silent", false)
@@ -32,20 +37,33 @@ class ChestStealer : Module() {
     private val timer = TimeHelper()
     override val tag: String
         get() = "${delay.get()}.0"
+
     @EventTarget
     private fun onTick(event: TickEvent) {
         if (mc.thePlayer != null && mc.thePlayer.openContainer is ContainerChest) {
             val container = mc.thePlayer.openContainer as ContainerChest
             if (!StatCollector.translateToLocal("container.chest")
-                    .equals(container.lowerChestInventory.displayName.unformattedText, ignoreCase = true) && !StatCollector.translateToLocal("container.chestDouble")
-                    .equals(container.lowerChestInventory.displayName.unformattedText, ignoreCase = true)) {
+                    .equals(
+                        container.lowerChestInventory.displayName.unformattedText,
+                        ignoreCase = true
+                    ) && !StatCollector.translateToLocal("container.chestDouble")
+                    .equals(container.lowerChestInventory.displayName.unformattedText, ignoreCase = true)
+            ) {
                 StatCollector.translateToLocal("container.chest")
             }
             var i = 0
             while (i < container.lowerChestInventory.sizeInventory) {
                 if (container.lowerChestInventory.getStackInSlot(i) != null && timer.hasReached(delay.get().toLong())
-                    && (container.lowerChestInventory.getStackInSlot(i).item !is ItemArmor || betterCheck(container, container.lowerChestInventory.getStackInSlot(i)))
-                    && (container.lowerChestInventory.getStackInSlot(i).item !is ItemSword || getDamage(container.lowerChestInventory.getStackInSlot(i)) >= bestDamage(container, i))) {
+                    && (container.lowerChestInventory.getStackInSlot(i).item !is ItemArmor || betterCheck(
+                        container,
+                        container.lowerChestInventory.getStackInSlot(i)
+                    ))
+                    && (container.lowerChestInventory.getStackInSlot(i).item !is ItemSword || getDamage(
+                        container.lowerChestInventory.getStackInSlot(
+                            i
+                        )
+                    ) >= bestDamage(container, i))
+                ) {
                     mc.playerController.windowClick(container.windowId, i, 0, 1, mc.thePlayer)
                     mc.playerController.windowClick(container.windowId, i, 1, 1, mc.thePlayer)
                     timer.reset()
@@ -66,7 +84,15 @@ class ChestStealer : Module() {
                 while (i < container.lowerChestInventory.sizeInventory) {
                     val itemStack = container.lowerChestInventory.getStackInSlot(i)
                     if (itemStack != null && itemStack.item != null) {
-                        if (itemStack.item !is ItemArmor || betterCheck(container, itemStack)) if (itemStack.item !is ItemSword || getDamage(itemStack) >= bestDamage(container, i)) return false
+                        if (itemStack.item !is ItemArmor || betterCheck(
+                                container,
+                                itemStack
+                            )
+                        ) if (itemStack.item !is ItemSword || getDamage(itemStack) >= bestDamage(
+                                container,
+                                i
+                            )
+                        ) return false
                     }
                     ++i
                 }
@@ -81,7 +107,8 @@ class ChestStealer : Module() {
         if (item.unlocalizedName.contains("helmet")) {
             for (i in 0..44) {
                 if (mc.thePlayer.inventoryContainer.getSlot(i).hasStack && mc.thePlayer.inventoryContainer
-                        .getSlot(i).stack.item.unlocalizedName.contains("helmet")) {
+                        .getSlot(i).stack.item.unlocalizedName.contains("helmet")
+                ) {
                     val temp = ((mc.thePlayer.inventoryContainer.getSlot(i).stack
                         .item as ItemArmor).damageReduceAmount
                             + getProtectionValue(mc.thePlayer.inventoryContainer.getSlot(i).stack))
@@ -93,7 +120,8 @@ class ChestStealer : Module() {
             }
             for (i in 0 until c.lowerChestInventory.sizeInventory) {
                 if (c.lowerChestInventory.getStackInSlot(i) != null
-                    && c.lowerChestInventory.getStackInSlot(i).unlocalizedName.contains("helmet")) {
+                    && c.lowerChestInventory.getStackInSlot(i).unlocalizedName.contains("helmet")
+                ) {
                     val temp = ((c.lowerChestInventory.getStackInSlot(i)
                         .item as ItemArmor).damageReduceAmount
                             + getProtectionValue(c.lowerChestInventory.getStackInSlot(i)))
@@ -107,7 +135,8 @@ class ChestStealer : Module() {
         if (item.unlocalizedName.contains("chestplate")) {
             for (i in 0..44) {
                 if (mc.thePlayer.inventoryContainer.getSlot(i).hasStack && mc.thePlayer.inventoryContainer
-                        .getSlot(i).stack.item.unlocalizedName.contains("chestplate")) {
+                        .getSlot(i).stack.item.unlocalizedName.contains("chestplate")
+                ) {
                     val temp = ((mc.thePlayer.inventoryContainer.getSlot(i).stack
                         .item as ItemArmor).damageReduceAmount
                             + getProtectionValue(mc.thePlayer.inventoryContainer.getSlot(i).stack))
@@ -119,7 +148,8 @@ class ChestStealer : Module() {
             }
             for (i in 0 until c.lowerChestInventory.sizeInventory) {
                 if (c.lowerChestInventory.getStackInSlot(i) != null
-                    && c.lowerChestInventory.getStackInSlot(i).unlocalizedName.contains("chestplate")) {
+                    && c.lowerChestInventory.getStackInSlot(i).unlocalizedName.contains("chestplate")
+                ) {
                     val temp = ((c.lowerChestInventory.getStackInSlot(i)
                         .item as ItemArmor).damageReduceAmount
                             + getProtectionValue(c.lowerChestInventory.getStackInSlot(i)))
@@ -133,7 +163,8 @@ class ChestStealer : Module() {
         if (item.unlocalizedName.contains("leggings")) {
             for (i in 0..44) {
                 if (mc.thePlayer.inventoryContainer.getSlot(i).hasStack && mc.thePlayer.inventoryContainer
-                        .getSlot(i).stack.item.unlocalizedName.contains("leggings")) {
+                        .getSlot(i).stack.item.unlocalizedName.contains("leggings")
+                ) {
                     val temp = ((mc.thePlayer.inventoryContainer.getSlot(i).stack
                         .item as ItemArmor).damageReduceAmount
                             + getProtectionValue(mc.thePlayer.inventoryContainer.getSlot(i).stack))
@@ -145,7 +176,8 @@ class ChestStealer : Module() {
             }
             for (i in 0 until c.lowerChestInventory.sizeInventory) {
                 if (c.lowerChestInventory.getStackInSlot(i) != null
-                    && c.lowerChestInventory.getStackInSlot(i).unlocalizedName.contains("leggings")) {
+                    && c.lowerChestInventory.getStackInSlot(i).unlocalizedName.contains("leggings")
+                ) {
                     val temp = ((c.lowerChestInventory.getStackInSlot(i)
                         .item as ItemArmor).damageReduceAmount
                             + getProtectionValue(c.lowerChestInventory.getStackInSlot(i)))
@@ -159,7 +191,8 @@ class ChestStealer : Module() {
         if (item.unlocalizedName.contains("boots")) {
             for (i in 0..44) {
                 if (mc.thePlayer.inventoryContainer.getSlot(i).hasStack && mc.thePlayer.inventoryContainer
-                        .getSlot(i).stack.item.unlocalizedName.contains("boots")) {
+                        .getSlot(i).stack.item.unlocalizedName.contains("boots")
+                ) {
                     val temp = ((mc.thePlayer.inventoryContainer.getSlot(i).stack
                         .item as ItemArmor).damageReduceAmount
                             + getProtectionValue(mc.thePlayer.inventoryContainer.getSlot(i).stack))
@@ -171,7 +204,8 @@ class ChestStealer : Module() {
             }
             for (i in 0 until c.lowerChestInventory.sizeInventory) {
                 if (c.lowerChestInventory.getStackInSlot(i) != null
-                    && c.lowerChestInventory.getStackInSlot(i).unlocalizedName.contains("boots")) {
+                    && c.lowerChestInventory.getStackInSlot(i).unlocalizedName.contains("boots")
+                ) {
                     val temp = ((c.lowerChestInventory.getStackInSlot(i)
                         .item as ItemArmor).damageReduceAmount
                             + getProtectionValue(c.lowerChestInventory.getStackInSlot(i)))
@@ -186,8 +220,8 @@ class ChestStealer : Module() {
     }
 
     private fun getProtectionValue(stack: ItemStack): Double {
-        return if(stack.item is ItemArmor) {
-            (stack.item as ItemArmor).damageReduceAmount.toDouble()+((100 - (stack.item as ItemArmor).damageReduceAmount)
+        return if (stack.item is ItemArmor) {
+            (stack.item as ItemArmor).damageReduceAmount.toDouble() + ((100 - (stack.item as ItemArmor).damageReduceAmount)
                     * EnchantmentHelper.getEnchantmentLevel(Enchantment.protection.effectId, stack)).toDouble() * 0.0075
         } else {
             0.0

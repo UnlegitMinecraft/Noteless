@@ -6,7 +6,7 @@
 package core;
 
 
-import cn.NativeMethod;
+import antiskidderobfuscate.NativeMethod;
 import com.google.common.collect.Lists;
 import net.ccbluex.liquidbounce.ui.client.GuiBackground;
 import net.ccbluex.liquidbounce.ui.client.altmanager.GuiAltManager;
@@ -221,7 +221,9 @@ public class GuiMainMenu extends GuiScreen {
         changes.add("+New HUD");
 
         changes.add("");
-        changes.add("1.0");
+        changes.add("2.0");
+        changes.add("+Add ViaForge Support");
+        changes.add("+Recode TargetStrafe");
         changes.add("~more simple module");
         changes.add("~fix too many shitcode");
         changes.add("-By FengXiao");
@@ -269,7 +271,7 @@ public class GuiMainMenu extends GuiScreen {
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         Fonts.SFUI35.drawString("Welcome, User", width - Fonts.SFUI35.getStringWidth("Welcome, User") - 4f, height - 12f, new Color(255, 255, 255, 200).getRGB(), true);
-        Fonts.SFUI35.drawString("Noteless Client(#Build 220417)", 4f, height - 12f, new Color(255, 255, 255, 200).getRGB(), true);
+        Fonts.SFUI35.drawString("Noteless Client(#Build B2)", 4f, height - 12f, new Color(255, 255, 255, 200).getRGB(), true);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (func_183501_a()) field_183503_M.drawScreen(mouseX, mouseY, partialTicks);

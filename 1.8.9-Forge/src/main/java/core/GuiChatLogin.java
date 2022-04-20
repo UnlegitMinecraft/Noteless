@@ -1,6 +1,6 @@
 package core;
 
-import cn.NativeMethod;
+import antiskidderobfuscate.NativeMethod;
 import net.ccbluex.liquidbounce.utils.render.RenderUtils;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
