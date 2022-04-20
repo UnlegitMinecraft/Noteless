@@ -1,21 +1,17 @@
 /*
- * LiquidBounce Hacked Client
- * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
- * https://github.com/CCBlueX/LiquidBounce/
+ * FDPClient Hacked Client
+ * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge by LiquidBounce.
+ * https://github.com/UnlegitMC/FDPClient/
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.entity;
 
 import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.event.*;
 import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura;
-import net.ccbluex.liquidbounce.features.module.modules.exploit.PortalMenu;
 import net.ccbluex.liquidbounce.features.module.modules.movement.InventoryMove;
 import net.ccbluex.liquidbounce.features.module.modules.movement.NoSlow;
-import net.ccbluex.liquidbounce.features.module.modules.movement.Sneak;
 import net.ccbluex.liquidbounce.features.module.modules.movement.Sprint;
-import net.ccbluex.liquidbounce.features.module.modules.render.NoSwing;
 import net.ccbluex.liquidbounce.features.module.modules.world.Scaffold;
-import net.ccbluex.liquidbounce.utils.MovementUtils;
 import net.ccbluex.liquidbounce.utils.Rotation;
 import net.ccbluex.liquidbounce.utils.RotationUtils;
 import net.minecraft.block.Block;
@@ -33,12 +29,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.*;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -51,8 +44,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(EntityPlayerSP.class)
-@SideOnly(Side.CLIENT)
 public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
+
+    @Shadow
+    private boolean serverSneakState;
 
     @Shadow
     public boolean serverSprintState;
@@ -104,13 +99,7 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
     public NetHandlerPlayClient sendQueue;
 
     @Shadow
-    private boolean serverSneakState;
-
-    @Shadow
     public abstract boolean isSneaking();
-
-    @Shadow
-    protected abstract boolean isCurrentViewEntity();
 
     @Shadow
     private double lastReportedPosX;
@@ -130,37 +119,39 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
     @Shadow
     private float lastReportedPitch;
 
+    @Shadow
+    protected abstract boolean isCurrentViewEntity();
+
     /**
-     * @author CCBlueX
+     * @author CCBlueX, liulihaocai
+     *
+     * use inject to make sure this works with ViaForge mod
      */
-    @Overwrite
-    public void onUpdateWalkingPlayer() {
+    @Inject(method = "onUpdateWalkingPlayer", at = @At("HEAD"), cancellable = true)
+    public void onUpdateWalkingPlayer(CallbackInfo ci) {
         try {
             LiquidBounce.eventManager.callEvent(new MotionEvent(EventState.PRE));
-            final InventoryMove inventoryMove = (InventoryMove) LiquidBounce.moduleManager.getModule(InventoryMove.class);
-            final Sneak sneak = (Sneak) LiquidBounce.moduleManager.getModule(Sneak.class);
-            final boolean fakeSprint = (inventoryMove.getState() && inventoryMove.getAacAdditionProValue().get()) || (sneak.getState() && (!MovementUtils.isMoving() || !sneak.stopMoveValue.get()) && sneak.modeValue.get().equalsIgnoreCase("MineSecure"));
 
-            boolean sprinting = this.isSprinting() && !fakeSprint;
-
-            if (sprinting != this.serverSprintState) {
-                if (sprinting)
+            boolean flag = this.isSprinting();
+            if (flag != this.serverSprintState) {
+                if (flag) {
                     this.sendQueue.addToSendQueue(new C0BPacketEntityAction((EntityPlayerSP) (Object) this, C0BPacketEntityAction.Action.START_SPRINTING));
-                else
+                } else {
                     this.sendQueue.addToSendQueue(new C0BPacketEntityAction((EntityPlayerSP) (Object) this, C0BPacketEntityAction.Action.STOP_SPRINTING));
+                }
 
-                this.serverSprintState = sprinting;
+                this.serverSprintState = flag;
             }
 
-            boolean sneaking = this.isSneaking();
-
-            if (sneaking != this.serverSneakState && (!sneak.getState() || sneak.modeValue.get().equalsIgnoreCase("Legit"))) {
-                if (sneaking)
+            boolean flag1 = this.isSneaking();
+            if (flag1 != this.serverSneakState) {
+                if (flag1) {
                     this.sendQueue.addToSendQueue(new C0BPacketEntityAction((EntityPlayerSP) (Object) this, C0BPacketEntityAction.Action.START_SNEAKING));
-                else
+                } else {
                     this.sendQueue.addToSendQueue(new C0BPacketEntityAction((EntityPlayerSP) (Object) this, C0BPacketEntityAction.Action.STOP_SNEAKING));
+                }
 
-                this.serverSneakState = sneaking;
+                this.serverSneakState = flag1;
             }
 
             if (this.isCurrentViewEntity()) {
@@ -177,8 +168,8 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
                 double xDiff = this.posX - this.lastReportedPosX;
                 double yDiff = this.getEntityBoundingBox().minY - this.lastReportedPosY;
                 double zDiff = this.posZ - this.lastReportedPosZ;
-                double yawDiff = (double) (yaw - lastReportedYaw);
-                double pitchDiff = (double) (pitch - lastReportedPitch);
+                double yawDiff = yaw - lastReportedYaw;
+                double pitchDiff = pitch - lastReportedPitch;
                 boolean moved = xDiff * xDiff + yDiff * yDiff + zDiff * zDiff > 9.0E-4D || this.positionUpdateTicks >= 20;
                 boolean rotated = yawDiff != 0.0D || pitchDiff != 0.0D;
 
@@ -216,18 +207,8 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
         } catch (final Exception e) {
             e.printStackTrace();
         }
-    }
 
-    @Inject(method = "swingItem", at = @At("HEAD"), cancellable = true)
-    private void swingItem(CallbackInfo callbackInfo) {
-        final NoSwing noSwing = (NoSwing) LiquidBounce.moduleManager.getModule(NoSwing.class);
-
-        if (noSwing.getState()) {
-            callbackInfo.cancel();
-
-            if (!noSwing.getServerSideValue().get())
-                this.sendQueue.addToSendQueue(new C0APacketAnimation());
-        }
+        ci.cancel();
     }
 
     @Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
@@ -262,10 +243,6 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
         this.prevTimeInPortal = this.timeInPortal;
 
         if (this.inPortal) {
-            if (this.mc.currentScreen != null && !this.mc.currentScreen.doesGuiPauseGame()
-                    && !LiquidBounce.moduleManager.getModule(PortalMenu.class).getState()) {
-                this.mc.displayGuiScreen(null);
-            }
 
             if (this.timeInPortal == 0.0F) {
                 this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("portal.trigger"), this.rand.nextFloat() * 0.4F + 0.8F));
@@ -338,12 +315,13 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
 
         final Scaffold scaffold = (Scaffold) LiquidBounce.moduleManager.getModule(Scaffold.class);
         if ((scaffold.getState() && !scaffold.sprintValue.get()) || (sprint.getState() && sprint.checkServerSide.get() && (onGround || !sprint.checkServerSideGround.get()) && !sprint.allDirectionsValue.get() && RotationUtils.targetRotation != null && RotationUtils.getRotationDifference(new Rotation(mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch)) > 30))
-                this.setSprinting(false);
+            this.setSprinting(false);
 
         if (this.isSprinting() && ((!(sprint.getState() && sprint.allDirectionsValue.get()) && this.movementInput.moveForward < f) || this.isCollidedHorizontally || !flag3)) {
             this.setSprinting(false);
         }
 
+        //aac may check it :(
         if (this.capabilities.allowFlying) {
             if (this.mc.playerController.isSpectatorMode()) {
                 if (!this.capabilities.isFlying) {
@@ -363,11 +341,11 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
 
         if (this.capabilities.isFlying && this.isCurrentViewEntity()) {
             if (this.movementInput.sneak) {
-                this.motionY -= (double) (this.capabilities.getFlySpeed() * 3.0F);
+                this.motionY -= this.capabilities.getFlySpeed() * 3.0F;
             }
 
             if (this.movementInput.jump) {
-                this.motionY += (double) (this.capabilities.getFlySpeed() * 3.0F);
+                this.motionY += this.capabilities.getFlySpeed() * 3.0F;
             }
         }
 
@@ -593,7 +571,7 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
                     z = d8;
                     this.setEntityBoundingBox(axisalignedbb3);
                 } else {
-                    LiquidBounce.eventManager.callEvent(new StepConfirmEvent());
+                    LiquidBounce.eventManager.callEvent(new StepEvent(-1f));
                 }
             }
 
@@ -702,5 +680,4 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
         }
     }
 }
-
 
