@@ -797,9 +797,11 @@ class KillAura : Module() {
                 prevTargetEntities.add(if (aacValue.get()) target!!.entityId else currentTarget!!.entityId)
             }
 
+            if(autoBlockPacketValue.get() == "HytPit"){
             //如果要修复targetstrafe就注释这两段
-            if (target == currentTarget && autoBlockPacketValue.get() == "HytPit")
+            if (target == currentTarget)
                 target = null
+            }
         }
 
         // Open inventory
