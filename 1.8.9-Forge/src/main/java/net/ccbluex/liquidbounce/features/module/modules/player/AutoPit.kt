@@ -13,7 +13,7 @@ import net.minecraft.network.play.client.C16PacketClientStatus
 import java.util.*
 import java.util.Timer
 
-@ModuleInfo(name = "AutoPit", description = "Automatically equips the best armor in your inventory.", category = ModuleCategory.HYT)
+@ModuleInfo(name = "AutoPit", description = "Automatically equips the best armor in your inventory.", category = ModuleCategory.MISC)
 class AutoPit : Module() {
     val timer = Timer()
     var check = true

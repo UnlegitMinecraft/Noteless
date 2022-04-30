@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.features.module
 
+
 import core.Verify.GuiLogin
 import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.event.Listenable
@@ -24,8 +25,8 @@ import org.lwjgl.input.Keyboard
 @SideOnly(Side.CLIENT)
 open class Module : MinecraftInstance(), Listenable {
     val translate = Translate(0F,0F)
-
-
+    val tab = Translate(0f , 0f)
+    var expanded: Boolean = false
     var toggleButtonAnimation = 218f
     private var suffix: String? = null
     // Module information

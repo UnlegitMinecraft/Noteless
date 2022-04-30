@@ -15,7 +15,7 @@ import net.minecraft.network.play.server.S02PacketChat
 import net.minecraft.network.play.server.S14PacketEntity
 import java.util.regex.Pattern
 
-@ModuleInfo(name = "HYTGetName", description = "idk", category = ModuleCategory.HYT)
+@ModuleInfo(name = "HYTGetName", description = "idk", category = ModuleCategory.MISC)
 class GetName : Module() {
     private val playerName: MutableList<String> = ArrayList()
     val ground = mutableListOf<Int>()

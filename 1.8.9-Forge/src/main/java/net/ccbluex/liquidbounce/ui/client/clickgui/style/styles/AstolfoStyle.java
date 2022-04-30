@@ -99,7 +99,7 @@ public class AstolfoStyle extends Style {
                 moduleElement.getY() + moduleElement.getHeight() + 2, hoverColor(new Color(26, 26, 26), moduleElement.hoverTime).getRGB());
         Gui.drawRect(moduleElement.getX() + 1, moduleElement.getY() + 1, moduleElement.getX()
                 + moduleElement.getWidth() - 1, moduleElement.getY() + moduleElement.getHeight() + 2, hoverColor(
-                new Color(getCategoryColor(moduleElement.getModule().getCategory().getDisplayName()).getRed(), getCategoryColor(moduleElement.getModule().getCategory().getDisplayName()).getGreen(), getCategoryColor(moduleElement.getModule().getCategory().getDisplayName()).getBlue(), moduleElement.slowlyFade), moduleElement.hoverTime).getRGB());
+                new Color(getCategoryColor(moduleElement.getModule().getCategory().name()).getRed(), getCategoryColor(moduleElement.getModule().getCategory().name()).getGreen(), getCategoryColor(moduleElement.getModule().getCategory().name()).getBlue(), moduleElement.slowlyFade), moduleElement.hoverTime).getRGB());
 
         final int guiColor = ClickGUI.generateColor().getRGB();
 

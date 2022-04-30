@@ -49,7 +49,7 @@ public class ClickGui extends GuiScreen {
 
         int yPos = 5;
         for (final ModuleCategory category : ModuleCategory.values()) {
-            panels.add(new Panel(category.getDisplayName(), 100, yPos, width, height, false) {
+            panels.add(new Panel(category.name(), 100, yPos, width, height, false) {
 
                 @Override
                 public void setupItems() {

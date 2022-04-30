@@ -4,7 +4,6 @@ package core.Verify;
 
 import antiskidderobfuscator.NativeMethod;
 import cn.WbxMain;
-import core.GuiChatLogin;
 import core.GuiMainMenu;
 import core.Insane.HydraButton;
 import core.textbox.UIDField;
@@ -72,7 +71,6 @@ public class GuiLogin extends GuiScreen {
     public void initGui() {
         buttonList.add(button);
         buttonList.add(hwid);
-        buttonList.add(irc);
         field = new UIDField(1, mc.fontRendererObj, (int) hWidth - 70, (int) hHeight - 35, 140, 30, "idk");
         alpha = 100;
         darkTheme = true;
@@ -85,7 +83,6 @@ public class GuiLogin extends GuiScreen {
 
     HydraButton button = new HydraButton(0, (int) hWidth - 70, (int) (hHeight + 5), 140, 30, "Log In");
     HydraButton hwid = new HydraButton(1, (int) hWidth - 70, (int) (hHeight - hwidy), 140, 30, "Copy Hwid");
-    HydraButton irc = new HydraButton(2, (int) hWidth - 70, (int) (hHeight - hwidy+120), 140, 30, "Log in to IRC");
     UIDField field;
     @NativeMethod
     @Override
@@ -132,14 +129,9 @@ public class GuiLogin extends GuiScreen {
                 hwid.hovered(mouseX, mouseY) ? blue.brighter() : blue,
                 hwid.hovered(mouseX, mouseY) ? blueish.brighter() : blueish,
                 fraction));
-        irc.setColor(interpolateColor(
-                irc.hovered(mouseX, mouseY) ? blue.brighter() : blue,
-                irc.hovered(mouseX, mouseY) ? blueish.brighter() : blueish,
-                fraction));
         ScaledResolution scaledResolution = new ScaledResolution(mc);
         button.updateCoordinates(hWidth - 70, hHeight + 5);
         hwid.updateCoordinates(hWidth - 70, hHeight -hwidy);
-        irc.updateCoordinates(hWidth - 70, hHeight -hwidy+120);
         field.updateCoordinates(hWidth - 70, hHeight - 35);
         int scaledWidthScaled = scaledResolution.getScaledWidth();
         int scaledHeightScaled = scaledResolution.getScaledHeight();
@@ -167,7 +159,6 @@ public class GuiLogin extends GuiScreen {
         // LOG IN BUTTON
         button.drawButton(mc, mouseX, mouseY);
         hwid.drawButton(mc, mouseX, mouseY);
-        irc.drawButton(mc, mouseX, mouseY);
         //STATUS
         if (status.startsWith("Idle") || status.startsWith("Initializing") || status.startsWith("Logging")) {
             Fonts.font40.drawString(status, hWidth - Fonts.font40.getStringWidth(status) / 2, hHeight + 45, interpolateColor(new Color(150, 150, 150), white, fraction));
@@ -188,7 +179,7 @@ public class GuiLogin extends GuiScreen {
         field.drawTextBox();
 
         // CREDITS
-         Fonts.SFUI35.drawString("Made With ❤ By Insane", hWidth - Fonts.SFUI35.getStringWidth("Made With ❤ By Insane") / 2, scaledHeightScaled - Fonts.SFUI35.getHeight() - 4, new Color(150, 150, 150).getRGB());
+        Fonts.SFUI35.drawString("Made With ❤ By Insane", hWidth - Fonts.SFUI35.getStringWidth("Made With ❤ By Insane") / 2, scaledHeightScaled - Fonts.SFUI35.getHeight() - 4, new Color(150, 150, 150).getRGB());
 
 
 
@@ -227,11 +218,10 @@ public class GuiLogin extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button.id == 0) {
-
             button.enabled = false;
             try {
                 status = "Logging in";
-                if (WebUtils.get("https://gitee.com/insaneNMSL/noteless-pravite/raw/master/HWID")
+                if (WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt")
                         .contains(field.getText()+":"+ HWIDUtils.getHWID())&&!field.getText().isEmpty()) {
                     status = "Success";
                     uid = field.getText();
@@ -274,13 +264,13 @@ public class GuiLogin extends GuiScreen {
                             Display.setTitle("Noteless Dev");
                             WbxMain.version = "Build Dev";
                         }else{
-                            Display.setTitle("Noteless B2");
-                            WbxMain.version = "Build B2";
+                            Display.setTitle("Noteless 220428");
+                            WbxMain.version = "Build 220428";
                         }
-                            } catch (Exception exception) {
+                    } catch (Exception exception) {
                     }
 
-                } else if (WebUtils.get("https://gitee.com/insaneNMSL/noteless-pravite/raw/master/HWID")
+                } else if (WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt")
                         .contains(HWIDUtils.getHWID())){
                     //检测uid是否错误
                     status = "User ID Error";
@@ -316,10 +306,6 @@ public class GuiLogin extends GuiScreen {
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-        }
-        if(button.id == 2){
-            mc.displayGuiScreen(new GuiChatLogin(this));
-
         }
         super.actionPerformed(button);
     }

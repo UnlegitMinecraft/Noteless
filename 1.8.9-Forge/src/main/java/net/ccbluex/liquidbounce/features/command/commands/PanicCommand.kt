@@ -27,7 +27,7 @@ class PanicCommand : Command("panic", emptyArray()) {
                 }
 
                 else -> {
-                    val categories = ModuleCategory.values().filter { it.displayName.equals(args[1], true) }
+                    val categories = ModuleCategory.values().filter { it.namee.equals(args[1], true) }
 
                     if (categories.isEmpty()) {
                         chat("Category ${args[1]} not found")
@@ -36,7 +36,7 @@ class PanicCommand : Command("panic", emptyArray()) {
 
                     val category = categories[0]
                     modules = modules.filter { it.category == category }
-                    msg = "all ${category.displayName}"
+                    msg = "all ${category.namee}"
                 }
             }
         } else {

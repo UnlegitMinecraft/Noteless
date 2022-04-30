@@ -5,8 +5,10 @@
  */
 package net.ccbluex.liquidbounce.features.module.modules.render;
 
+
 import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.cn.Insane.Ui.TestUi.dropdown.Client;
+import net.ccbluex.liquidbounce.cn.Insane.newdropdown.DropdownClickGui;
 import net.ccbluex.liquidbounce.event.EventTarget;
 import net.ccbluex.liquidbounce.event.PacketEvent;
 import net.ccbluex.liquidbounce.event.TickEvent;
@@ -35,9 +37,11 @@ public class ClickGUI extends Module {
             updateStyle();
         }
     };
-    private final ListValue mode = new ListValue("Mode",new String[]{"LiquidBounce","Novoline"},"Novoline");
-
-
+    private final ListValue mode = new ListValue("Mode",new String[]{"LiquidBounce","Novoline","Tenacity"},"Tenacity");
+    public static final BoolValue backback = new BoolValue("Background Accent",true);
+    public static final ListValue scrollMode = new ListValue("Scroll Mode", new String[]{"Screen Height", "Value"},"Value");
+    public static final ListValue colormode = new ListValue("Setting Accent", new String[]{"White", "Color"},"Color");
+    public static final IntegerValue clickHeight = new IntegerValue("Tab Height", 250, 100, 500);
     public final FloatValue scaleValue = new FloatValue("Scale", 1F, 0.7F, 2F);
     public final IntegerValue maxElementsValue = new IntegerValue("MaxElements", 15, 1, 20);
     public final ListValue backgroundValue = new ListValue("Background", new String[] {"Default", "Gradient", "None"}, "None");
@@ -56,10 +60,10 @@ public class ClickGUI extends Module {
 
 
     public static boolean isLight (){
-       if (clickguicolormode.get().equalsIgnoreCase("White")){
-           return true;
-       }
-       return false;
+        if (clickguicolormode.get().equalsIgnoreCase("White")){
+            return true;
+        }
+        return false;
     }
     public static Color generateColor() {
         Color c = new Color(255, 255, 255, 255);
@@ -93,7 +97,9 @@ public class ClickGUI extends Module {
         if (mode.get().equalsIgnoreCase("Novoline")){
             mc.displayGuiScreen(Client.getInstance().getDropDownGUI());
         }
-
+        if (mode.get().equalsIgnoreCase("Tenacity")){
+            mc.displayGuiScreen(new DropdownClickGui());
+        }
 
     }
 

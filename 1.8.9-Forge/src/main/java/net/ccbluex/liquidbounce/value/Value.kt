@@ -17,6 +17,7 @@ import net.minecraft.client.gui.FontRenderer
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 import java.util.*
+import kotlin.math.roundToInt
 
 @SideOnly(Side.CLIENT)
 abstract class Value<T>(val name: String, var value: T) {
@@ -86,9 +87,32 @@ open class BoolValue(name: String, value: Boolean) : Value<Boolean>(name, value)
     init {
         animation.animationX = if(value) 5F else -5F
     }
-
+    open fun toggle(){
+        this.value = !this.value
+    }
 }
+open class NumberValue(name: String, value: Double, val minimum: Double = 0.0, val maximum: Double = Double.MAX_VALUE,val inc: Double/* = 1.0*/)
+    : Value<Double>(name, value) {
 
+    fun set(newValue: Number) {
+        set(newValue.toDouble())
+    }
+
+    override fun toJson() = JsonPrimitive(value)
+
+    override fun fromJson(element: JsonElement) {
+        if (element.isJsonPrimitive)
+            value = element.asDouble
+    }
+    open fun getDouble(): Double {
+        return ((this.get() as Number).toDouble() / this.inc).roundToInt() * this.inc
+    }
+
+    fun append(o: Double): NumberValue {
+        set(get() + o)
+        return this
+    }
+}
 open class ColorValue(name : String, value: Int) : Value<Int>(name, value) {
     val minimum: Int = -10000000
     val maximum: Int = 1000000
