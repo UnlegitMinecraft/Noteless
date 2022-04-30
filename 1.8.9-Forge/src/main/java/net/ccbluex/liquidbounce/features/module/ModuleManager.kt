@@ -54,6 +54,7 @@ class ModuleManager : Listenable {
             PacketFixer::class.java,
                 TabGui::class.java,
             ItemPhysics::class.java,
+                TargetHUD::class.java,
             SessionInfo::class.java,
             ChestESP::class.java,
             TPAura::class.java,

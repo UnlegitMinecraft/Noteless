@@ -13,6 +13,7 @@ import net.ccbluex.liquidbounce.utils.block.BlockUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.*;
@@ -21,11 +22,13 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityEgg;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.util.*;
 import net.minecraft.util.Timer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -64,6 +67,148 @@ public final class RenderUtils extends MinecraftInstance {
         GL11.glEnable(3553);
         GL11.glEnable(2929);
         GL11.glColor3d(1.0, 1.0, 1.0);
+    }
+    public static void skeetRect(final double x, final double y, final double x1, final double y1, final double size) {
+        RenderUtils.rectangleBordered(x, y + -4.0, x1 + size, y1 + size, 0.5, new Color(60, 60, 60).getRGB(), new Color(10, 10, 10).getRGB());
+        RenderUtils.rectangleBordered(x + 1.0, y + -3.0, x1 + size - 1.0, y1 + size - 1.0, 1.0, new Color(40, 40, 40).getRGB(), new Color(40, 40, 40).getRGB());
+        RenderUtils.rectangleBordered(x + 2.5, y + -1.5, x1 + size - 2.5, y1 + size - 2.5, 0.5, new Color(40, 40, 40).getRGB(), new Color(60, 60, 60).getRGB());
+        RenderUtils.rectangleBordered(x + 2.5, y + -1.5, x1 + size - 2.5, y1 + size - 2.5, 0.5, new Color(22, 22, 22).getRGB(), new Color(255, 255, 255, 0).getRGB());
+    }
+
+    public static void skeetRectSmall(final double x, final double y, final double x1, final double y1, final double size) {
+        RenderUtils.rectangleBordered(x + 4.35, y + 0.5, x1 + size - 84.5, y1 + size - 4.35, 0.5, new Color(48, 48, 48).getRGB(), new Color(10, 10, 10).getRGB());
+        RenderUtils.rectangleBordered(x + 5.0, y + 1.0, x1 + size - 85.0, y1 + size - 5.0, 0.5, new Color(17, 17, 17).getRGB(), new Color(255, 255, 255, 0).getRGB());
+    }
+    public static void drawModel(final float yaw, final float pitch, final EntityLivingBase entityLivingBase) {
+        GlStateManager.resetColor();
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GlStateManager.enableColorMaterial();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0.0f, 0.0f, 50.0f);
+        GlStateManager.scale(-50.0f, 50.0f, 50.0f);
+        GlStateManager.rotate(180.0f, 0.0f, 0.0f, 1.0f);
+        final float renderYawOffset = entityLivingBase.renderYawOffset;
+        final float rotationYaw = entityLivingBase.rotationYaw;
+        final float rotationPitch = entityLivingBase.rotationPitch;
+        final float prevRotationYawHead = entityLivingBase.prevRotationYawHead;
+        final float rotationYawHead = entityLivingBase.rotationYawHead;
+        GlStateManager.rotate(135.0f, 0.0f, 1.0f, 0.0f);
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.rotate(-135.0f, 0.0f, 1.0f, 0.0f);
+        GlStateManager.rotate((float) (-Math.atan(pitch / 40.0f) * 20.0), 1.0f, 0.0f, 0.0f);
+        entityLivingBase.renderYawOffset = yaw - yaw / yaw * 0.4f;
+        entityLivingBase.rotationYaw = yaw - yaw / yaw * 0.2f;
+        entityLivingBase.rotationPitch = pitch;
+        entityLivingBase.rotationYawHead = entityLivingBase.rotationYaw;
+        entityLivingBase.prevRotationYawHead = entityLivingBase.rotationYaw;
+        GlStateManager.translate(0.0f, 0.0f, 0.0f);
+        final RenderManager renderManager = mc.getRenderManager();
+        renderManager.setPlayerViewY(180.0f);
+        renderManager.setRenderShadow(false);
+        renderManager.renderEntityWithPosYaw(entityLivingBase, 0.0, 0.0, 0.0, 0.0f, 1.0f);
+        renderManager.setRenderShadow(true);
+        entityLivingBase.renderYawOffset = renderYawOffset;
+        entityLivingBase.rotationYaw = rotationYaw;
+        entityLivingBase.rotationPitch = rotationPitch;
+        entityLivingBase.prevRotationYawHead = prevRotationYawHead;
+        entityLivingBase.rotationYawHead = rotationYawHead;
+        GlStateManager.popMatrix();
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GlStateManager.disableTexture2D();
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        GlStateManager.resetColor();
+    }
+    public static void renderEnchantText(ItemStack stack, int x, float y) {
+        RenderHelper.disableStandardItemLighting();
+        float enchantmentY = y + 24f;
+        if (stack.getItem() instanceof ItemArmor) {
+            int protectionLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.protection.effectId, stack);
+            int unbreakingLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, stack);
+            int thornLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.thorns.effectId, stack);
+            if (protectionLevel > 0) {
+                RenderUtils.drawEnchantTag("P" + ColorUtil.getColor(protectionLevel) + protectionLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+            if (unbreakingLevel > 0) {
+                RenderUtils.drawEnchantTag("U" + ColorUtil.getColor(unbreakingLevel) + unbreakingLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+            if (thornLevel > 0) {
+                RenderUtils.drawEnchantTag("T" + ColorUtil.getColor(thornLevel) + thornLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+        }
+        if (stack.getItem() instanceof ItemBow) {
+            int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
+            int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
+            int flameLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack);
+            int unbreakingLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, stack);
+            if (powerLevel > 0) {
+                RenderUtils.drawEnchantTag("Pow" + ColorUtil.getColor(powerLevel) + powerLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+            if (punchLevel > 0) {
+                RenderUtils.drawEnchantTag("Pun" + ColorUtil.getColor(punchLevel) + punchLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+            if (flameLevel > 0) {
+                RenderUtils.drawEnchantTag("F" + ColorUtil.getColor(flameLevel) + flameLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+            if (unbreakingLevel > 0) {
+                RenderUtils.drawEnchantTag("U" + ColorUtil.getColor(unbreakingLevel) + unbreakingLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+        }
+        if (stack.getItem() instanceof ItemSword) {
+            int sharpnessLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness.effectId, stack);
+            int knockbackLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.knockback.effectId, stack);
+            int fireAspectLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, stack);
+            int unbreakingLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.unbreaking.effectId, stack);
+            if (sharpnessLevel > 0) {
+                RenderUtils.drawEnchantTag("S" +  ColorUtil.getColor(sharpnessLevel) + sharpnessLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+            if (knockbackLevel > 0) {
+                RenderUtils.drawEnchantTag("K" + ColorUtil.getColor(knockbackLevel) + knockbackLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+            if (fireAspectLevel > 0) {
+                RenderUtils.drawEnchantTag("F" + ColorUtil.getColor(fireAspectLevel) + fireAspectLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+            if (unbreakingLevel > 0) {
+                RenderUtils.drawEnchantTag("U" + ColorUtil.getColor(unbreakingLevel) + unbreakingLevel, x * 2, enchantmentY);
+                enchantmentY += 8;
+            }
+        }
+        if (stack.getRarity() == EnumRarity.EPIC) {
+            GlStateManager.pushMatrix();
+            GlStateManager.disableDepth();
+            GL11.glScalef(0.5f, 0.5f, 0.5f);
+            drawOutlinedStringCock(Minecraft.getMinecraft().fontRendererObj, "God", x * 2, enchantmentY, new Color(255, 255, 0).getRGB(), new Color(100, 100, 0, 200).getRGB());
+            GL11.glScalef(1.0f, 1.0f, 1.0f);
+            GlStateManager.enableDepth();
+            GlStateManager.popMatrix();
+        }
+    }
+    public static void drawOutlinedStringCock(FontRenderer fr, String s, float x, float y, int color, int outlineColor) {
+        fr.drawString(ColorUtil.stripColor(s), (int) (x - 1.0f), (int) y, outlineColor);
+        fr.drawString(ColorUtil.stripColor(s), (int) x, (int) (y - 1.0f), outlineColor);
+        fr.drawString(ColorUtil.stripColor(s), (int) (x + 1.0f), (int) y, outlineColor);
+        fr.drawString(ColorUtil.stripColor(s), (int) x, (int) (y + 1.0f), outlineColor);
+        fr.drawString(s, (int) x, (int) y, color);
+    }
+    private static void drawEnchantTag(String text, int x, float y) {
+        GlStateManager.pushMatrix();
+        GlStateManager.disableDepth();
+        GL11.glScalef(0.5f, 0.5f, 0.5f);
+        drawOutlinedStringCock(Minecraft.getMinecraft().fontRendererObj, text, x, y, -1, new Color(0, 0, 0, 220).darker().getRGB());
+        GL11.glScalef(1.0f, 1.0f, 1.0f);
+        GlStateManager.enableDepth();
+        GlStateManager.popMatrix();
     }
     public static void imageCentered(final ResourceLocation imageLocation, float x, float y, final float width, final float height) {
         x -= width / 2f;

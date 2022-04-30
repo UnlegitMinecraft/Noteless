@@ -198,16 +198,16 @@ public class GuiMainMenu extends GuiScreen {
     }
     @NativeMethod
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        if(!got) {
-            try {
-                if (!WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt").contains(HWIDUtils.getHWID())) {
-                    new DimplesUtils().NMSL();  //HWID库不匹配触发后门
-                }
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-            got = true;
-        }
+       // if(!got) {
+     //       try {
+       //         if (!WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt").contains(HWIDUtils.getHWID())) {
+        //            new DimplesUtils().NMSL();  //HWID库不匹配触发后门
+        //        }
+        //    } catch (Throwable e) {
+        //        e.printStackTrace();
+        //    }
+       //     got = true;
+        //}
         GlStateManager.disableAlpha();
         renderSkybox(mouseX, mouseY, partialTicks);
         GlStateManager.enableAlpha();

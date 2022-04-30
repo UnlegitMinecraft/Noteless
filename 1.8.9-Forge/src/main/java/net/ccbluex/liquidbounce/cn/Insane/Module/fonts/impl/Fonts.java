@@ -40,6 +40,7 @@ public interface Fonts {
 
 		final class FluxICONFONT_40 { public static final FontRenderer FluxICONFONT_40 = FluxICONFONT.ofSize(40); private FluxICONFONT_40() {} }
 		final class FluxICONFONT_18 { public static final FontRenderer FluxICONFONT_18 = FluxICONFONT.ofSize(18); private FluxICONFONT_18() {} }
+		final class FluxICONFONT_10 { public static final FontRenderer FluxICONFONT_10 = FluxICONFONT.ofSize(10); private FluxICONFONT_10() {} }
 	}
 	interface TenacityBold {
 		FontFamily TenacityBold = FONT_MANAGER.fontFamily(FontType.TenacityBold);
