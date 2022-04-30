@@ -18,12 +18,12 @@ import org.lwjgl.opengl.GL11
 import java.awt.Color
 
 @ModuleInfo(name = "TabGui", description = "Toggles visibility of the HUD.", category = ModuleCategory.RENDER, array = false)
-object TabGui : Module() {
+class TabGui : Module() {
 
-    private const val x = 5f
-    private const val y = 50f
-    private const val width = 75f
-    private const val height = 78.5f
+    private val x = 5f
+    private val y = 50f
+    private val width = 75f
+    private val height = 78.5f
 
     private var openModuleGui = false;
     private var selectedCategory = 0
