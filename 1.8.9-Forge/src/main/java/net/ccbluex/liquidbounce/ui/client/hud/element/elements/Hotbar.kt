@@ -1,6 +1,6 @@
 package net.ccbluex.liquidbounce.ui.client.hud.element.elements
 
-import antiskidderobfuscate.NativeMethod
+
 import net.ccbluex.liquidbounce.ui.client.hud.element.Border
 import net.ccbluex.liquidbounce.ui.client.hud.element.Element
 import net.ccbluex.liquidbounce.ui.client.hud.element.ElementInfo
@@ -26,7 +26,7 @@ import kotlin.collections.ArrayList
             slotlist.add(slot)
         }
     }
-@NativeMethod
+
     override fun drawElement(): Border {
 
         GlStateManager.pushMatrix()

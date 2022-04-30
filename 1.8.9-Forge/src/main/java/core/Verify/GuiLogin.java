@@ -1,7 +1,8 @@
 package core.Verify;
 
 
-import antiskidderobfuscate.NativeMethod;
+
+import antiskidderobfuscator.NativeMethod;
 import cn.WbxMain;
 import core.GuiChatLogin;
 import core.GuiMainMenu;

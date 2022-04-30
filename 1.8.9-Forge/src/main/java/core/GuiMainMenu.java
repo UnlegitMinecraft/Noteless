@@ -6,7 +6,7 @@
 package core;
 
 
-import antiskidderobfuscate.NativeMethod;
+import antiskidderobfuscator.NativeMethod;
 import com.google.common.collect.Lists;
 import net.ccbluex.liquidbounce.ui.client.GuiBackground;
 import net.ccbluex.liquidbounce.ui.client.altmanager.GuiAltManager;
