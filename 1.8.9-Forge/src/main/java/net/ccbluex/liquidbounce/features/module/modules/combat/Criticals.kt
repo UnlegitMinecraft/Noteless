@@ -26,7 +26,6 @@ class Criticals : Module() {
         "Mode",
         arrayOf(
             "Packet",
-            "Tenacity",
             "NCPPacket",
             "NoGround",
             "Redesky",
@@ -101,16 +100,6 @@ class Criticals : Module() {
                     sendCriticalPacket(yOffset = 0.00150000001304, ground = false)
                     sendCriticalPacket(yOffset = 0.01400000001304, ground = false)
                     sendCriticalPacket(yOffset = 0.00150000001304, ground = false)
-                }
-
-                "tenacity" -> {
-                    if (LiquidBounce.combatManager.inCombat && mc.thePlayer.onGround) {
-                        if (event.targetEntity.hurtTime > delayValue.get()) {
-                            for (offset in doubleArrayOf(0.06, 0.01)) {
-                                sendCriticalPacket(yOffset = offset + Math.random() * 0.001, ground = false)
-                            }
-                        }
-                    }
                 }
 
                 "tphop" -> {
