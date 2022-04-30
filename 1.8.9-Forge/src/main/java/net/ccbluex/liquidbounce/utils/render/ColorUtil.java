@@ -98,6 +98,7 @@ public class ColorUtil {
 
         return Color.HSBtoRGB(hue - hueoffset / 54, saturation, brightness);
     }
+
     public static int getRainbow() {
         final float hue = (System.currentTimeMillis() % 10000) / 10000f;
         return Color.HSBtoRGB(hue, 0.5f, 1);
