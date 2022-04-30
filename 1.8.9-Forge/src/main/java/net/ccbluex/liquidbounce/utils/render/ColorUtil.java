@@ -92,6 +92,23 @@ public class ColorUtil {
         range[1] = startPoint;
         return range;
     }
+    public static String getColor(int n) {
+        if (n != 1) {
+            if (n == 2) {
+                return "\u00a7a";
+            }
+            if (n == 3) {
+                return "\u00a73";
+            }
+            if (n == 4) {
+                return "\u00a74";
+            }
+            if (n >= 5) {
+                return "\u00a7e";
+            }
+        }
+        return "\u00a7f";
+    }
     public static int getColor(final float hueoffset, final float saturation, final float brightness) {
         final float speed = 4500;
         final float hue = (System.currentTimeMillis() % (int) speed) / speed;
