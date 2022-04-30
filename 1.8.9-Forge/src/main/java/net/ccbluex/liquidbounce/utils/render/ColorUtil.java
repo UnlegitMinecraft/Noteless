@@ -109,10 +109,7 @@ public class ColorUtil {
         }
         return "\u00a7f";
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 230bfb24a13a3f4078b723f7330079e95ae1b283
     public static int getColor(final float hueoffset, final float saturation, final float brightness) {
         final float speed = 4500;
         final float hue = (System.currentTimeMillis() % (int) speed) / speed;
