@@ -1,7 +1,5 @@
 package core.Verify;
 
-
-
 import antiskidderobfuscator.NativeMethod;
 import cn.WbxMain;
 import core.GuiMainMenu;

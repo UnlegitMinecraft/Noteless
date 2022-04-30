@@ -1,8 +1,3 @@
-/*
- * FDPClient Hacked Client
- * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge by LiquidBounce.
- * https://github.com/UnlegitMC/FDPClient/
- */
 package net.ccbluex.liquidbounce.injection.forge.mixins.entity;
 
 import net.ccbluex.liquidbounce.LiquidBounce;
@@ -123,7 +118,7 @@ public abstract class MixinEntityPlayerSP extends MixinAbstractClientPlayer {
     protected abstract boolean isCurrentViewEntity();
 
     /**
-     * @author CCBlueX, liulihaocai
+     * @author CCBlueX
      *
      * use inject to make sure this works with ViaForge mod
      */
