@@ -264,8 +264,8 @@ public class GuiLogin extends GuiScreen {
                             Display.setTitle("Noteless Dev");
                             WbxMain.version = "Build Dev";
                         }else{
-                            Display.setTitle("Noteless 220428");
-                            WbxMain.version = "Build 220428";
+                            Display.setTitle("Noteless 220430");
+                            WbxMain.version = "Build 220430";
                         }
                     } catch (Exception exception) {
                     }
