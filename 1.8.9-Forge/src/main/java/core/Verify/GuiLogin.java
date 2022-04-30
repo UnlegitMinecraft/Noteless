@@ -279,8 +279,6 @@ public class GuiLogin extends GuiScreen {
                 }else {
                     //如果hwid错误提示hwid框
                     status = "Your hwid error, please contact the administrator";
-                    JOptionPane.showMessageDialog(null, "Failed", "Checker", 0);
-                    JOptionPane.showInputDialog(null, "Ur HWID is Unchecked ", HWIDUtils.getHWID());
                     button.enabled = true;
                 }
 
