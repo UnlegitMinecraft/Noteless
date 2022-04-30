@@ -28,6 +28,10 @@ public class Fonts {
     public static GameFontRenderer font35;
     @FontDetails(fontName = "Small", fontSize = 15)
     public static GameFontRenderer font30;
+    @FontDetails(fontName = "jello", fontSize = 20)
+    public static GameFontRenderer jello;
+    @FontDetails(fontName = "jellom", fontSize = 20)
+    public static GameFontRenderer jellom;
     @FontDetails(fontName = "Comfortaa35", fontSize = 18)
     public static GameFontRenderer Comfortaa35;
     @FontDetails(fontName = "test", fontSize = 16)
@@ -125,6 +129,8 @@ public class Fonts {
         font35 = new GameFontRenderer(getFont("regular.ttf", 18));
         font30 = new GameFontRenderer(getFont("regular.ttf", 15));
         font36 = new GameFontRenderer(getFont("regular.ttf", 19));
+        jello = new GameFontRenderer(getFont("jelloSB.ttf", 20));
+        jellom = new GameFontRenderer(getFont("jellom.ttf", 20));
         font60 = new GameFontRenderer(getFont("regular.ttf", 50));
         wqy_microhei35 = new GameFontRenderer(getFont("wqy_microhei.ttf", 35));
         font40 = new GameFontRenderer(getFont("regular.ttf", 20));
@@ -196,6 +202,8 @@ public class Fonts {
             initSingleFont("test.ttf");
             initSingleFont("stylesicons.ttf");
             initSingleFont("GoogleSans.ttf");
+            initSingleFont("jelloSB.ttf");
+            initSingleFont("jellom.ttf");
             initSingleFont("Comfortaa.ttf");
             initSingleFont("KomikaTitleBold.ttf");
             initSingleFont("tahoma.ttf");

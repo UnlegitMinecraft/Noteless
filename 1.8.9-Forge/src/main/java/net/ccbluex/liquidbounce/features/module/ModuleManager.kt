@@ -21,6 +21,7 @@ import net.ccbluex.liquidbounce.features.module.modules.player.*
 import net.ccbluex.liquidbounce.features.module.modules.render.*
 import net.ccbluex.liquidbounce.features.module.modules.world.*
 import net.ccbluex.liquidbounce.features.module.modules.world.Timer
+import net.ccbluex.liquidbounce.ui.client.hud.element.elements.TabGUI
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.render.ColorMixer
 import java.util.*
@@ -51,6 +52,7 @@ class ModuleManager : Listenable {
             KickWarn::class.java,
             AutoKit::class.java,
             PacketFixer::class.java,
+                TabGui::class.java,
             ItemPhysics::class.java,
             SessionInfo::class.java,
             ChestESP::class.java,
