@@ -27,7 +27,6 @@ class Criticals : Module() {
         arrayOf(
             "Packet",
             "NCPPacket",
-            "NewPacket",
             "NoGround",
             "Redesky",
             "AACv4",
@@ -89,12 +88,6 @@ class Criticals : Module() {
                     sendCriticalPacket(yOffset = 1.1E-5, ground = false)
                     sendCriticalPacket(ground = false)
                 }
-                "newpacket" -> {
-                    mc.netHandler.addToSendQueue(C04PacketPlayerPosition(x, y + 0.05250000001304, z, true))
-                    mc.netHandler.addToSendQueue(C04PacketPlayerPosition(x, y + 0.00150000001304, z, false))
-                    mc.netHandler.addToSendQueue(C04PacketPlayerPosition(x, y + 0.01400000001304, z, false))
-                    mc.netHandler.addToSendQueue(C04PacketPlayerPosition(x, y + 0.00150000001304, z, false))
-                }
                 "ncppacket" -> {
                     sendCriticalPacket(yOffset = 0.11, ground = false)
                     sendCriticalPacket(yOffset = 0.1100013579, ground = false)
@@ -102,7 +95,7 @@ class Criticals : Module() {
                 }
 
                 "aacv4" -> {
-                    sendCriticalPacket(yOffset = 0.05250000001304, ground = false)
+                    sendCriticalPacket(yOffset = 0.05250000001304, ground = true)
                     sendCriticalPacket(yOffset = 0.00150000001304, ground = false)
                     sendCriticalPacket(yOffset = 0.01400000001304, ground = false)
                     sendCriticalPacket(yOffset = 0.00150000001304, ground = false)
