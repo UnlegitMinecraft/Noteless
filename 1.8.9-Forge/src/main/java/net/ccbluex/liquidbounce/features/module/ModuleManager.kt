@@ -8,7 +8,7 @@ package net.ccbluex.liquidbounce.features.module
 
 import Insane.modules.render.PointerESP
 import net.ccbluex.liquidbounce.features.module.modules.exploit.Disabler
-import me.YuZhiWen.net.ccbluex.liquidbounce.features.module.modules.render.KickWarn
+import net.ccbluex.liquidbounce.features.module.modules.render.KickWarn
 import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.KeyEvent
