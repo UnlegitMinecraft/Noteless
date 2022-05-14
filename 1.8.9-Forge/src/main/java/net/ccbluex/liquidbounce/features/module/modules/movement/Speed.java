@@ -12,17 +12,12 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory;
 import net.ccbluex.liquidbounce.features.module.ModuleInfo;
 import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura;
 import net.ccbluex.liquidbounce.features.module.modules.movement.speeds.SpeedMode;
-import net.ccbluex.liquidbounce.features.module.modules.movement.speeds.aac.*;
-import net.ccbluex.liquidbounce.features.module.modules.movement.speeds.ncp.*;
+import net.ccbluex.liquidbounce.features.module.modules.movement.speeds.anticheat.*;
 import net.ccbluex.liquidbounce.features.module.modules.movement.speeds.other.*;
-import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notification;
-import net.ccbluex.liquidbounce.ui.client.hud.element.elements.NotifyType;
 import net.ccbluex.liquidbounce.utils.MovementUtils;
-import net.ccbluex.liquidbounce.utils.timer.TimeHelper;
 import net.ccbluex.liquidbounce.value.BoolValue;
 import net.ccbluex.liquidbounce.value.FloatValue;
 import net.ccbluex.liquidbounce.value.ListValue;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 
 import java.util.ArrayList;
@@ -32,27 +27,17 @@ import java.util.List;
 public class Speed extends Module {
 
     private final SpeedMode[] speedModes = new SpeedMode[]{
-            // NCP
             new NCPBHop(),
             new NCPFHop(),
             new NCPHop(),
 
-            // AAC
             new AACHop350(),
-            new RedeSkyGround(),
-
-            // Server
             new AntiCheatB(),
-
-            // Other
             new Matrix(),
             new CustomSpeed(),
-            new AAC5Fast(),
-            new AAC5Long(),
             new VerusHop(),
             new VulcanHop(),
             new RiseVulcan(),
-            new BlocksMcBHop(),
     };
     public final ListValue modeValue = new ListValue("Mode", getModes(), "NCPBHop") {
 
@@ -75,8 +60,6 @@ public class Speed extends Module {
     public final BoolValue customStrafeValue = new BoolValue("CustomStrafe", true);
     public final BoolValue resetXZValue = new BoolValue("CustomResetXZ", false);
     public final BoolValue resetYValue = new BoolValue("CustomResetY", false);
-    public final FloatValue HypixelTimerValue = new FloatValue("Hypixel-MaxTimer", 2.3F, 0.2F, 5F);
-    public final FloatValue HypixelDealyTimerValue = new FloatValue("Hypixel-MinTimer", 0.7F, 0.2F, 5F);
 
     @EventTarget
     public void onUpdate(final UpdateEvent event) {

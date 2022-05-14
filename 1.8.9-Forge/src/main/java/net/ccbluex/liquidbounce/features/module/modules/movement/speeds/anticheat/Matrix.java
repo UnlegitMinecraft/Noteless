@@ -3,7 +3,7 @@
  * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
  * https://github.com/CCBlueX/LiquidBounce/
  */
-package net.ccbluex.liquidbounce.features.module.modules.movement.speeds.other;
+package net.ccbluex.liquidbounce.features.module.modules.movement.speeds.anticheat;
 
 
 import net.ccbluex.liquidbounce.event.MoveEvent;
