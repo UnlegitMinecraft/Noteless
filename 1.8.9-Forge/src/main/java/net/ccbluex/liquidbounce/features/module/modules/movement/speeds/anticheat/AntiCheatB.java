@@ -1,4 +1,4 @@
-package net.ccbluex.liquidbounce.features.module.modules.movement.speeds.other;
+package net.ccbluex.liquidbounce.features.module.modules.movement.speeds.anticheat;
 
 import net.ccbluex.liquidbounce.event.EventTarget;
 import net.ccbluex.liquidbounce.event.MoveEvent;
@@ -13,26 +13,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.potion.Potion;
 
-public class AntiCheatB extends SpeedMode{
-    public boolean shouldslow = false;
-    boolean collided;
-    boolean lessSlow;
+public class AntiCheatB extends SpeedMode {
     private int stage;
-    double less;
-    double stair;
-    private double speed;
-    public double slow;
-    MSTimer timer = new MSTimer();
-    TimeHelper lastCheck = new TimeHelper();
-    private double movementSpeed;
     public Minecraft mc = Minecraft.getMinecraft();
 
     private int hops;
     private double moveSpeed;
     private double lastDist;
+
     public AntiCheatB() {
         super("AntiCheatB");
     }
+
     @Override
     public void onEnable() {
         super.onEnable();
@@ -43,11 +35,6 @@ public class AntiCheatB extends SpeedMode{
 
     }
 
-    @EventTarget
-    public  void onPacket(PacketEvent packetEvent){
-        S08PacketPlayerPosLook packet = (S08PacketPlayerPosLook)packetEvent.getPacket();
-
-    }
     @Override
     public void onDisable() {
         mc.timer.timerSpeed = 1.0F;
@@ -57,13 +44,6 @@ public class AntiCheatB extends SpeedMode{
         mc.thePlayer.motionX = 0.0;
 
 
-    }
-
-    @Override
-    public void onMotion() {
-    }
-    @Override
-    public void onUpdate() {
     }
 
     @Override
@@ -90,25 +70,18 @@ public class AntiCheatB extends SpeedMode{
                 lastDist = this.lastDist;
                 n = mc.thePlayer.isPotionActive(Potion.moveSpeed) ? (mc.thePlayer.isPotionActive(Potion.jump) ? 0.54D : 0.655D) : 0.7025D;
                 lastDist2 = this.lastDist;
-                thePlayer = mc.thePlayer;
                 this.moveSpeed = lastDist - n * (lastDist2 - MovementUtils.getBaseMoveSpeed());
                 break;
             default:
-                if ((mc.theWorld.getCollidingBoundingBoxes((Entity)mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(0.0D, mc.thePlayer.motionY, 0.0D)).size() > 0 || mc.thePlayer.isCollidedVertically) && this.stage > 0)
+                if ((mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(0.0D, mc.thePlayer.motionY, 0.0D)).size() > 0 || mc.thePlayer.isCollidedVertically) && this.stage > 0)
                     this.stage = MovementUtils.isMoving() ? 1 : 0;
-                this.moveSpeed = this.lastDist - this.lastDist  / 90D;
+                this.moveSpeed = this.lastDist - this.lastDist / 90D;
                 break;
         }
         MovementUtils.setMotion(event, this.moveSpeed = Math.max(this.moveSpeed, MovementUtils.defaultSpeed() + 0.011219999998D));
         this.stage++;
 
 
-
-    }
-
-
-    public boolean isMoving2() {
-        return mc.thePlayer.moveForward != 0.0f || mc.thePlayer.moveStrafing != 0.0f;
     }
 
 
