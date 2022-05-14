@@ -8,7 +8,9 @@ package net.ccbluex.liquidbounce.injection.forge.mixins.gui;
 import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura;
 import net.ccbluex.liquidbounce.features.module.modules.player.InvManager;
 import net.ccbluex.liquidbounce.features.module.modules.render.BlockAnimations;
+import net.ccbluex.liquidbounce.features.module.modules.render.HUD;
 import net.ccbluex.liquidbounce.features.module.modules.world.ChestStealer;
+import net.ccbluex.liquidbounce.utils.RenderUtils;
 import net.ccbluex.liquidbounce.utils.render.EaseUtils;
 import net.ccbluex.liquidbounce.utils.render.Translate;
 import net.minecraft.client.Minecraft;
@@ -16,6 +18,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,6 +26,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.ccbluex.liquidbounce.LiquidBounce;
+
+import static net.ccbluex.liquidbounce.utils.render.RenderUtils.drawImage;
 
 @Mixin(GuiContainer.class)
 public abstract class MixinGuiContainer extends GuiScreen {
@@ -116,10 +121,17 @@ public abstract class MixinGuiContainer extends GuiScreen {
         }
     }
 
-
+    @Inject(method = "drawScreen", at = @At("TAIL"))
+    private void drawScreenRe(CallbackInfo callbackInfo){
+        HUD hud=(HUD) LiquidBounce.moduleManager.getModule(HUD.class);
+        if(hud.paimon.get()){
+            drawImage(new ResourceLocation("liquidbounce/paimon/paimon_00" + (hud.photoIndex < 10 ? "0" + hud.photoIndex : hud.photoIndex)  + ".png"),610, net.ccbluex.liquidbounce.RenderUtils.height() - 434, 119, 119);
+        }
+    }
 
     @Inject(method = "drawScreen", at = @At("RETURN"))
     private void drawScreenReturn(CallbackInfo callbackInfo){
+
         if(translated){
             GL11.glPopMatrix();
             translated=false;

@@ -28,7 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class AutoPot extends Module {
 
     private final FloatValue delay = new FloatValue("Delay", 50f, 0f, 2000f);
-    private final FloatValue minHealHP = new FloatValue("BlockMCSpeed", 12f, 1f, 20f);
+    private final FloatValue minHealHP = new FloatValue("minHP", 12f, 1f, 20f);
     private final BoolValue splashFrogPots = new BoolValue("Frog potions", true);
     private final TimerUtil timerUtil = new TimerUtil();
     public static boolean isPotting;

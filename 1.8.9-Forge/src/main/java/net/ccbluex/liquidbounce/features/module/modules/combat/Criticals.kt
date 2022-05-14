@@ -29,7 +29,7 @@ class Criticals : Module() {
             "NCPPacket",
             "NoGround",
             "Redesky",
-            "AACv4",
+            "NewPacket",
             "Hop",
             "TPHop",
             "Jump",
@@ -94,7 +94,7 @@ class Criticals : Module() {
                     sendCriticalPacket(yOffset = 0.0000013579, ground = false)
                 }
 
-                "aacv4" -> {
+                "newpacket" -> {
                     sendCriticalPacket(yOffset = 0.05250000001304, ground = true)
                     sendCriticalPacket(yOffset = 0.00150000001304, ground = false)
                     sendCriticalPacket(yOffset = 0.01400000001304, ground = false)
