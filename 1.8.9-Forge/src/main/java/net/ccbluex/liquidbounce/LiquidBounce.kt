@@ -25,6 +25,7 @@ import net.ccbluex.liquidbounce.ui.font.Fonts
 import net.ccbluex.liquidbounce.utils.ClassUtils.hasForge
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.NativeLoader
+import net.ccbluex.liquidbounce.utils.misc.QQUtils
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.common.network.FMLEventChannel
 
