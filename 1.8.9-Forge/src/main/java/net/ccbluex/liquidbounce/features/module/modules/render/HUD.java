@@ -61,14 +61,11 @@ public class HUD extends Module {
     public final BoolValue hueInterpolation = new BoolValue("hueInterpolation", false);
     public final BoolValue playTimeValue = new BoolValue("PlayTime", true);
     private int startTime;
-    public final FloatValue px = new FloatValue("PaimonX", 5, 130, 1000);
-    public final FloatValue py = new FloatValue("PaimonY", 5, 130, 1000);
-    public final FloatValue ps = new FloatValue("PaimonSize", 50F, 10F, 1000F);
     public final TextValue clientname =  new TextValue("ClientName", "Noteless");
     public final TextValue domainValue =  new TextValue("Scoreboard-Domain", "One.Noteless");
     public final BoolValue hotbar = new BoolValue("HUD_Hotbar", true);
     public final BoolValue WhiteInfo = new BoolValue("WhiteInfo", false);
-    public final BoolValue paimon = new BoolValue("paimon", false);
+    public final BoolValue paimon = new BoolValue("paimon", true);
     public final BoolValue fontChatValue = new BoolValue("FontChat", false);
     public final  BoolValue chatRectValue = new BoolValue("ChatRect", true);
     public final BoolValue HealthValue  = new BoolValue("Health", true);
@@ -77,7 +74,7 @@ public class HUD extends Module {
     public double High1123;
     private TimeHelper timeHelper = new TimeHelper();
     public static double alpha;
-    int photoIndex = 0;
+    public int photoIndex = 0;
     public static float hue = 0.0F;
     public HUD() {
         setState(true);
@@ -143,10 +140,6 @@ public class HUD extends Module {
                     TimeUnit.MILLISECONDS.toMinutes(pasted) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(pasted)),
                     TimeUnit.MILLISECONDS.toSeconds(pasted) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(pasted)));
             mc.fontRendererObj.drawStringWithShadow(timed, sr.getScaledWidth() / 2F - mc.fontRendererObj.getStringWidth(timed) / 2F, (BossStatus.bossName != null && BossStatus.statusBarTime > 0) ? 47 : 30, -1);
-        }
-        if(paimon.get()){
-            int state = (mc.thePlayer.ticksExisted % 16) + 1;
-            net.ccbluex.liquidbounce.RenderUtils.drawImage(new ResourceLocation("liquidbounce/paimon/paimon_00" + (photoIndex < 10 ? "0" + photoIndex : photoIndex)  + ".png"),px.getValue().intValue() , net.ccbluex.liquidbounce.RenderUtils.height() - py.getValue().intValue(), ps.getValue().intValue(), ps.getValue().intValue());
         }
         if (mc.currentScreen instanceof GuiHudDesigner)
             return;
