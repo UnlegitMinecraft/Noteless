@@ -29,7 +29,6 @@ import net.ccbluex.liquidbounce.value.IntegerValue
 import net.ccbluex.liquidbounce.value.ListValue
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.gui.inventory.GuiInventory
-import net.minecraft.client.multiplayer.PlayerControllerMP
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityLivingBase
@@ -51,7 +50,6 @@ import java.awt.Color
 import java.util.*
 import kotlin.math.*
 
-// TODO: Recode KillAura mark
 @ModuleInfo(
     name = "KillAura",
     category = ModuleCategory.COMBAT,
@@ -236,12 +234,9 @@ class KillAura : Module() {
 
     // Container Delay
     private var containerOpen = -1L
-    private var sYaw = 0F
-    private var sPitch = 0F
 
     // Fake block status
     var blockingStatus = false
-    private var aacB = 0F
     var verusBlocking = false
 
     /**
@@ -267,7 +262,7 @@ class KillAura : Module() {
         clicks = 0
 
         stopBlocking()
-        if (verusBlocking && !blockingStatus && !mc.thePlayer.isBlocking()) {
+        if (verusBlocking && !blockingStatus && !mc.thePlayer.isBlocking) {
             verusBlocking = false
             if (autoBlockPacketValue.equals("Verus"))
                 PacketUtils.sendPacketNoEvent(
@@ -278,10 +273,6 @@ class KillAura : Module() {
                     )
                 )
         }
-    }
-
-    private fun randomNumber(min: Int, max: Int): Int {
-        return (min + Random().nextDouble() * (max - min)).toInt()
     }
 
     /**
@@ -429,7 +420,7 @@ class KillAura : Module() {
         val packet = event.packet
         if (verusBlocking
             && ((packet is C07PacketPlayerDigging
-                    && packet.getStatus() == C07PacketPlayerDigging.Action.RELEASE_USE_ITEM)
+                    && packet.status == C07PacketPlayerDigging.Action.RELEASE_USE_ITEM)
                     || packet is C08PacketPlayerBlockPlacement)
             && autoBlockPacketValue.equals("Verus")
         )
@@ -455,7 +446,7 @@ class KillAura : Module() {
 
     @EventTarget
     fun onUpdate(event: UpdateEvent) {
-        if (blockingStatus || mc.thePlayer.isBlocking())
+        if (blockingStatus || mc.thePlayer.isBlocking)
             verusBlocking = true
         else if (verusBlocking) {
             verusBlocking = false
