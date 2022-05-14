@@ -46,6 +46,32 @@ public final class RotationUtils extends MinecraftInstance implements Listenable
         double y = ent.posY + ent.getEyeHeight() / 2.0F;
         return getRotationFromPosition(x, z, y);
     }
+    public static Rotation getHypixelRotations(final Vec3 vec, final boolean predict) {
+        final Vec3 eyesPos = new Vec3(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY +
+                mc.thePlayer.getEyeHeight(), mc.thePlayer.posZ);
+        final double diffX = vec.xCoord - eyesPos.xCoord;
+        final double diffY = vec.yCoord - eyesPos.yCoord;
+        final double diffZ = vec.zCoord - eyesPos.zCoord;
+
+        double dist = MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ);
+        float yaw = (float)(Math.atan2(diffZ, diffX) * 180.0 / 3.141592653589793) - 90.0f;
+        float pitch = (float)((- Math.atan2(diffY, dist)) * 180.0 / 3.141592653589793);
+        return new Rotation(yaw, pitch);
+    }
+    public static Rotation getNCPRotations(final Vec3 vec, final boolean predict) {
+        final Vec3 eyesPos = new Vec3(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY +
+                mc.thePlayer.getEyeHeight(), mc.thePlayer.posZ);
+
+        if(predict) eyesPos.addVector(mc.thePlayer.motionX, mc.thePlayer.motionY, mc.thePlayer.motionZ);
+
+        final double diffX = vec.xCoord - eyesPos.xCoord;
+        final double diffY = vec.yCoord - eyesPos.yCoord;
+        final double diffZ = vec.zCoord - eyesPos.zCoord;
+        double hypotenuse = MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ);
+        return new Rotation((float)(Math.atan2(diffZ, diffX) * 180.0 / 3.141592653589793) - 90.0f, (float)(- Math.atan2(diffY, hypotenuse) * 180.0 / 3.141592653589793));
+    }
+
+
     public static float[] getNeededRotations(final Vector3d current, final Vector3d target) {
         final double diffX = target.x - current.x;
         final double diffY = target.y - current.y;
