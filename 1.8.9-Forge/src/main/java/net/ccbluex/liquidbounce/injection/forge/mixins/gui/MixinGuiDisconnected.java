@@ -5,12 +5,17 @@
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.gui;
 
+
+import cn.WbxMain;
 import net.ccbluex.liquidbounce.LiquidBounce;
+import net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts;
+import net.ccbluex.liquidbounce.features.module.modules.render.HUD;
 import net.ccbluex.liquidbounce.features.special.AntiForge;
 import net.ccbluex.liquidbounce.features.special.AutoReconnect;
 import net.ccbluex.liquidbounce.utils.ServerUtils;
 import net.ccbluex.liquidbounce.utils.login.LoginUtils;
 import net.ccbluex.liquidbounce.utils.misc.RandomUtils;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraftforge.fml.client.config.GuiSlider;
@@ -21,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 @Mixin(GuiDisconnected.class)
 public abstract class MixinGuiDisconnected extends MixinGuiScreen {
@@ -33,12 +39,12 @@ public abstract class MixinGuiDisconnected extends MixinGuiScreen {
     private GuiSlider autoReconnectDelaySlider;
     private GuiButton forgeBypassButton;
     private int reconnectTimer;
-
+    public long sessionEndTime = 0;
     @Inject(method = "initGui", at = @At("RETURN"))
     private void initGui(CallbackInfo callbackInfo) {
         reconnectTimer = 0;
         buttonList.add(reconnectButton = new GuiButton(1, this.width / 2 - 100, this.height / 2 + field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 22, 98, 20, "Reconnect"));
-
+        sessionEndTime = System.currentTimeMillis();
         this.drawReconnectDelaySlider();
 
         buttonList.add(new GuiButton(4, this.width / 2 + 2, this.height / 2 + field_175353_i / 2 + this.fontRendererObj.FONT_HEIGHT + 44, 98, 20, "Random username"));
@@ -79,6 +85,13 @@ public abstract class MixinGuiDisconnected extends MixinGuiScreen {
         if (AutoReconnect.INSTANCE.isEnabled()) {
             this.updateReconnectButton();
         }
+        long durationInMillis = sessionEndTime - WbxMain.playTimeStart;
+        long second = (durationInMillis / 1000) % 60;
+        long minute = (durationInMillis / (1000 * 60)) % 60;
+        long hour = (durationInMillis / (1000 * 60 * 60)) % 24;
+        String time = String.format("%02dh %02dm %02ds", hour, minute, second);
+        Fonts.SF.SF_20.SF_20.drawCenteredString( "Server: " +  ServerUtils.serverData.serverIP, width / 2, this.height / 2 - this.field_175353_i / 2 - this.fontRendererObj.FONT_HEIGHT * 2 - 30, 0xffffff);
+        Fonts.SF.SF_20.SF_20.drawCenteredString("Session Ended! Total time: " + time, this.width / 2, this.height / 2 - this.field_175353_i / 2 - this.fontRendererObj.FONT_HEIGHT * 2 - 50, 0xffffffff);
     }
 
     private void drawReconnectDelaySlider() {

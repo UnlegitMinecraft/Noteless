@@ -31,6 +31,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
@@ -214,6 +216,23 @@ public class GuiLogin extends GuiScreen {
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
     @NativeMethod
+    public static String getHWID() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        StringBuilder s = new StringBuilder();
+        String main = System.getenv("PROCESS_IDENTIFIER") + System.getenv("COMPUTERNAME");
+        byte[] bytes = main.getBytes("UTF-8");
+        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+        byte[] md5 = messageDigest.digest(bytes);
+        int i = 0;
+        for(byte b : md5) {
+            s.append(Integer.toHexString((b & 0xFF) | 0x300),0,3);
+            if(i != md5.length -1) {
+                s.append("-");
+            }
+            i++;
+        }
+        return s.toString();
+    }
+    @NativeMethod
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button.id == 0) {
@@ -221,7 +240,7 @@ public class GuiLogin extends GuiScreen {
             try {
                 status = "Logging in";
                 if (WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt")
-                        .contains(field.getText()+":"+ HWIDUtils.getHWID())&&!field.getText().isEmpty()) {
+                        .contains(field.getText()+":"+ getHWID())&&!field.getText().isEmpty()) {
                     status = "Success";
                     uid = field.getText();
                     checkUser();
@@ -270,7 +289,7 @@ public class GuiLogin extends GuiScreen {
                     }
 
                 } else if (WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt")
-                        .contains(HWIDUtils.getHWID())){
+                        .contains(getHWID())){
                     //检测uid是否错误
                     status = "User ID Error";
                     button.enabled = true;
@@ -299,7 +318,7 @@ public class GuiLogin extends GuiScreen {
         }
         if (button.id == 1){
             try {
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(HWIDUtils.getHWID()), null);
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(getHWID()), null);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }

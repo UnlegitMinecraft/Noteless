@@ -44,7 +44,7 @@ public class Tower extends Module {
      */
 
     private final ListValue modeValue = new ListValue("Mode", new String[] {
-            "Jump", "Motion", "ConstantMotion", "MotionTP", "Packet", "Teleport", "AAC3.3.9", "AAC3.6.4"
+            "Jump", "Motion", "ConstantMotion", "MotionTP","Test", "Packet", "Teleport", "AAC3.3.9", "AAC3.6.4"
     }, "Motion");
     private final BoolValue autoBlockValue = new BoolValue("AutoBlock", true);
     private final BoolValue stayAutoBlock = new BoolValue("StayAutoBlock", false);
@@ -166,6 +166,24 @@ public class Tower extends Module {
                     fakeJump();
                     mc.thePlayer.motionY = 0.42D;
                 } else if (mc.thePlayer.motionY < 0.1D) mc.thePlayer.motionY = -0.3D;
+                break;
+            case "test":
+                if (mc.thePlayer.onGround) {
+                    fakeJump();
+                    jumpGround = mc.thePlayer.posY;
+                    mc.thePlayer.motionY = 0.42;
+                }
+                mc.thePlayer.motionX = 0.0;
+                mc.thePlayer.motionZ = -0.00000001;
+                mc.thePlayer.jumpMovementFactor = 0.000F;
+                mc.timer.timerSpeed = 0.60f;
+                if (mc.thePlayer.posY > jumpGround + 0.99) {
+                    fakeJump();
+                    mc.thePlayer.setPosition(mc.thePlayer.posX, mc.thePlayer.posY - 0.001335979112146, mc.thePlayer.posZ);
+                    mc.thePlayer.motionY = 0.42;
+                    jumpGround = mc.thePlayer.posY;
+                    mc.timer.timerSpeed = 0.75f;
+                }
                 break;
             case "motiontp":
                 if (mc.thePlayer.onGround) {

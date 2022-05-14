@@ -40,11 +40,7 @@ import java.net.URISyntaxException;
 
 @Mixin(NetHandlerPlayClient.class)
 public abstract class MixinNetHandlerPlayClient {
-    @Overwrite
-    public void onDisconnect(IChatComponent reason) {
-        ClientUtils.displayChatMessage(reason.getFormattedText());
-        ClientUtils.displayChatMessage("§7[§8§lNoteless§7]§f You are kicked from server");
-    }
+
     @Shadow
     @Final
     private NetworkManager netManager;
