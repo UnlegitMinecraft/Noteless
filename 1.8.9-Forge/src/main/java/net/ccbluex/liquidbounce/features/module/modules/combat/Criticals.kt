@@ -95,10 +95,10 @@ class Criticals : Module() {
                 }
 
                 "newpacket" -> {
-                    sendCriticalPacket(yOffset = 0.05250000001304, ground = true)
-                    sendCriticalPacket(yOffset = 0.00150000001304, ground = false)
-                    sendCriticalPacket(yOffset = 0.01400000001304, ground = false)
-                    sendCriticalPacket(yOffset = 0.00150000001304, ground = false)
+                    mc.netHandler.addToSendQueue(C04PacketPlayerPosition(x, y + 0.05250000001304, z, true))
+                    mc.netHandler.addToSendQueue(C04PacketPlayerPosition(x, y + 0.00150000001304, z, false))
+                    mc.netHandler.addToSendQueue(C04PacketPlayerPosition(x, y + 0.01400000001304, z, false))
+                    mc.netHandler.addToSendQueue(C04PacketPlayerPosition(x, y + 0.00150000001304, z, false))
                 }
 
                 "tphop" -> {
