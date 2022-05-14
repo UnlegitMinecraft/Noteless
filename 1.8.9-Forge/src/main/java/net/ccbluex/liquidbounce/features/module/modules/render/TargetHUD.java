@@ -161,11 +161,6 @@ public class TargetHUD extends Module {
             final KillAura ka = (KillAura) LiquidBounce.moduleManager.getModule(KillAura.class);
             EntityLivingBase ent = ka.getTarget();
             if (ent != null) {
-
-
-
-
-                float animation = 0;
                 GL11.glPushMatrix();
                 //更改TargetHUD在屏幕坐标的初始位置
                 Color color;
