@@ -54,7 +54,7 @@ import kotlin.math.*
     name = "KillAura",
     category = ModuleCategory.COMBAT,
     keyBind = Keyboard.KEY_R,
-    description = "kill youer mother"
+    description = "kill your mother"
 )
 class KillAura : Module() {
 
