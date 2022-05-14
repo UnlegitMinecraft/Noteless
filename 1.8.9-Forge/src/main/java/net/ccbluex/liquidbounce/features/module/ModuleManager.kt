@@ -7,8 +7,6 @@ package net.ccbluex.liquidbounce.features.module
 
 
 import Insane.modules.render.PointerESP
-import me.YuZhiWen.net.ccbluex.liquidbounce.features.module.modules.exploit.Disabler
-import me.YuZhiWen.net.ccbluex.liquidbounce.features.module.modules.render.KickWarn
 import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.KeyEvent
@@ -153,7 +151,7 @@ class ModuleManager : Listenable {
             TrueSight::class.java,
             AntiBlind::class.java,
             NoSwing::class.java,
-            BugUp::class.java,
+            GlowESP::class.java,
             Breadcrumbs::class.java,
             AbortBreaking::class.java,
             PotionSaver::class.java,
