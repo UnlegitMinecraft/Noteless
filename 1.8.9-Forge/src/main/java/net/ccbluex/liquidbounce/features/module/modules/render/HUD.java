@@ -59,6 +59,7 @@ public class HUD extends Module {
     public static final IntegerValue fontWidthValue = new IntegerValue("FontWidth", 7, 5, 10);
     private final BoolValue blurValue = new BoolValue("Blur", false);
     public final BoolValue hueInterpolation = new BoolValue("hueInterpolation", false);
+    public final BoolValue movingcolors = new BoolValue("MovingColors", false);
     public final BoolValue playTimeValue = new BoolValue("PlayTime", true);
     private int startTime;
     public final TextValue clientname =  new TextValue("ClientName", "Noteless");

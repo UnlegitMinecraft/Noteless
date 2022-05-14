@@ -153,7 +153,7 @@ class ModuleManager : Listenable {
             TrueSight::class.java,
             AntiBlind::class.java,
             NoSwing::class.java,
-            BugUp::class.java,
+            GlowESP::class.java,
             Breadcrumbs::class.java,
             AbortBreaking::class.java,
             PotionSaver::class.java,
