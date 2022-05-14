@@ -48,6 +48,7 @@ class ModuleManager : Listenable {
             Particles::class.java,
             KickWarn::class.java,
             AutoKit::class.java,
+            AutoPit::class.java,
             PacketFixer::class.java,
             TabGui::class.java,
             ItemPhysics::class.java,
