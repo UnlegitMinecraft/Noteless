@@ -14,6 +14,8 @@ import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura;
 import net.ccbluex.liquidbounce.features.module.modules.movement.speeds.SpeedMode;
 import net.ccbluex.liquidbounce.features.module.modules.movement.speeds.anticheat.*;
 import net.ccbluex.liquidbounce.features.module.modules.movement.speeds.other.*;
+import net.ccbluex.liquidbounce.ui.client.hud.element.elements.Notification;
+import net.ccbluex.liquidbounce.ui.client.hud.element.elements.NotifyType;
 import net.ccbluex.liquidbounce.utils.MovementUtils;
 import net.ccbluex.liquidbounce.value.BoolValue;
 import net.ccbluex.liquidbounce.value.FloatValue;
@@ -53,7 +55,7 @@ public class Speed extends Module {
                 onEnable();
         }
     };
-
+    public final BoolValue lagback = new BoolValue("LagBackCheck", true);
     public final FloatValue customSpeedValue = new FloatValue("CustomSpeed", 1.6F, 0.2F, 2F);
     public final FloatValue customYValue = new FloatValue("CustomY", 0F, 0F, 4F);
     public final FloatValue customTimerValue = new FloatValue("CustomTimer", 1F, 0.1F, 2F);
@@ -140,6 +142,10 @@ public class Speed extends Module {
 
     @EventTarget
     public void onPacket(final PacketEvent event) {
+        if (event.getPacket() instanceof S08PacketPlayerPosLook && lagback.get()) {
+            this.setState(false);
+            LiquidBounce.hud.addNotification(new Notification("LagBackCheck", "Speed was disabled due to lagback", NotifyType.WARNING, 2000,1000));
+        }
         if (modeValue.get().equals("RiseVulcan")) {
             if (event.getPacket() instanceof S08PacketPlayerPosLook && mc.thePlayer.ticksExisted > 20) {
                 S08PacketPlayerPosLook s08 = ((S08PacketPlayerPosLook) event.getPacket());

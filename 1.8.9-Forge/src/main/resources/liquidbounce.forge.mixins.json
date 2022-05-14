@@ -39,6 +39,8 @@
     "gui.MixinGuiContainer",
     "item.MixinItemRenderer",
     "item.MixinItemStack",
+    "splash.MixinSplashProgressRunnable",
+    "splash.MixinSplashProgress",
     "network.MixinNetHandlerLoginClient",
     "network.MixinNetHandlerPlayClient",
     "network.MixinNetworkManager",
