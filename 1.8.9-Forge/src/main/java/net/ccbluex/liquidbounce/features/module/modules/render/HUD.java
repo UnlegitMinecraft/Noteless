@@ -18,6 +18,7 @@ import net.ccbluex.liquidbounce.ui.font.Fonts;
 import net.ccbluex.liquidbounce.utils.render.ColorUtil;
 import net.ccbluex.liquidbounce.utils.render.GradientUtil;
 import net.ccbluex.liquidbounce.utils.render.RenderUtils;
+import net.ccbluex.liquidbounce.utils.timer.MSTimer;
 import net.ccbluex.liquidbounce.utils.timer.TimeHelper;
 import net.ccbluex.liquidbounce.value.*;
 import net.minecraft.client.Minecraft;
@@ -62,6 +63,7 @@ public class HUD extends Module {
     public final BoolValue movingcolors = new BoolValue("MovingColors", false);
     public final BoolValue playTimeValue = new BoolValue("PlayTime", true);
     private int startTime;
+    public final BoolValue test1 = new BoolValue("BMCTest", false);
     public final TextValue clientname =  new TextValue("ClientName", "Noteless");
     public final TextValue domainValue =  new TextValue("Scoreboard-Domain", "One.Noteless");
     public final BoolValue hotbar = new BoolValue("HUD_Hotbar", true);
@@ -80,7 +82,7 @@ public class HUD extends Module {
     public HUD() {
         setState(true);
     }
-
+    final MSTimer timer = new MSTimer();
     private final Map<String, String> bottomLeftText = new LinkedHashMap<>();
 
     private void drawInfo(Color[] clientColors) {
@@ -132,6 +134,10 @@ public class HUD extends Module {
         float height = sr.getScaledHeight();
         String username = GuiLogin.uid;
         if (username == null) username = mc.thePlayer.getName();
+        if(test1.get() && !timer.hasTimePassed(5000L)){
+            net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_50.SFBOLD_50.drawString("VICTORY!",sr.getScaledWidth() / 2F - net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_50.SFBOLD_50.stringWidth("Victory!") / 2F, (BossStatus.bossName != null && BossStatus.statusBarTime > 0) ? 47 : 30, Color.YELLOW.getRGB(),true);
+            net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_35.SFBOLD_35.drawString("You were the last man standing!",sr.getScaledWidth() / 2F - net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_35.SFBOLD_35.stringWidth("You were the last man standing!") / 2F, (BossStatus.bossName != null && BossStatus.statusBarTime > 0) ? 47 : 60, Color.GRAY.getRGB(),true);
+        }
         // PlayTime
         if (playTimeValue.get()) {
             final int endTime = (int) System.currentTimeMillis();
