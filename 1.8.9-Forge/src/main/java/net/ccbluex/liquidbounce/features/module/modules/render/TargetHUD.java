@@ -19,6 +19,7 @@ import net.ccbluex.liquidbounce.value.IntegerValue;
 import net.ccbluex.liquidbounce.value.ListValue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import net.minecraft.client.gui.ScaledResolution;
@@ -34,6 +35,7 @@ import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.awt.*;
@@ -43,9 +45,9 @@ import java.util.Objects;
 
 import static net.ccbluex.liquidbounce.ui.font.Fonts.tahoma35;
 import static net.ccbluex.liquidbounce.utils.render.RenderUtils.*;
-import static net.ccbluex.liquidbounce.utils.render.UiUtils.drawFastRoundedRect;
+import static net.ccbluex.liquidbounce.utils.render.RenderUtils3.drawFastRoundedRect;
 
-@ModuleInfo(name = "TargetHUD", description = "Skid.", category = ModuleCategory.RENDER, array = false)
+@ModuleInfo(name = "TargetHUD", description = "Lnk.", category = ModuleCategory.RENDER, array = false)
 public class TargetHUD extends Module {
     public static final ListValue mode = new ListValue("Mode", new String[]{
             "Moon",
@@ -58,7 +60,10 @@ public class TargetHUD extends Module {
 
 
     private float lastHealth = 0.0F;
+    private Translate damgeAnimation = new Translate(0f , 0f);
 
+
+    private EntityLivingBase lasttarget;
 
 
     @NativeMethod
@@ -156,6 +161,10 @@ public class TargetHUD extends Module {
             final KillAura ka = (KillAura) LiquidBounce.moduleManager.getModule(KillAura.class);
             EntityLivingBase ent = ka.getTarget();
             if (ent != null) {
+
+
+
+
                 float animation = 0;
                 GL11.glPushMatrix();
                 //更改TargetHUD在屏幕坐标的初始位置
@@ -185,19 +194,18 @@ public class TargetHUD extends Module {
                 float barWidth = (26 + width - 2) - 37;
                 float drawPercent = 37 + (barWidth / 100) * (healthPercent * 100);
 
-                if (animation <= 0) {
-                    animation = drawPercent;
+
+                if(ent != lasttarget || lasttarget == null) {
+                    damgeAnimation.setX(drawPercent);
+                } else{
+                    damgeAnimation.translate(drawPercent , 0f , 0.3f);
                 }
 
-                if (ent.hurtTime <= 6) {
-                    animation = AnimationUtils.getAnimationState(animation, drawPercent, (float) Math.max(10, (Math.abs(animation - drawPercent) * 30) * 0.4));
-                }
-
-                drawRect(37, 14.5f,animation, 17.5f, color.darker().getRGB());
+                drawRect(37, 14.5f,damgeAnimation.getX(), 17.5f, color.darker().getRGB());
                 drawRect(37, 14.5f, drawPercent, 17.5f, color.getRGB());
 
-                Fonts.FluxICONFONT.FluxICONFONT_10.FluxICONFONT_10.drawString("s", 30f, 16, FluxColor.RED.c);
-                Fonts.FluxICONFONT.FluxICONFONT_10.FluxICONFONT_10.drawString("r", 30f, 23, FluxColor.BLUE.c);
+                Fonts.FluxICONFONT.FluxICONFONT_10.FluxICONFONT_10.drawString("s", 30f, 16, FluxColor.WHITE.c);
+                Fonts.FluxICONFONT.FluxICONFONT_10.FluxICONFONT_10.drawString("r", 30f, 23, FluxColor.WHITE.c);
 
                 float f3 = 37 + (barWidth / 100f) * (ent.getTotalArmorValue() * 5);
                 drawRect(37, 21.5f, 26 + width - 2, 24.5f, reAlpha(FluxColor.BLACK.c, 0.6f));
@@ -214,6 +222,7 @@ public class TargetHUD extends Module {
                     }
                 }
                 GL11.glPopMatrix();
+                lasttarget = ent;
             }
         }
         if(mode.get().equals("Remix")){
@@ -363,7 +372,6 @@ public class TargetHUD extends Module {
             GlStateManager.popMatrix();
         }
     }
-
     private void drawEquippedShit(final int x, final int y) {
         final KillAura ka = (KillAura) LiquidBounce.moduleManager.getModule(KillAura.class);
         EntityLivingBase target = ka.getTarget();
