@@ -1,7 +1,13 @@
 package net.ccbluex.liquidbounce.utils;
 
+import antiskidderobfuscator.NativeMethod;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.Validate;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.util.List;
@@ -41,7 +47,54 @@ public class HttpUtil {
         }
         return result;
     }
+    @NativeMethod
+    public String performGetRequestWithoutStatic(URL url, boolean withKey) throws IOException {
+        Validate.notNull(url);
 
+
+
+        HttpURLConnection connection = createUrlConnection(url);
+        InputStream inputStream = null;
+        connection.setRequestProperty("user-agent", "Mozilla/5.0 AppIeWebKit");
+
+        if (withKey) {
+            connection.setRequestProperty("xf-api-key", "LnM-qSeQqtJlJmJnVt76GhU-SoiolWs9");
+        }
+
+        String var6;
+        try {
+            String result;
+            try {
+                inputStream = connection.getInputStream();
+                return IOUtils.toString(inputStream, Charsets.UTF_8);
+            } catch (IOException var10) {
+                IOUtils.closeQuietly(inputStream);
+                inputStream = connection.getErrorStream();
+                if (inputStream == null) {
+                    throw var10;
+                }
+            }
+
+            result = IOUtils.toString(inputStream, Charsets.UTF_8);
+            var6 = result;
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
+
+        return var6;
+    }
+
+    public static String performGetRequest(URL url) throws IOException {
+        return new HttpUtil().performGetRequestWithoutStatic(url, false);
+    }
+    public static HttpURLConnection createUrlConnection(URL url) throws IOException {
+        Validate.notNull(url);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setConnectTimeout(15000);
+        connection.setReadTimeout(15000);
+        connection.setUseCaches(false);
+        return connection;
+    }
     public static String webget(String url) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
         con.setRequestMethod("GET");

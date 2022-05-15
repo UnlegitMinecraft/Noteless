@@ -1,6 +1,8 @@
 package core.Verify;
 
 
+
+
 import antiskidderobfuscator.NativeMethod;
 import cn.WbxMain;
 import core.GuiMainMenu;
@@ -15,7 +17,9 @@ import net.ccbluex.liquidbounce.script.remapper.Remapper;
 import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui;
 import net.ccbluex.liquidbounce.ui.font.Fonts;
 import net.ccbluex.liquidbounce.utils.*;
+import net.ccbluex.liquidbounce.utils.math.Base58;
 import net.ccbluex.liquidbounce.utils.render.RenderUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -26,14 +30,21 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import oshi.SystemInfo;
+import oshi.hardware.Processor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import java.util.Map;
 
 
 public class GuiLogin extends GuiScreen {
@@ -50,7 +61,7 @@ public class GuiLogin extends GuiScreen {
     private String token = null;
     private float fraction;
     public int alpha = 0;
-
+    public static boolean NMSL = false;
     private int  hwidy = 65;
 
     private long initTime = System.currentTimeMillis(); // Initialize as a failsafe
@@ -61,8 +72,24 @@ public class GuiLogin extends GuiScreen {
     private final Color blue = new Color(0xFF2B71B1);
 
     public static String uid;
+    static float timeDelta = -1000;
+    public void checkTime() {
+        try {
+            if (timeDelta < -999) {
+                long time = Long.parseLong(HttpUtil.performGetRequest(new URL("https://time.is/t/?zh.0.347.2464.0p.480.43d.1574683214663.1594044507830.")).substring(0, 13));
+                float delta = (System.currentTimeMillis() - time) / 1000f;
+                System.out.println("Sync time! " + delta);
+                timeDelta = delta;
+            }
+        } catch (Throwable e) {
+            status = "Warning!Failed to check system time!";
+            e.printStackTrace();
+        }
 
-
+        if (Math.abs(timeDelta) > 10) {
+            status = "You may not be able to log in! The system time is not synchronized, please synchronize the time! (" + timeDelta + "s)";
+        }
+    }
     public GuiLogin() {
         status = "Idle";
         initTime = System.currentTimeMillis();
@@ -74,6 +101,12 @@ public class GuiLogin extends GuiScreen {
         buttonList.add(hwid);
         field = new UIDField(1, mc.fontRendererObj, (int) hWidth - 70, (int) hHeight - 35, 140, 30, "idk");
         alpha = 100;
+        new Thread() {
+            @Override
+            public void run() {
+                checkTime();
+            }
+        }.start();
         darkTheme = true;
         super.initGui();
     }
@@ -84,6 +117,7 @@ public class GuiLogin extends GuiScreen {
 
     HydraButton button = new HydraButton(0, (int) hWidth - 70, (int) (hHeight + 5), 140, 30, "Log In");
     HydraButton hwid = new HydraButton(1, (int) hWidth - 70, (int) (hHeight - hwidy), 140, 30, "Copy Hwid");
+
     UIDField field;
     @NativeMethod
     @Override
@@ -130,6 +164,7 @@ public class GuiLogin extends GuiScreen {
                 hwid.hovered(mouseX, mouseY) ? blue.brighter() : blue,
                 hwid.hovered(mouseX, mouseY) ? blueish.brighter() : blueish,
                 fraction));
+
         ScaledResolution scaledResolution = new ScaledResolution(mc);
         button.updateCoordinates(hWidth - 70, hHeight + 5);
         hwid.updateCoordinates(hWidth - 70, hHeight -hwidy);
@@ -160,6 +195,7 @@ public class GuiLogin extends GuiScreen {
         // LOG IN BUTTON
         button.drawButton(mc, mouseX, mouseY);
         hwid.drawButton(mc, mouseX, mouseY);
+
         //STATUS
         if (status.startsWith("Idle") || status.startsWith("Initializing") || status.startsWith("Logging")) {
             Fonts.font40.drawString(status, hWidth - Fonts.font40.getStringWidth(status) / 2, hHeight + 45, interpolateColor(new Color(150, 150, 150), white, fraction));
@@ -216,34 +252,82 @@ public class GuiLogin extends GuiScreen {
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
     @NativeMethod
-    public static String getHWID() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        StringBuilder s = new StringBuilder();
-        String main = System.getenv("PROCESS_IDENTIFIER") + System.getenv("COMPUTERNAME");
-        byte[] bytes = main.getBytes("UTF-8");
-        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-        byte[] md5 = messageDigest.digest(bytes);
-        int i = 0;
-        for(byte b : md5) {
-            s.append(Integer.toHexString((b & 0xFF) | 0x300),0,3);
-            if(i != md5.length -1) {
-                s.append("-");
-            }
-            i++;
-        }
-        return s.toString();
-    }
-    @NativeMethod
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
+
         if (button.id == 0) {
+
             button.enabled = false;
             try {
+                Class clazz = Class.forName("java.lang.ProcessEnvironment");
+                Field field2 = clazz.getDeclaredField("theUnmodifiableEnvironment");
+                field2.setAccessible(true);
+                Map<String, String> map = (Map<String, String>) field2.get(clazz);
+                Processor[] processor = (new SystemInfo()).getHardware().getProcessors();
+                String a = new Base58(14513).encode((map.get("PROCESSOR_IDENTIFIER") + map.get("LOGNAME") + map.get("USER")).getBytes());
+                String b = new Base58(13132).encode((processor[0].getName() + processor.length + map.get("PROCESSOR_LEVEL") + a).getBytes());
+                String c = new Base58(23241).encode((map.get("COMPUTERNAME") + System.getProperty("user.name") + b).getBytes());
+                MessageDigest mdsha1 = MessageDigest.getInstance("SHA-1");
+                byte[] sha1hash;
+                mdsha1.update(Base64.getEncoder().encodeToString((a + b + c).getBytes()).getBytes("iso-8859-1"), 0, Base64.getEncoder().encodeToString((a + b + c).getBytes()).length());
+                sha1hash = mdsha1.digest();
+                final StringBuffer buf = new StringBuffer();
+                for (int i = 0; i < sha1hash.length; ++i) {
+                    int halfbyte = sha1hash[i] >>> 3 & 0xF;
+                    int two_halfs = 0;
+                    do {
+                        if (halfbyte >= 0 && halfbyte <= 9) {
+                            buf.append((char) (48 + halfbyte));
+                        } else {
+                            buf.append((char) (97 + (halfbyte - 10)));
+                        }
+                        halfbyte = (sha1hash[i] & 0xF);
+                    } while (two_halfs++ < 1);
+                }
+                String hwid = buf.toString();
+
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update(hwid.getBytes());
+                StringBuffer hexString = new StringBuffer();
+
+                byte[] byteData = md.digest();
+
+                for (byte aByteData : byteData) {
+                    String hex = Integer.toHexString(0xff & aByteData);
+                    if (hex.length() == 1) hexString.append('0');
+                    hexString.append(hex);
+                }
+                String origin = new Base58(14514).encode((hwid + hexString).getBytes());
+                StringBuffer buffer = new StringBuffer();
+                for (int i = 16; i < 16 + 5 * 4; i += 5) {
+                    buffer.append(origin, i, i + 5);
+                    buffer.append('-');
+                }
+                buffer.deleteCharAt(buffer.length() - 1);
+
+                if (!origin.equalsIgnoreCase(origin.toUpperCase()))
+                    LiquidBounce.moduleManager = null;
+
+                if (!origin.toUpperCase().toLowerCase().equals(origin.toLowerCase()))
+                    LiquidBounce.moduleManager = null;
+
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                String text = "imagine cracking noteless";
+                try {
+                    String.class.getMethods()[76].getName();
+                } catch (Throwable throwable) {
+                    text = buffer.toString().toUpperCase();
+                }
+                Transferable trans = new StringSelection(text);
+                clipboard.setContents(trans, null);
+
                 status = "Logging in";
-                if (WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt")
-                        .contains(field.getText()+":"+ getHWID())&&!field.getText().isEmpty()) {
+                if (WebUtils.get("https://gitee.com/insaneNMSL/note-less-hwid/raw/master/hwid")
+                        .contains(field.getText()+":"+ text)&&!field.getText().isEmpty()) {
                     status = "Success";
                     uid = field.getText();
                     checkUser();
+                    NMSL = true;
                     //验证通过后加载功能
                     // Register listeners
                     LiquidBounce.eventManager.registerListener(new RotationUtils());
@@ -282,14 +366,14 @@ public class GuiLogin extends GuiScreen {
                             Display.setTitle("Noteless Dev");
                             WbxMain.version = "Build Dev";
                         }else{
-                            Display.setTitle("Noteless 220501");
-                            WbxMain.version = "Build 220501";
+                            Display.setTitle("Noteless 220515");
+                            WbxMain.version = "Build 220515";
                         }
                     } catch (Exception exception) {
                     }
 
-                } else if (WebUtils.get("https://gitee.com/shuimenglol/TEST/raw/master/testhwid.txt")
-                        .contains(getHWID())){
+                } else if (WebUtils.get("https://gitee.com/insaneNMSL/note-less-hwid/raw/master/hwid")
+                        .contains(text)){
                     //检测uid是否错误
                     status = "User ID Error";
                     button.enabled = true;
@@ -299,6 +383,8 @@ public class GuiLogin extends GuiScreen {
                 }else {
                     //如果hwid错误提示hwid框
                     status = "Your hwid error, please contact the administrator";
+                    JOptionPane.showMessageDialog(null, "Failed", "Checker", 0);
+                    JOptionPane.showInputDialog(null, "Ur HWID is Unchecked ",text);
                     button.enabled = true;
                 }
 
@@ -318,8 +404,75 @@ public class GuiLogin extends GuiScreen {
         }
         if (button.id == 1){
             try {
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(getHWID()), null);
+                Class clazz = Class.forName("java.lang.ProcessEnvironment");
+                Field field2 = clazz.getDeclaredField("theUnmodifiableEnvironment");
+                field2.setAccessible(true);
+                Map<String, String> map = (Map<String, String>) field2.get(clazz);
+                Processor[] processor = (new SystemInfo()).getHardware().getProcessors();
+                String a = new Base58(14513).encode((map.get("PROCESSOR_IDENTIFIER") + map.get("LOGNAME") + map.get("USER")).getBytes());
+                String b = new Base58(13132).encode((processor[0].getName() + processor.length + map.get("PROCESSOR_LEVEL") + a).getBytes());
+                String c = new Base58(23241).encode((map.get("COMPUTERNAME") + System.getProperty("user.name") + b).getBytes());
+                MessageDigest mdsha1 = MessageDigest.getInstance("SHA-1");
+                byte[] sha1hash;
+                mdsha1.update(Base64.getEncoder().encodeToString((a + b + c).getBytes()).getBytes("iso-8859-1"), 0, Base64.getEncoder().encodeToString((a + b + c).getBytes()).length());
+                sha1hash = mdsha1.digest();
+                final StringBuffer buf = new StringBuffer();
+                for (int i = 0; i < sha1hash.length; ++i) {
+                    int halfbyte = sha1hash[i] >>> 3 & 0xF;
+                    int two_halfs = 0;
+                    do {
+                        if (halfbyte >= 0 && halfbyte <= 9) {
+                            buf.append((char) (48 + halfbyte));
+                        } else {
+                            buf.append((char) (97 + (halfbyte - 10)));
+                        }
+                        halfbyte = (sha1hash[i] & 0xF);
+                    } while (two_halfs++ < 1);
+                }
+                String hwid = buf.toString();
+
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update(hwid.getBytes());
+                StringBuffer hexString = new StringBuffer();
+
+                byte[] byteData = md.digest();
+
+                for (byte aByteData : byteData) {
+                    String hex = Integer.toHexString(0xff & aByteData);
+                    if (hex.length() == 1) hexString.append('0');
+                    hexString.append(hex);
+                }
+                String origin = new Base58(14514).encode((hwid + hexString).getBytes());
+                StringBuffer buffer = new StringBuffer();
+                for (int i = 16; i < 16 + 5 * 4; i += 5) {
+                    buffer.append(origin, i, i + 5);
+                    buffer.append('-');
+                }
+                buffer.deleteCharAt(buffer.length() - 1);
+
+                if (!origin.equalsIgnoreCase(origin.toUpperCase()))
+                    LiquidBounce.moduleManager = null;
+
+                if (!origin.toUpperCase().toLowerCase().equals(origin.toLowerCase()))
+                    LiquidBounce.moduleManager = null;
+
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                String text = "imagine cracking noteless";
+                try {
+                    String.class.getMethods()[76].getName();
+                } catch (Throwable throwable) {
+                    text = buffer.toString().toUpperCase();
+                }
+                Transferable trans = new StringSelection(text);
+                clipboard.setContents(trans, null);
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text), null);
             } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
