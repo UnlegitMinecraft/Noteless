@@ -5,6 +5,7 @@ package core.Verify;
 
 import antiskidderobfuscator.NativeMethod;
 import cn.WbxMain;
+import com.google.gson.JsonObject;
 import core.GuiMainMenu;
 import core.Insane.HydraButton;
 import core.textbox.UIDField;
@@ -18,6 +19,7 @@ import net.ccbluex.liquidbounce.ui.client.clickgui.ClickGui;
 import net.ccbluex.liquidbounce.ui.font.Fonts;
 import net.ccbluex.liquidbounce.utils.*;
 import net.ccbluex.liquidbounce.utils.math.Base58;
+import net.ccbluex.liquidbounce.utils.misc.QQUtils;
 import net.ccbluex.liquidbounce.utils.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -27,6 +29,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import org.json.JSONObject;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -55,6 +58,7 @@ public class GuiLogin extends GuiScreen {
     private long ticks;
 
     private boolean launched = true;
+    private boolean verify = true;
     public static boolean login = false;
     private boolean darkTheme = false;
     private boolean falseError;
@@ -322,8 +326,8 @@ public class GuiLogin extends GuiScreen {
                 clipboard.setContents(trans, null);
 
                 status = "Logging in";
-                if (WebUtils.get("https://gitee.com/insaneNMSL/note-less-hwid/raw/master/hwid")
-                        .contains(field.getText()+":"+ text)&&!field.getText().isEmpty()) {
+                token=text;
+                if (verify()) {
                     status = "Success";
                     uid = field.getText();
                     checkUser();
@@ -383,8 +387,8 @@ public class GuiLogin extends GuiScreen {
                 }else {
                     //如果hwid错误提示hwid框
                     status = "Your hwid error, please contact the administrator";
-                    JOptionPane.showMessageDialog(null, "Failed", "Checker", 0);
-                    JOptionPane.showInputDialog(null, "Ur HWID is Unchecked ",text);
+                    //JOptionPane.showMessageDialog(null, "Failed", "Checker", 0);
+                    //JOptionPane.showInputDialog(null, "Ur HWID is Unchecked ",text);
                     button.enabled = true;
                 }
 
@@ -477,6 +481,20 @@ public class GuiLogin extends GuiScreen {
             }
         }
         super.actionPerformed(button);
+    }
+    @NativeMethod
+    private boolean verify() {
+        try {
+            final String string = WebUtils.get("http://dimplesantileak.xgstudio.xyz/update/verify.php?uid=" + field.getText() + "&qq=" + QQUtils.QQNumber + "&hwid=" + token);
+            JSONObject jsonObject = new JSONObject(string);
+            status = jsonObject.get("message").toString();
+            System.out.println(QQUtils.QQNumber);
+            System.out.println(string);
+            return !jsonObject.get("code").toString().contains("-1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     //    @Override
