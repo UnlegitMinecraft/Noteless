@@ -127,7 +127,6 @@ public class HUD extends Module {
         });
         GlStateManager.resetColor();
         net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SF.SF_20.SF_20.drawString(WbxMain.version, net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_35.SFBOLD_35.stringWidth(clientname.get()) + 6, 5, clientColors[1].getRGB());
-        net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SF.SF_20.SF_20.drawString(GuiLogin.uid, net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_35.SFBOLD_35.stringWidth(clientname.get()) + 6, 15, clientColors[1].getRGB());
         drawInfo(clientColors);
         ScaledResolution sr = new ScaledResolution(mc);
         float width = sr.getScaledWidth();

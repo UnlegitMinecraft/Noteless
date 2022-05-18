@@ -11,7 +11,6 @@ import core.Insane.HydraButton;
 import core.textbox.UIDField;
 import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.utils.ClientUtils;
-import net.ccbluex.liquidbounce.WebUtils;
 import net.ccbluex.liquidbounce.features.special.AntiForge;
 import net.ccbluex.liquidbounce.features.special.BungeeCordSpoof;
 import net.ccbluex.liquidbounce.script.remapper.Remapper;
@@ -41,8 +40,11 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -87,11 +89,13 @@ public class GuiLogin extends GuiScreen {
             }
         } catch (Throwable e) {
             status = "Warning!Failed to check system time!";
+            button.enabled = true;
             e.printStackTrace();
         }
 
         if (Math.abs(timeDelta) > 10) {
             status = "You may not be able to log in! The system time is not synchronized, please synchronize the time! (" + timeDelta + "s)";
+            button.enabled = true;
         }
     }
     public GuiLogin() {
@@ -220,7 +224,7 @@ public class GuiLogin extends GuiScreen {
         field.drawTextBox();
 
         // CREDITS
-        Fonts.SFUI35.drawString("Made With ❤ By Insane", hWidth - Fonts.SFUI35.getStringWidth("Made With ❤ By Insane") / 2, scaledHeightScaled - Fonts.SFUI35.getHeight() - 4, new Color(150, 150, 150).getRGB());
+        Fonts.SFUI35.drawString("Protected By DimplesAntiLeak", hWidth - Fonts.SFUI35.getStringWidth("Protected By DimplesAntiLeak") / 2, scaledHeightScaled - Fonts.SFUI35.getHeight() - 4, new Color(150, 150, 150).getRGB());
 
 
 
@@ -330,7 +334,6 @@ public class GuiLogin extends GuiScreen {
                 if (verify()) {
                     status = "Success";
                     uid = field.getText();
-                    checkUser();
                     NMSL = true;
                     //验证通过后加载功能
                     // Register listeners
@@ -365,30 +368,10 @@ public class GuiLogin extends GuiScreen {
                     LiquidBounce.fileManager.loadConfig(LiquidBounce.fileManager.clickGuiConfig);
                     mc.displayGuiScreen(new GuiMainMenu());
                     login = true;
-                    try {
-                        if (HttpUtil.webget("https://gitee.com/insaneNMSL/dev/raw/master/uid").contains(GuiLogin.uid)) {
-                            Display.setTitle("Noteless Dev");
-                            WbxMain.version = "Build Dev";
-                        }else{
                             Display.setTitle("Noteless 220515");
                             WbxMain.version = "Build 220515";
-                        }
-                    } catch (Exception exception) {
-                    }
-
-                } else if (WebUtils.get("https://gitee.com/insaneNMSL/note-less-hwid/raw/master/hwid")
-                        .contains(text)){
-                    //检测uid是否错误
-                    status = "User ID Error";
-                    button.enabled = true;
-                }else if (field.getText().isEmpty()){
+                } else if (field.getText().isEmpty()){
                     status = "User ID Empty";
-                    button.enabled = true;
-                }else {
-                    //如果hwid错误提示hwid框
-                    status = "Your hwid error, please contact the administrator";
-                    //JOptionPane.showMessageDialog(null, "Failed", "Checker", 0);
-                    //JOptionPane.showInputDialog(null, "Ur HWID is Unchecked ",text);
                     button.enabled = true;
                 }
 
@@ -483,9 +466,29 @@ public class GuiLogin extends GuiScreen {
         super.actionPerformed(button);
     }
     @NativeMethod
+    public static String get(String url) throws IOException {
+        HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+            response.append("\n");
+        }
+
+        in.close();
+
+        return response.toString();
+    }
+    @NativeMethod
     private boolean verify() {
         try {
-            final String string = WebUtils.get("http://dimplesantileak.xgstudio.xyz/update/verify.php?uid=" + field.getText() + "&qq=" + QQUtils.QQNumber + "&hwid=" + token);
+            final String string = get("http://dimplesantileak.xgstudio.xyz/update/verify.php?uid=" + field.getText() + "&qq=" + QQUtils.QQNumber + "&hwid=" + token);
             JSONObject jsonObject = new JSONObject(string);
             status = jsonObject.get("message").toString();
             System.out.println(QQUtils.QQNumber);
@@ -503,34 +506,6 @@ public class GuiLogin extends GuiScreen {
 //        authenticated = true;
 //        this.token = token;
 //    }
-    @NativeMethod
-    public static void checkUser() {
-        try {
-            if (HttpUtil.webget("https://gitee.com/insaneNMSL/staff/raw/master/uid").contains(GuiLogin.uid)) {
-                WbxMain.Rank =  EnumChatFormatting.GRAY+"Rank:"+EnumChatFormatting.BLUE + "STAFF";
-                System.out.print("Hello STAFF ");
-                System.out.print("\n");
-                return;
-            }
-            if (HttpUtil.webget("https://gitee.com/insaneNMSL/backer/raw/master/uid").contains(GuiLogin.uid)) {
-                WbxMain.Rank = EnumChatFormatting.GRAY+"Rank:"+EnumChatFormatting.YELLOW + "Backer";
-                System.out.print("Hello Backer ");
-                System.out.print("\n");
-                return;
-            }
-            if (HttpUtil.webget("https://gitee.com/insaneNMSL/dev/raw/master/uid").contains(GuiLogin.uid)) {
-                WbxMain.Rank = EnumChatFormatting.GRAY+"Rank:"+EnumChatFormatting.RED + "DEV";
-                System.out.print("Hello DEV ");
-                System.out.print("\n");
-                return;
-            }
-        } catch (Exception exception) {
-            System.out.println("Error");
-            WbxMain.Rank = EnumChatFormatting.GRAY+"Rank:"+EnumChatFormatting.GREEN + "USER";
-            return;
-        }
-        WbxMain.Rank = EnumChatFormatting.GRAY+"Rank:"+EnumChatFormatting.GREEN + "USER";
-    }
     private int interpolateColor(Color color1, Color color2, float fraction) {
         int red = (int) (color1.getRed() + (color2.getRed() - color1.getRed()) * fraction);
         int green = (int) (color1.getGreen() + (color2.getGreen() - color1.getGreen()) * fraction);

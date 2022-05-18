@@ -28,8 +28,6 @@ class CommandManager {
         registerCommand(VClipCommand())
         registerCommand(HClipCommand())
         registerCommand(HelpCommand())
-        registerCommand(boomCommand())
-        registerCommand(esuCommand())
         registerCommand(FriendCommand())
         registerCommand(AutoSettingsCommand())
         registerCommand(LocalAutoSettingsCommand())

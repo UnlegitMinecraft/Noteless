@@ -8,7 +8,6 @@ package core;
 
 import antiskidderobfuscator.NativeMethod;
 import com.google.common.collect.Lists;
-import net.ccbluex.liquidbounce.WebUtils;
 import net.ccbluex.liquidbounce.ui.client.GuiBackground;
 import net.ccbluex.liquidbounce.ui.client.altmanager.GuiAltManager;
 import net.ccbluex.liquidbounce.ui.font.Fonts;
