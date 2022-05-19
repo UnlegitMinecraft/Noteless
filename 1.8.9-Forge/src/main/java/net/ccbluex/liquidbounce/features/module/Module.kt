@@ -79,7 +79,6 @@ open class Module : MinecraftInstance(), Listenable {
             // Play sound and add notification
             if (!LiquidBounce.isStarting) {
                 mc.soundHandler.playSound(PositionedSoundRecord.create(ResourceLocation("random.click"), if(value) 1F else 0.5F))
-                LiquidBounce.hud.addNotification(Notification("Module","${if (value) "Enabled " else "Disabled "}$name",if(value) NotifyType.SUCCESS else NotifyType.ERROR))
             }
 
             // Call on enabled or disabled

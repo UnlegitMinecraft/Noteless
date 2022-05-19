@@ -276,13 +276,13 @@ public class Tower extends Module {
         }
 
         // Place block
-        if (mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, itemStack, this.placeInfo.getBlockPos(),
-                placeInfo.getEnumFacing(), placeInfo.getVec3())) {
+        mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, itemStack, this.placeInfo.getBlockPos(),
+                placeInfo.getEnumFacing(), placeInfo.getVec3());
             if(swingValue.get())
                 mc.thePlayer.swingItem();
             else
                 mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
-        }
+
         this.placeInfo = null;
 
         // Switch back to old slot when using auto block

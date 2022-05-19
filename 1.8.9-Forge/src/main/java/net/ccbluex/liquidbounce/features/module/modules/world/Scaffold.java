@@ -460,7 +460,7 @@ public class Scaffold extends Module {
             }
             itemStack = mc.thePlayer.inventoryContainer.getSlot(blockSlot).getStack();
         }
-        if (mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, itemStack, targetPlace.getBlockPos(), targetPlace.getEnumFacing(), targetPlace.getVec3())) {
+        mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, itemStack, targetPlace.getBlockPos(), targetPlace.getEnumFacing(), targetPlace.getVec3());
             delayTimer.reset();
             delay = TimeUtils.randomDelay(minDelayValue.get(), maxDelayValue.get());
             if (mc.thePlayer.onGround) {
@@ -473,7 +473,6 @@ public class Scaffold extends Module {
                 mc.thePlayer.swingItem();
             else
                 mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
-        }
         // Reset
         this.targetPlace = null;
     }

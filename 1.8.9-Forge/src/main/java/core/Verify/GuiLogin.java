@@ -79,6 +79,7 @@ public class GuiLogin extends GuiScreen {
 
     public static String uid;
     static float timeDelta = -1000;
+    @NativeMethod
     public void checkTime() {
         try {
             if (timeDelta < -999) {
@@ -89,13 +90,11 @@ public class GuiLogin extends GuiScreen {
             }
         } catch (Throwable e) {
             status = "Warning!Failed to check system time!";
-            button.enabled = true;
             e.printStackTrace();
         }
 
         if (Math.abs(timeDelta) > 10) {
             status = "You may not be able to log in! The system time is not synchronized, please synchronize the time! (" + timeDelta + "s)";
-            button.enabled = true;
         }
     }
     public GuiLogin() {
@@ -224,7 +223,7 @@ public class GuiLogin extends GuiScreen {
         field.drawTextBox();
 
         // CREDITS
-        Fonts.SFUI35.drawString("Protected By DimplesAntiLeak", hWidth - Fonts.SFUI35.getStringWidth("Protected By DimplesAntiLeak") / 2, scaledHeightScaled - Fonts.SFUI35.getHeight() - 4, new Color(150, 150, 150).getRGB());
+        Fonts.SFUI35.drawString("Made With ❤ By Insane | Protected By DimplesAntiLeak", hWidth - Fonts.SFUI35.getStringWidth("Made With ❤ By Insane | Protected By DimplesAntiLeak") / 2, scaledHeightScaled - Fonts.SFUI35.getHeight() - 4, new Color(150, 150, 150).getRGB());
 
 
 
@@ -368,8 +367,8 @@ public class GuiLogin extends GuiScreen {
                     LiquidBounce.fileManager.loadConfig(LiquidBounce.fileManager.clickGuiConfig);
                     mc.displayGuiScreen(new GuiMainMenu());
                     login = true;
-                            Display.setTitle("Noteless 220515");
-                            WbxMain.version = "Build 220515";
+                            Display.setTitle("Noteless 220519");
+                            WbxMain.version = "Build 220519";
                 } else if (field.getText().isEmpty()){
                     status = "User ID Empty";
                     button.enabled = true;

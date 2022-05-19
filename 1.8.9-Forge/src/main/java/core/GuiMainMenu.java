@@ -223,22 +223,10 @@ public class GuiMainMenu extends GuiScreen {
 
 
         changes.add("");
-        changes.add("220415");
-        changes.add("+Added More Velocity Mode");
-        changes.add("+New Scaffold");
-        changes.add("~Little Change in KillAura");
+        changes.add("Build 220519");
+        changes.add("+New Verify");
+        changes.add("+BlocksMC AntiVoid");
 
-        changes.add("");
-        changes.add("220417");
-        changes.add("+New HUD");
-
-        changes.add("");
-        changes.add("2.0");
-        changes.add("+Add ViaForge Support");
-        changes.add("+Recode TargetStrafe");
-        changes.add("~more simple module");
-        changes.add("~fix too many shitcode");
-        changes.add("-By FengXiao");
 
         if (sr.getScaledWidth() > 600 && sr.getScaledHeight() > 300) {
             net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SF.SF_20.SF_20.drawString("SkidLog:", 5, 5, new Color(255, 255, 255, 220).hashCode());
@@ -283,7 +271,7 @@ public class GuiMainMenu extends GuiScreen {
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         Fonts.SFUI35.drawString("Welcome, User", width - Fonts.SFUI35.getStringWidth("Welcome, User") - 4f, height - 12f, new Color(255, 255, 255, 200).getRGB(), true);
-        Fonts.SFUI35.drawString("Noteless Client(#Build 220501)", 4f, height - 12f, new Color(255, 255, 255, 200).getRGB(), true);
+        Fonts.SFUI35.drawString("Noteless Client(#Build 220518)", 4f, height - 12f, new Color(255, 255, 255, 200).getRGB(), true);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (func_183501_a()) field_183503_M.drawScreen(mouseX, mouseY, partialTicks);
