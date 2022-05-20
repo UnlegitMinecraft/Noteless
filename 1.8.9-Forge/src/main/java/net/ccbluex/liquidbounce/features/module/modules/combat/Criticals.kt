@@ -4,10 +4,14 @@ import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.event.AttackEvent
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.ModuleInfo
 import net.ccbluex.liquidbounce.features.module.modules.movement.Fly
+import net.ccbluex.liquidbounce.features.module.modules.movement.Speed
+import net.ccbluex.liquidbounce.utils.MovementUtils
+import net.ccbluex.liquidbounce.utils.PacketUtils
 import net.ccbluex.liquidbounce.utils.PlayerUtil
 import net.ccbluex.liquidbounce.utils.timer.MSTimer
 import net.ccbluex.liquidbounce.value.BoolValue
@@ -34,6 +38,7 @@ class Criticals : Module() {
             "TPHop",
             "Jump",
             "Visual",
+                "Hypixel",
             "VerusSmart"
         ),
         "Packet"
@@ -44,6 +49,7 @@ class Criticals : Module() {
     private val hurtTimeValue = IntegerValue("HurtTime", 10, 0, 10)
     private val onlyAuraValue = BoolValue("OnlyAura", false)
     private val debugValue = BoolValue("DebugMessage", false)
+    var ss = BoolValue("StopSpeed",true)
     val msTimer = MSTimer()
     private var readyCrits = false
     private var canCrits = true
@@ -54,8 +60,9 @@ class Criticals : Module() {
             mc.thePlayer.jump()
         canCrits = true
         counter = 0;
+        groundTicks = 0;
     }
-
+    private var groundTicks = 0
     fun sendCriticalPacket(xOffset: Double = 0.0, yOffset: Double = 0.0, zOffset: Double = 0.0, ground: Boolean) {
         val x = mc.thePlayer.posX + xOffset
         val y = mc.thePlayer.posY + yOffset
@@ -87,6 +94,12 @@ class Criticals : Module() {
                     sendCriticalPacket(ground = false)
                     sendCriticalPacket(yOffset = 1.1E-5, ground = false)
                     sendCriticalPacket(ground = false)
+                }
+                "hypixel" -> {
+                    val posy = doubleArrayOf(0.05,0.0016,0.0018,0.0016,0.002,0.04,0.0011)
+                    for (i in posy.indices) {
+                        PacketUtils.sendPacketNoEvent(C04PacketPlayerPosition(x, y + posy[i], z, false))
+                    }
                 }
                 "ncppacket" -> {
                     sendCriticalPacket(yOffset = 0.11, ground = false)
@@ -134,13 +147,22 @@ class Criticals : Module() {
             msTimer.reset()
         }
     }
-
+    @EventTarget
+    fun onUpdate(event: UpdateEvent) {
+        groundTicks = if (MovementUtils.isOnGround(0.0)) groundTicks + 1 else 0
+    }
     @EventTarget
     fun onPacket(event: PacketEvent) {
         if (onlyAuraValue.get() && !LiquidBounce.moduleManager[KillAura::class.java]!!.state) return
-
+        val killaure = LiquidBounce.moduleManager[KillAura::class.java] as KillAura
         val packet = event.packet
-
+        if (packet is C03PacketPlayer && killaure.target != null && groundTicks > 1 && modeValue.get().equals("Hypixel", ignoreCase = true)) {
+            if(!mc.thePlayer.onGround || mc.thePlayer.isOnLadder || mc.thePlayer.isInWeb || mc.thePlayer.isInWater ||
+                    mc.thePlayer.isInLava || mc.thePlayer.ridingEntity != null || killaure.target!!.hurtTime > hurtTimeValue.get() ||
+                    LiquidBounce.moduleManager[Fly::class.java]!!.state || !msTimer.hasTimePassed(delayValue.get().toLong()) || (ss.get() && LiquidBounce.moduleManager[Speed::class.java]!!.state))
+                return
+            packet.onGround = false
+        }
         when (modeValue.get().toLowerCase()) {
             "redesky" -> {
                 if (packet is C03PacketPlayer) {

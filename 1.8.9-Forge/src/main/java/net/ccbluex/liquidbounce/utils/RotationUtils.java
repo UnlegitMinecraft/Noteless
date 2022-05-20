@@ -35,7 +35,21 @@ public final class RotationUtils extends MinecraftInstance implements Listenable
     public static Rotation serverRotation = new Rotation(0F, 0F);
 
     public static boolean keepCurrentRotation = false;
-
+    public static float[] getRotations2(Entity ent) {
+        double x = ent.posX;
+        double z = ent.posZ;
+        double y = ent.posY + (double)(ent.getEyeHeight() / 2.0f);
+        return RotationUtils.getRotationFromPosition2(x, z, y);
+    }
+    public static float[] getRotationFromPosition2(double x, double z, double y) {
+        double xDiff = x - mc.thePlayer.posX;
+        double zDiff = z - mc.thePlayer.posZ;
+        double yDiff = y - mc.thePlayer.posY - 1.2;
+        double dist = MathHelper.sqrt_double(xDiff * xDiff + zDiff * zDiff);
+        float yaw = (float)(Math.atan2(zDiff, xDiff) * 180.0 / 3.141592653589793) - 90.0f;
+        float pitch = (float)(- Math.atan2(yDiff, dist) * 180.0 / 3.141592653589793);
+        return new float[]{yaw, pitch};
+    }
     private static double x = random.nextDouble();
     private static double y = random.nextDouble();
     private static int revTick;

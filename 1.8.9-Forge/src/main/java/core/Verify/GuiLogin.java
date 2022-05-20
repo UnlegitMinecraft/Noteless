@@ -78,25 +78,6 @@ public class GuiLogin extends GuiScreen {
     private final Color blue = new Color(0xFF2B71B1);
 
     public static String uid;
-    static float timeDelta = -1000;
-    @NativeMethod
-    public void checkTime() {
-        try {
-            if (timeDelta < -999) {
-                long time = Long.parseLong(HttpUtil.performGetRequest(new URL("https://time.is/t/?zh.0.347.2464.0p.480.43d.1574683214663.1594044507830.")).substring(0, 13));
-                float delta = (System.currentTimeMillis() - time) / 1000f;
-                System.out.println("Sync time! " + delta);
-                timeDelta = delta;
-            }
-        } catch (Throwable e) {
-            status = "Warning!Failed to check system time!";
-            e.printStackTrace();
-        }
-
-        if (Math.abs(timeDelta) > 10) {
-            status = "You may not be able to log in! The system time is not synchronized, please synchronize the time! (" + timeDelta + "s)";
-        }
-    }
     public GuiLogin() {
         status = "Idle";
         initTime = System.currentTimeMillis();
@@ -108,12 +89,6 @@ public class GuiLogin extends GuiScreen {
         buttonList.add(hwid);
         field = new UIDField(1, mc.fontRendererObj, (int) hWidth - 70, (int) hHeight - 35, 140, 30, "idk");
         alpha = 100;
-        new Thread() {
-            @Override
-            public void run() {
-                checkTime();
-            }
-        }.start();
         darkTheme = true;
         super.initGui();
     }
