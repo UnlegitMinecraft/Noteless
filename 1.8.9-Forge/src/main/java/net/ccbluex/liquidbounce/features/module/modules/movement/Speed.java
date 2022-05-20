@@ -32,7 +32,7 @@ public class Speed extends Module {
             new NCPBHop(),
             new NCPFHop(),
             new NCPHop(),
-
+           new Hypixel(),
             new AACHop350(),
             new AntiCheatB(),
             new Matrix(),
@@ -62,7 +62,9 @@ public class Speed extends Module {
     public final BoolValue customStrafeValue = new BoolValue("CustomStrafe", true);
     public final BoolValue resetXZValue = new BoolValue("CustomResetXZ", false);
     public final BoolValue resetYValue = new BoolValue("CustomResetY", false);
-
+    public final FloatValue speedtimerValue = new FloatValue("SpeedTimer", 1F , 0.1F , 3F);
+    public final FloatValue hypixelspeedValue = new FloatValue("hypixelspeed", 0.47F, 0.2F, 2F);
+    public final FloatValue speedYValue = new FloatValue("speedY", 0.42F, 0.2F, 2F);
     @EventTarget
     public void onUpdate(final UpdateEvent event) {
         if (mc.thePlayer.isSneaking())

@@ -200,7 +200,7 @@ class SessionEvent : Event()
 /**
  * Called when player is going to step
  */
-class StepEvent(var stepHeight: Float) : Event()
+class StepEvent(var stepHeight: Float,var realHeight: Double,var state: Boolean) : Event()
 
 /**
  * Called when player step is confirmed

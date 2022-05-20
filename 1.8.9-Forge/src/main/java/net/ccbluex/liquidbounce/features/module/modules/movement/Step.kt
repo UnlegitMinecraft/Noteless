@@ -30,7 +30,7 @@ class Step : Module() {
      */
 
     private val modeValue = ListValue("Mode", arrayOf(
-            "Vanilla", "Jump", "NCP", "MotionNCP", "OldNCP", "AAC", "LAAC", "AAC3.3.4", "Spartan", "Rewinside"
+            "Vanilla", "Jump", "NCP", "MotionNCP", "OldNCP", "AAC", "LAAC", "AAC3.3.4", "Spartan", "Rewinside","Hypixel"
     ), "NCP")
 
     private val heightValue = FloatValue("Height", 1F, 0.6F, 10F)
@@ -51,7 +51,7 @@ class Step : Module() {
     private var isAACStep = false
 
     private val timer = MSTimer()
-
+    var stepping = false
     override fun onDisable() {
         mc.thePlayer ?: return
 
@@ -169,7 +169,29 @@ class Step : Module() {
         }
 
         val mode = modeValue.get()
-
+        if (mode.equals("Hypixel",ignoreCase = true)){
+            if (event.state && !mc.thePlayer.movementInput.jump && mc.thePlayer.isCollidedVertically) {
+                event.stepHeight = 1.0f
+            } else if (!event.state && event.realHeight > 0.5 && event.stepHeight > 0.0 && !mc.thePlayer.movementInput.jump && mc.thePlayer.isCollidedVertically) {
+                stepping = true
+                if (event.realHeight >= 0.87) {
+                    val realHeight: Double = event.realHeight
+                    val height1 = realHeight * 0.42
+                    val height2 = realHeight * 0.75
+                    mc.thePlayer.sendQueue.addToSendQueue(C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + height1, mc.thePlayer.posZ, mc.thePlayer.onGround))
+                    mc.thePlayer.sendQueue.addToSendQueue(C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + height2, mc.thePlayer.posZ, mc.thePlayer.onGround))
+                }
+                mc.timer.timerSpeed = 0.55f
+                Thread(Runnable {
+                    try {
+                        Thread.sleep(100L)
+                    } catch (var1: InterruptedException) {
+                    }
+                    stepping = false
+                    mc.timer.timerSpeed = 1.0f
+                }).start()
+            }
+        }
         // Set step to default in some cases
         if (!mc.thePlayer.onGround || !timer.hasTimePassed(delayValue.get().toLong()) ||
                 mode.equals("Jump", ignoreCase = true) || mode.equals("MotionNCP", ignoreCase = true)
