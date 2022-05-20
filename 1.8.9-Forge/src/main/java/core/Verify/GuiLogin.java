@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import core.GuiMainMenu;
 import core.Insane.HydraButton;
 import core.textbox.UIDField;
+import lombok.Getter;
 import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.utils.ClientUtils;
 import net.ccbluex.liquidbounce.features.special.AntiForge;
@@ -22,6 +23,7 @@ import net.ccbluex.liquidbounce.utils.misc.QQUtils;
 import net.ccbluex.liquidbounce.utils.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -330,7 +332,9 @@ public class GuiLogin extends GuiScreen {
 
                 status = "Logging in";
                 token=text;
-                if (verify()) {
+                this.verify();
+                //System.out.println((boolean) Class.forName("core.Verify.GuiLogin").getField("verifyType").get(this));
+                if ((boolean) Class.forName("core.Verify.GuiLogin").getField("verifyType").get(this)) {
                     status = "Success";
                     uid = field.getText();
                     NMSL = true;
@@ -484,19 +488,21 @@ public class GuiLogin extends GuiScreen {
 
         return response.toString();
     }
+    public static boolean verifyType;
     @NativeMethod
-    private boolean verify() {
+    private void verify() throws Exception{
+        Class.forName("core.Verify.GuiLogin").getField("verifyType").set(this,false);
         try {
             final String string = get("http://dimplesantileak.xgstudio.xyz/update/verify.php?uid=" + field.getText() + "&qq=" + QQUtils.QQNumber + "&hwid=" + token);
             JSONObject jsonObject = new JSONObject(string);
             status = jsonObject.get("message").toString();
-            System.out.println(QQUtils.QQNumber);
-            System.out.println(string);
-            return !jsonObject.get("code").toString().contains("-1");
+            //System.out.println(QQUtils.QQNumber);
+            //System.out.println(string);
+            Class.forName("core.Verify.GuiLogin").getField("verifyType").set(this,!jsonObject.get("code").toString().contains("-1"));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        //Class.forName("core.Verify.GuiLogin").getField("verifyType").set(this,false);
     }
 
     //    @Override
