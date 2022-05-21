@@ -65,6 +65,7 @@
     "world.MixinChunk",
     "world.MixinWorld",
     "world.MixinWorldRenderer",
-    "world.MixinWorldClient"
+    "world.MixinWorldClient",
+    "packets.IPlayerControllerMP"
   ]
 }

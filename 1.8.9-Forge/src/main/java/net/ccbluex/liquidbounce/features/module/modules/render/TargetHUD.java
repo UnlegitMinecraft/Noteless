@@ -263,7 +263,7 @@ public class TargetHUD extends Module {
             mc.fontRendererObj.drawStringWithShadow(ping, 230, 40, Color.WHITE.getRGB());
             GlStateManager.popMatrix();
             // Draws the ping thingy from tab. :sunglasses:
-            if (target != null && networkPlayerInfo != null) ((IGuiPlayerTabOverlay) mc.ingameGUI.getTabList()).drawPingInvoke(103, 50, 14, networkPlayerInfo);
+            if (target != null && networkPlayerInfo != null) (mc.ingameGUI.getTabList()).drawPing(103, 50, 14, networkPlayerInfo);
             // Round.
             double cockWidth = 0.0;
             cockWidth = MathUtils.round(cockWidth, (int) 5.0);
