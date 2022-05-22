@@ -18,7 +18,7 @@ public class HttpUtil {
         String result = "";
         BufferedReader in = null;
         try {
-            String urlNameString = url + "?" + param;
+            String urlNameString = url/* + "?" + param*/;
             URL realUrl = new URL(urlNameString);
             URLConnection connection = realUrl.openConnection();
             connection.setDoOutput(true);
