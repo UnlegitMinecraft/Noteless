@@ -346,8 +346,8 @@ public class GuiLogin extends GuiScreen {
                     LiquidBounce.fileManager.loadConfig(LiquidBounce.fileManager.clickGuiConfig);
                     mc.displayGuiScreen(new GuiMainMenu());
                     login = true;
-                            Display.setTitle("Noteless 220520");
-                            WbxMain.version = "Build 220520";
+                            Display.setTitle("Noteless 220521");
+                            WbxMain.version = "Build 220521";
                 } else if (field.getText().isEmpty()){
                     status = "User ID Empty";
                     button.enabled = true;

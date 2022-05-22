@@ -223,9 +223,9 @@ public class GuiMainMenu extends GuiScreen {
 
 
         changes.add("");
-        changes.add("Build 220519");
-        changes.add("+New Verify");
-        changes.add("+BlocksMC AntiVoid");
+        changes.add("Build 220521");
+        changes.add("+Hypixel Disabler");
+        changes.add("+Fix TargetHUD Remix Mode");
 
 
         if (sr.getScaledWidth() > 600 && sr.getScaledHeight() > 300) {
@@ -271,7 +271,7 @@ public class GuiMainMenu extends GuiScreen {
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         Fonts.SFUI35.drawString("Welcome, User", width - Fonts.SFUI35.getStringWidth("Welcome, User") - 4f, height - 12f, new Color(255, 255, 255, 200).getRGB(), true);
-        Fonts.SFUI35.drawString("Noteless Client(#Build 220520)", 4f, height - 12f, new Color(255, 255, 255, 200).getRGB(), true);
+        Fonts.SFUI35.drawString("Noteless Client(#Build 220521)", 4f, height - 12f, new Color(255, 255, 255, 200).getRGB(), true);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (func_183501_a()) field_183503_M.drawScreen(mouseX, mouseY, partialTicks);
