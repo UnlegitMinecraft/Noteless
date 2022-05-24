@@ -23,6 +23,28 @@ object BlockUtils : MinecraftInstance() {
      */
     @JvmStatic
     fun getBlock(blockPos: BlockPos?): Block? = mc.theWorld?.getBlockState(blockPos)?.block
+    /**
+     * Check if [axisAlignedBB] has collidable blocks using custom [collide] check
+     */
+    @JvmStatic
+    fun collideBlock(axisAlignedBB: AxisAlignedBB, collide: (Block?) -> Boolean): Boolean {
+        for (x in MathHelper.floor_double(mc.thePlayer.entityBoundingBox.minX) until
+                MathHelper.floor_double(mc.thePlayer.entityBoundingBox.maxX) + 1) {
+            for (z in MathHelper.floor_double(mc.thePlayer.entityBoundingBox.minZ) until
+                    MathHelper.floor_double(mc.thePlayer.entityBoundingBox.maxZ) + 1) {
+                val block = getBlock(BlockPos(x.toDouble(), axisAlignedBB.minY, z.toDouble()))
+
+                if (!collide(block))
+                    return false
+            }
+        }
+
+        return true
+    }
+
+
+
+
     @JvmStatic
     fun isValidBlock(block: Block, placing: Boolean): Boolean {
         if (block is BlockCarpet

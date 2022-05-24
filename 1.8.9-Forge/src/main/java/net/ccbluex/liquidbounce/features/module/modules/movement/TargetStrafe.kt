@@ -261,7 +261,7 @@ class TargetStrafe : Module() {
         mc.gameSettings.thirdPersonView = if (canStrafe(target)) 3 else 0
     }
 
-    private fun canStrafe(target: EntityLivingBase?): Boolean {
+    fun canStrafe(target: EntityLivingBase?): Boolean {
         return target != null && (!holdSpaceValue.get() || mc.thePlayer.movementInput.jump) && ((!onlySpeedValue.get() || LiquidBounce.moduleManager[Speed::class.java]!!.state) || (onlyflyValue.get() && LiquidBounce.moduleManager[Fly::class.java]!!.state))
     }
 

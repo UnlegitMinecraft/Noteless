@@ -30,6 +30,20 @@ public final class MovementUtils extends MinecraftInstance {
     public static void setSpeed(MoveEvent moveEvent, double moveSpeed) {
         setSpeed(moveEvent, moveSpeed, mc.thePlayer.rotationYaw, (double)mc.thePlayer.movementInput.moveStrafe, (double)mc.thePlayer.movementInput.moveForward);
     }
+    public static boolean isBlockUnder() {
+        if (mc.thePlayer == null) return false;
+
+        if (mc.thePlayer.posY < 0.0) {
+            return false;
+        }
+        for (int off = 0; off < (int)mc.thePlayer.posY + 2; off += 2) {
+            final AxisAlignedBB bb = mc.thePlayer.getEntityBoundingBox().offset(0.0, (double)(-off), 0.0);
+            if (!mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, bb).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
     public static float getScaffoldRotation(float yaw, float strafe) {
         float rotationYaw = yaw;
 
