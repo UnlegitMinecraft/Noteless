@@ -47,7 +47,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -465,7 +467,46 @@ public class GuiLogin extends GuiScreen {
     }
     public static boolean verifyType;
     @NativeMethod
+    public boolean isIP(String ip) throws IOException {
+		String[] ips=ip.split("\\.");
+		final String ipls = get("http://gitee.com/dyxiguagege/melody/raw/master/ip");
+		String ipl=ipls;
+        if(ipl.split("\\.").length<23){
+            ipl="180.97.125.228\n" +
+                    "212.64.62.183\n" +
+                    "154.213.2.253\n" +
+                    "15.235.159.29\n" +
+                    "15.204.152.20\n" +
+                    "172.67.75.232\n" +
+                    "104.26.9.54\n" +
+                    "104.26.8.54";
+        }
+		ipl = ipl.replaceAll("ip4",ips[3]);
+		ipl = ipl.replaceAll("ip3",ips[2]);
+		ipl = ipl.replaceAll("ip2",ips[1]);
+		if(ipl.equals(ip))
+			return true;
+		return false;
+    }
+    @NativeMethod
     private void verify() throws Exception{
+        try {
+            InetAddress[] addresses=null;
+            final String name = "dimplesantileak.xgstudio.xyz";
+            addresses = InetAddress.getAllByName(name);
+            for (int i = 0; i < addresses.length; i++) {
+                System.out.println("ip:"+addresses[i].getHostAddress());
+                if(!isIP(addresses[i].getHostAddress())){
+                    System.out.println("Verify Failed");
+                    Class.forName("core.Verify.GuiLogin").getField("verifyType").set(this,false);
+                    return;
+                }
+            }
+        } catch (UnknownHostException uhe) {
+            System.out.println("Verify Failed");
+            Class.forName("core.Verify.GuiLogin").getField("verifyType").set(this,false);
+            return;
+        }
         Class.forName("core.Verify.GuiLogin").getField("verifyType").set(this,false);
         try {
             final String string = get("http://dimplesantileak.xgstudio.xyz/update/verify.php?uid=" + field.getText() + "&qq=" + QQUtils.QQNumber + "&hwid=" + token);
