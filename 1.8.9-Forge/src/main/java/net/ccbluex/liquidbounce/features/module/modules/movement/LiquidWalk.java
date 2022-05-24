@@ -40,7 +40,7 @@ public class LiquidWalk extends Module {
         switch(modeValue.get().toLowerCase()) {
             case "ncp":
             case "vanilla":
-                if(BlockUtils.collideBlock(mc.thePlayer.getEntityBoundingBox(), block -> block instanceof BlockLiquid) && mc.thePlayer.isInsideOfMaterial(Material.air) && !mc.thePlayer.isSneaking())
+                if(BlockUtils.collidelock(mc.thePlayer.getEntityBoundingBox(), block -> block instanceof BlockLiquid) && mc.thePlayer.isInsideOfMaterial(Material.air) && !mc.thePlayer.isSneaking())
                     mc.thePlayer.motionY = 0.08D;
                 break;
             case "aac":
@@ -126,7 +126,7 @@ public class LiquidWalk extends Module {
         if(mc.thePlayer == null || mc.thePlayer.getEntityBoundingBox() == null)
             return;
 
-        if(event.getBlock() instanceof BlockLiquid && !BlockUtils.collideBlock(mc.thePlayer.getEntityBoundingBox(), block -> block instanceof BlockLiquid) && !mc.thePlayer.isSneaking()) {
+        if(event.getBlock() instanceof BlockLiquid && !BlockUtils.collidelock(mc.thePlayer.getEntityBoundingBox(), block -> block instanceof BlockLiquid) && !mc.thePlayer.isSneaking()) {
             switch(modeValue.get().toLowerCase()) {
                 case "ncp":
                 case "vanilla":
@@ -144,7 +144,7 @@ public class LiquidWalk extends Module {
         if(event.getPacket() instanceof C03PacketPlayer) {
             final C03PacketPlayer packetPlayer = (C03PacketPlayer) event.getPacket();
 
-            if(BlockUtils.collideBlock(new AxisAlignedBB(mc.thePlayer.getEntityBoundingBox().maxX, mc.thePlayer.getEntityBoundingBox().maxY, mc.thePlayer.getEntityBoundingBox().maxZ, mc.thePlayer.getEntityBoundingBox().minX, mc.thePlayer.getEntityBoundingBox().minY - 0.01D, mc.thePlayer.getEntityBoundingBox().minZ), block -> block instanceof BlockLiquid)) {
+            if(BlockUtils.collidelock(new AxisAlignedBB(mc.thePlayer.getEntityBoundingBox().maxX, mc.thePlayer.getEntityBoundingBox().maxY, mc.thePlayer.getEntityBoundingBox().maxZ, mc.thePlayer.getEntityBoundingBox().minX, mc.thePlayer.getEntityBoundingBox().minY - 0.01D, mc.thePlayer.getEntityBoundingBox().minZ), block -> block instanceof BlockLiquid)) {
                 nextTick = !nextTick;
 
                 if(nextTick) packetPlayer.y -= 0.001D;
