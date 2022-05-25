@@ -44,26 +44,7 @@ public class Hypixel extends SpeedMode {
         }
         return baseSpeed;
     }
-    private float getYaw() {
-        float wrapAngleTo180_float = MathHelper.wrapAngleTo180_float(this.mc.thePlayer.rotationYaw);
-        final MovementInput movementInput = this.mc.thePlayer.movementInput;
-        float b = movementInput.moveStrafe;
-        float a = movementInput.moveForward;
-        if (a != 0.0f) {
-            if (b < 0.0f) {
-                wrapAngleTo180_float += (a < 0.0f) ? 135.0F : 45.0F;
-            } else if (b > 0.0f) {
-                wrapAngleTo180_float -= (a < 0.0f) ? 135.0F : 45.0F;
-            } else if (b == 0.0f && a < 0.0f) {
-                wrapAngleTo180_float -= 180.0F;
-            }
-        } else if (b < 0.0f) {
-            wrapAngleTo180_float += 90.0F;
-        } else if (b > 0.0f) {
-            wrapAngleTo180_float -= 90.0F;
-        }
-        return MathHelper.wrapAngleTo180_float(wrapAngleTo180_float);
-    }
+
 
     @Override
     public void onEnable() {
@@ -77,7 +58,6 @@ public class Hypixel extends SpeedMode {
 
     @Override
     public void onMotion() {
-        RotationUtils.setTargetRotation(new Rotation(getYaw(),mc.thePlayer.rotationPitch));
     }
 
     @Override

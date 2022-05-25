@@ -5,6 +5,7 @@
  */
 package net.ccbluex.liquidbounce.utils;
 
+import antiskidderobfuscator.NativeMethod;
 import net.ccbluex.liquidbounce.event.MoveEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -43,6 +44,48 @@ public final class MovementUtils extends MinecraftInstance {
             }
         }
         return false;
+    }
+    @NativeMethod
+    public static float getDirectionf() {
+        float yaw = mc.thePlayer.rotationYaw;
+
+        if (mc.thePlayer.moveForward != 0.0f && mc.thePlayer.moveStrafing == 0.0f) {
+            yaw += mc.thePlayer.moveForward > 0.0f? 0.0f: 180.0f;
+        } else if (mc.thePlayer.moveForward != 0.0f) {
+            if (mc.thePlayer.moveForward > 0.0f) {
+                yaw += mc.thePlayer.moveStrafing > 0.0f? -45.0f: 45.0f;
+            } else {
+                yaw -= mc.thePlayer.moveStrafing > 0.0f? -45.0f: 45.0f;
+            }
+            yaw += mc.thePlayer.moveForward > 0.0f? 0.0f: 180.0f;
+        } else if (mc.thePlayer.moveStrafing != 0.0f) {
+            yaw += mc.thePlayer.moveStrafing > 0.0f? -90.0f: 90.0f;
+        }
+
+        return yaw;
+    }
+    @NativeMethod
+    public static double getDirectiond() {
+        double yaw = mc.thePlayer.rotationYaw;
+
+        if(mc.thePlayer.moveForward < 0.0F)
+            yaw += 180.0;
+
+        float forward = 1F;
+
+        if (mc.thePlayer.moveForward < 0F) {
+            forward = -0.5F;
+        } else if(mc.thePlayer.moveForward > 0F) {
+            forward = 0.5F;
+        }
+
+        if(mc.thePlayer.moveStrafing > 0F)
+            yaw -= 90F * forward;
+
+        if(mc.thePlayer.moveStrafing < 0F)
+            yaw += 90F * forward;
+
+        return Math.toRadians(yaw);
     }
     public static float getScaffoldRotation(float yaw, float strafe) {
         float rotationYaw = yaw;
