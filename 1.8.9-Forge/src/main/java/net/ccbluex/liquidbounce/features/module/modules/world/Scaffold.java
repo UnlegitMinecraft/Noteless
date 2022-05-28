@@ -6,6 +6,7 @@
 package net.ccbluex.liquidbounce.features.module.modules.world;
 
 import net.ccbluex.liquidbounce.LiquidBounce;
+import net.ccbluex.liquidbounce.features.module.modules.player.SlientMove;
 import net.ccbluex.liquidbounce.utils.ClientUtils;
 import net.ccbluex.liquidbounce.event.*;
 import net.ccbluex.liquidbounce.features.module.Module;
@@ -252,10 +253,12 @@ public class Scaffold extends Module {
 
         if (tower.get() && Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !LiquidBounce.moduleManager.getModule(Speed.class).getState()) {
             mc.thePlayer.onGround = false;
+            LiquidBounce.moduleManager.getModule(SlientMove.class).setState(true);
             LiquidBounce.moduleManager.getModule(Tower.class).setState(true);
             //System.out.println("1");
         } else {
             LiquidBounce.moduleManager.getModule(Tower.class).setState(false);
+            LiquidBounce.moduleManager.getModule(SlientMove.class).setState(false);
 
         }
 

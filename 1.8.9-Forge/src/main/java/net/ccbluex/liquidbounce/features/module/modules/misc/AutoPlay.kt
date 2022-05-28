@@ -3,6 +3,7 @@ package net.ccbluex.liquidbounce.features.module.modules.misc
 import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.event.EventTarget
 import net.ccbluex.liquidbounce.event.PacketEvent
+import net.ccbluex.liquidbounce.event.UpdateEvent
 import net.ccbluex.liquidbounce.event.WorldEvent
 import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
@@ -128,6 +129,7 @@ class AutoPlay : Module() {
                     fun process(component: IChatComponent) {
                         val value = component.chatStyle.chatClickEvent?.value
                         if (value != null && value.startsWith("/play", true)) {
+                            mc.thePlayer.sendChatMessage("/ac [Noteless]GG Hacked By Dimples#1337")
                             queueAutoPlay {
                                 mc.thePlayer.sendChatMessage(value)
                             }

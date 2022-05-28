@@ -152,7 +152,7 @@ public class HUD extends Module {
         High1123 = RenderUtils.height() - 50;
         LiquidBounce.hud.render(false);
         if (HealthValue.get())
-            Fonts.SFUI35.drawStringWithShadow(String.valueOf(MathHelper.ceiling_float_int( mc.thePlayer.getHealth())), width / 2 - 4, height / 2 - 13, mc.thePlayer.getHealth() <= 15 ? new Color(255, 0, 0).getRGB() : new Color(0, 255, 0).getRGB());
+           mc.fontRendererObj.drawStringWithShadow(String.valueOf(MathHelper.ceiling_float_int( mc.thePlayer.getHealth())), width / 2 - 4, height / 2 - 13, mc.thePlayer.getHealth() <= 15 ? new Color(255, 0, 0).getRGB() : new Color(0, 255, 0).getRGB());
         GlStateManager.resetColor();
     }
 

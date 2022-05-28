@@ -68,6 +68,26 @@ public final class RenderUtils extends MinecraftInstance {
         GL11.glEnable(2929);
         GL11.glColor3d(1.0, 1.0, 1.0);
     }
+    public static int Astolfo(int var2, float bright, float st, int index, int offset, float client) {
+        double rainbowDelay = Math.ceil(System.currentTimeMillis() + (long) (var2 * index)) / offset;
+        return Color.getHSBColor((double) ((float) ((rainbowDelay %= client) / client)) < 0.5 ? -((float) (rainbowDelay / client)) : (float) (rainbowDelay / client), st, bright).getRGB();
+    }
+    public static Color getGradientOffset(Color color1, Color color2, double gident) {
+        if (gident > 1.0) {
+            double f1 = gident % 1.0;
+            int f2 = (int)gident;
+            gident = f2 % 2 == 0 ? f1 : 1.0 - f1;
+        }
+        double f3 = 1.0 - gident;
+        int f4 = (int)((double)color1.getRed() * f3 + (double)color2.getRed() * gident);
+        int f5 = (int)((double)color1.getGreen() * f3 + (double)color2.getGreen() * gident);
+        int f6 = (int)((double)color1.getBlue() * f3 + (double)color2.getBlue() * gident);
+        return new Color(f4, f5, f6);
+    }
+    public static int getRainbow(int index, int offset, float bright, float st) {
+        float hue = (System.currentTimeMillis() + ((long) offset * index)) % 2000L;
+        return Color.getHSBColor((float) (hue /= 2000L), st, bright).getRGB();
+    }
     public static void skeetRect(final double x, final double y, final double x1, final double y1, final double size) {
         RenderUtils.rectangleBordered(x, y + -4.0, x1 + size, y1 + size, 0.5, new Color(60, 60, 60).getRGB(), new Color(10, 10, 10).getRGB());
         RenderUtils.rectangleBordered(x + 1.0, y + -3.0, x1 + size - 1.0, y1 + size - 1.0, 1.0, new Color(40, 40, 40).getRGB(), new Color(40, 40, 40).getRGB());
