@@ -46,6 +46,7 @@ class ModuleManager : Listenable {
             AutoLogin::class.java,
             AutoL::class.java,
             ResetVL::class.java,
+                SlientMove::class.java,
             Particles::class.java,
             KickWarn::class.java,
             AutoKit::class.java,
