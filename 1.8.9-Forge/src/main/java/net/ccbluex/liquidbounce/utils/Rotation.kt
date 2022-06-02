@@ -15,7 +15,7 @@ import net.minecraft.util.Vec3
 /**
  * Rotations
  */
-data class Rotation(var yaw: Float, var pitch: Float) {
+data class Rotation( var yaw: Float, var pitch: Float) {
 
     /**
      * Set rotations to [player]
