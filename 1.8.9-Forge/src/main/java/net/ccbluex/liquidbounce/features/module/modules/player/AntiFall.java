@@ -18,7 +18,7 @@ import java.util.ArrayList;
 @ModuleInfo(name = "AntiFall", description = "Antifall.", category = ModuleCategory.PLAYER)
 public class AntiFall extends Module {
     public double[] lastGroundPos = new double[3];
-    public static FloatValue pullbackTime = new FloatValue("Pullback Time", 1500f, 1000f, 2000f);
+    public static FloatValue pullbackTime = new FloatValue("Pullback Time", 1500f, 100f, 2000f);
     public static TimerUtil timer = new TimerUtil();
     public static ArrayList<C03PacketPlayer> packets = new ArrayList<>();
     public static boolean isInVoid() {
@@ -32,8 +32,8 @@ public class AntiFall extends Module {
 
     @EventTarget
     public void onPacket(PacketEvent e) {
-            if (LiquidBounce.moduleManager.get(Fly.class).getState() || LiquidBounce.moduleManager.get(Scaffold.class).getState())
-                return;
+
+
 
             if (!packets.isEmpty() && mc.thePlayer.ticksExisted < 100)
                 packets.clear();

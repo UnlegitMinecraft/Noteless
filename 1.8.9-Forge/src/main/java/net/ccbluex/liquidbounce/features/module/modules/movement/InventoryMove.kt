@@ -13,14 +13,12 @@ import net.ccbluex.liquidbounce.features.module.Module
 import net.ccbluex.liquidbounce.features.module.ModuleCategory
 import net.ccbluex.liquidbounce.features.module.ModuleInfo
 import net.ccbluex.liquidbounce.utils.MovementUtils
-import net.ccbluex.liquidbounce.utils.PacketUtils
 import net.ccbluex.liquidbounce.value.BoolValue
 import net.minecraft.client.gui.GuiChat
 import net.minecraft.client.gui.GuiIngameMenu
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.settings.GameSettings
 import net.minecraft.network.Packet
-import net.minecraft.network.play.INetHandlerPlayServer
 import net.minecraft.network.play.client.C0DPacketCloseWindow
 import net.minecraft.network.play.client.C0EPacketClickWindow
 import net.minecraft.network.play.client.C16PacketClientStatus
@@ -43,7 +41,6 @@ class InventoryMove : Module() {
             mc.gameSettings.keyBindSprint.pressed = GameSettings.isKeyDown(mc.gameSettings.keyBindSprint)
         }
     }
-
     @EventTarget
     fun onClick(event: ClickWindowEvent) {
         if (noMoveClicksValue.get() && MovementUtils.isMoving())

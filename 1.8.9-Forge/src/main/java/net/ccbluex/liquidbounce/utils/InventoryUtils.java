@@ -37,6 +37,9 @@ public final class InventoryUtils extends MinecraftInstance implements Listenabl
         }
         return -1;
     }
+    public static ItemStack getStackInSlot(final int slot) {
+        return mc.thePlayer.inventory.getStackInSlot(slot);
+    }
     public static void click(int slot, int mouseButton, boolean shiftClick) {
         mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, slot, mouseButton, shiftClick ? 1 : 0, mc.thePlayer);
     }

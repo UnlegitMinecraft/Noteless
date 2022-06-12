@@ -6,7 +6,6 @@
 package net.ccbluex.liquidbounce.features.module.modules.world;
 
 import net.ccbluex.liquidbounce.LiquidBounce;
-import net.ccbluex.liquidbounce.features.module.modules.player.SlientMove;
 import net.ccbluex.liquidbounce.utils.ClientUtils;
 import net.ccbluex.liquidbounce.event.*;
 import net.ccbluex.liquidbounce.features.module.Module;
@@ -38,6 +37,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -131,7 +131,7 @@ public class Scaffold extends Module {
     private final IntegerValue colorRedValue = new IntegerValue("R", 255, 0, 255);
     private final IntegerValue colorGreenValue = new IntegerValue("G", 255, 0, 255);
     private final IntegerValue colorBlueValue = new IntegerValue("B", 255, 0, 255);
-    private final IntegerValue alphaValue = new IntegerValue("B", 255, 0, 255);
+    private final IntegerValue alphaValue = new IntegerValue("A", 255, 0, 255);
 
     // Visuals
     public final ListValue counterDisplayValue = new ListValue("Counter", new String[]{"Off", "Simple", "Advanced", "Sigma", "Novoline"}, "Simple");
@@ -254,11 +254,9 @@ public class Scaffold extends Module {
         if (tower.get() && Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !LiquidBounce.moduleManager.getModule(Speed.class).getState()) {
             mc.thePlayer.onGround = false;
             LiquidBounce.moduleManager.getModule(Tower.class).setState(true);
-            LiquidBounce.moduleManager.getModule(SlientMove.class).setState(true);
             //System.out.println("1");
         } else {
             LiquidBounce.moduleManager.getModule(Tower.class).setState(false);
-            LiquidBounce.moduleManager.getModule(SlientMove.class).setState(false);
         }
 
         shouldGoDown = downValue.get() && !sameYValue.get() && GameSettings.isKeyDown(mc.gameSettings.keyBindSneak) && getBlocksAmount() > 1;
@@ -378,7 +376,13 @@ public class Scaffold extends Module {
         // Update and search for new block
         if (eventState == EventState.PRE)
             update();
-
+        if(eventState == EventState.PRE){
+            // Speed 2 Slowdown
+            if(mc.thePlayer.isPotionActive(Potion.moveSpeed.id)){
+                mc.thePlayer.motionX *= 0.66;
+                mc.thePlayer.motionZ *= 0.66;
+            }
+        }
         // Reset placeable delay
         if (targetPlace == null) {
             if (smart.get()) {
@@ -511,6 +515,7 @@ public class Scaffold extends Module {
     /**
      * Entity movement event
      *
+     * @param event
      * @param event
      */
     @EventTarget

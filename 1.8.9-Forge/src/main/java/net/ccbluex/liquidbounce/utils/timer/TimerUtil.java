@@ -14,6 +14,10 @@ public class TimerUtil {
         }
         return false;
     }
+
+    public boolean hasReached(long delay) {
+        return System.currentTimeMillis() - this.lastMS >= delay;
+    }
     public void setTime(long time) {
         lastMS = time;
     }

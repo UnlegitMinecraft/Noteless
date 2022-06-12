@@ -58,11 +58,15 @@ public class HUD extends Module {
             "Default"
     }, "Light Rainbow");
     public static final IntegerValue fontWidthValue = new IntegerValue("FontWidth", 7, 5, 10);
+    private final IntegerValue colorRedValue = new IntegerValue("R", 255, 0, 255);
+    private final IntegerValue colorGreenValue = new IntegerValue("G", 255, 0, 255);
+    private final IntegerValue colorBlueValue = new IntegerValue("B", 255, 0, 255);
     private final BoolValue blurValue = new BoolValue("Blur", false);
     public final BoolValue hueInterpolation = new BoolValue("hueInterpolation", false);
     public final BoolValue movingcolors = new BoolValue("MovingColors", false);
     public final BoolValue playTimeValue = new BoolValue("PlayTime", true);
     private int startTime;
+    public final BoolValue logo = new BoolValue("Logo", true);
     public final BoolValue test1 = new BoolValue("BMCTest", false);
     public final TextValue clientname =  new TextValue("ClientName", "Noteless");
     public final TextValue domainValue =  new TextValue("Scoreboard-Domain", "One.Noteless");
@@ -118,15 +122,15 @@ public class HUD extends Module {
     @EventTarget
     public void onRender2D(final Render2DEvent event) {
 
-
         Color[] clientColors = getClientColors();
-
-        GradientUtil.applyGradientHorizontal(5, 5, (float) net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_35.SFBOLD_35.stringWidth(clientname.get()), 20, 1, clientColors[0], clientColors[1], () -> {
-            RenderUtils.setAlphaLimit(0);
-            net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.TenacityBold.TenacityBold40.TenacityBold40.drawString(clientname.get(), 5, 5, new Color(0,0,0,0).getRGB());
-        });
-        GlStateManager.resetColor();
-        net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SF.SF_20.SF_20.drawString(WbxMain.version, net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_35.SFBOLD_35.stringWidth(clientname.get()) + 6, 5, clientColors[1].getRGB());
+        if(logo.get()) {
+            GradientUtil.applyGradientHorizontal(5, 5, (float) net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_35.SFBOLD_35.stringWidth(clientname.get()), 20, 1, clientColors[0], clientColors[1], () -> {
+                RenderUtils.setAlphaLimit(0);
+                net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.TenacityBold.TenacityBold40.TenacityBold40.drawString(clientname.get(), 5, 5, new Color(0, 0, 0, 0).getRGB());
+            });
+            GlStateManager.resetColor();
+            net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SF.SF_20.SF_20.drawString(WbxMain.version, net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_35.SFBOLD_35.stringWidth(clientname.get()) + 6, 5, clientColors[1].getRGB());
+        }
         drawInfo(clientColors);
         ScaledResolution sr = new ScaledResolution(mc);
         float width = sr.getScaledWidth();

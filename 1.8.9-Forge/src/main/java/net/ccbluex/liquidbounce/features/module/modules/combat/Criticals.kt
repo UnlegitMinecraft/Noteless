@@ -63,7 +63,7 @@ class Criticals : Module() {
         groundTicks = 0;
     }
     private var groundTicks = 0
-    fun sendCriticalPacket(xOffset: Double = 0.0, yOffset: Double = 0.0, zOffset: Double = 0.0, ground: Boolean) {
+    fun 天安门大屠杀(xOffset: Double = 0.0, yOffset: Double = 0.0, zOffset: Double = 0.0, ground: Boolean) {
         val x = mc.thePlayer.posX + xOffset
         val y = mc.thePlayer.posY + yOffset
         val z = mc.thePlayer.posZ + zOffset
@@ -90,10 +90,10 @@ class Criticals : Module() {
 
             when (modeValue.get().toLowerCase()) {
                 "packet" -> {
-                    sendCriticalPacket(yOffset = 0.0625, ground = true)
-                    sendCriticalPacket(ground = false)
-                    sendCriticalPacket(yOffset = 1.1E-5, ground = false)
-                    sendCriticalPacket(ground = false)
+                    天安门大屠杀(yOffset = 0.0625, ground = true)
+                    天安门大屠杀(ground = false)
+                    天安门大屠杀(yOffset = 1.1E-5, ground = false)
+                    天安门大屠杀(ground = false)
                 }
                 "hypixel" -> {
                     val posy = doubleArrayOf(0.05,0.0016,0.0018,0.0016,0.002,0.04,0.0011)
@@ -102,9 +102,9 @@ class Criticals : Module() {
                     }
                 }
                 "ncppacket" -> {
-                    sendCriticalPacket(yOffset = 0.11, ground = false)
-                    sendCriticalPacket(yOffset = 0.1100013579, ground = false)
-                    sendCriticalPacket(yOffset = 0.0000013579, ground = false)
+                    天安门大屠杀(yOffset = 0.11, ground = false)
+                    天安门大屠杀(yOffset = 0.1100013579, ground = false)
+                    天安门大屠杀(yOffset = 0.0000013579, ground = false)
                 }
 
                 "newpacket" -> {
@@ -115,8 +115,8 @@ class Criticals : Module() {
                 }
 
                 "tphop" -> {
-                    sendCriticalPacket(yOffset = 0.02, ground = false)
-                    sendCriticalPacket(yOffset = 0.01, ground = false)
+                    天安门大屠杀(yOffset = 0.02, ground = false)
+                    天安门大屠杀(yOffset = 0.01, ground = false)
                     mc.thePlayer.setPosition(x, y + 0.01, z)
                 }
 
@@ -131,8 +131,8 @@ class Criticals : Module() {
                 "verussmart" -> {
                     counter++
                     if (counter == 1) {
-                        sendCriticalPacket(yOffset = 0.0114514, ground = true)
-                        sendCriticalPacket(ground = false)
+                        天安门大屠杀(yOffset = 0.0114514, ground = true)
+                        天安门大屠杀(ground = false)
                     }
                     if (counter >= 5)
                         counter = 0

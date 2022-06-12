@@ -40,7 +40,7 @@ object PacketUtils : MinecraftInstance() {
     //            }
     //        }
     //    }
-    public  val packets = ArrayList<Packet<INetHandlerPlayServer>>()
+    public  val packets = ArrayList<Packet<*>>()
 
     @JvmStatic
     fun handleSendPacket(packet: Packet<*>): Boolean {
@@ -52,7 +52,7 @@ object PacketUtils : MinecraftInstance() {
     }
 
     @JvmStatic
-    fun sendPacketNoEvent(packet: Packet<INetHandlerPlayServer>) {
+    fun sendPacketNoEvent(packet: Packet<*>) {
         packets.add(packet)
         mc.netHandler.addToSendQueue(packet)
         //        NetworkManager networkManager=mc.thePlayer.sendQueue.getNetworkManager();
