@@ -5,3 +5,154 @@
 run gradlew --debug setupDevWorkspace idea genIntellijRuns build
 
 Dev: _FengXiao Insane
+
+
+[[baizhijun-d0xx1ng]]
+= baizhijun-d0xx1ng (白治军信息总和)
+:china-dictatorship-media-base: https://raw.githubusercontent.com/cirosantilli/china-dictatorship-media/master
+:china-dictatorship-media-base-ignore: {china-dictatorship-media-base}
+:docinfo:
+:idprefix:
+:idseparator: -
+:sectanchors:
+:sectlinks:
+:sectnumlevels: 6
+:sectnums:
+:toc: macro
+:toclevels: 6
+:toc-title:
+https://github.com/Dimples1337/baizhijun1337[github (规范链接 canonical)] |
+
+
+
+反白治军宣传库。Anti-baozhijun propaganda.
+
+image::{china-dictatorship-media-base}/Xi_Jinping_The_Governance_of_China_photo.jpg[height=300]
+
+== About (关于)
+
+白治军女朋友热线：19956203260
+
+白治军热线: 17628614714
+
+白治军妈妈热线：15397699535
+
+白治军爸爸热线：15397699690
+
+白治军另一个手机号：15397699681
+
+白治军女朋友QQ：2785254766
+
+白治军QQ：2646222680
+
+白治军家开的店：
+
+华蓥市陈氏豪情烧烤店
+
+联系方式：15397699535（治军妈妈手机号 可以加微信） QQ1878897380（白治军妈妈）
+
+地址：四川省广安市华蓥市新华大道三段62号豪情金街18号楼1层12号
+
+白治军全：
+
+image::https://user-images.githubusercontent.com/88377095/182652592-0e12ffff-edf9-431b-955c-88bad0369005.png[height=800]
+
+白治军爹的车：
+
+image::https://user-images.githubusercontent.com/88377095/182652768-f708e0cd-138d-4a6b-bb51-a2a4aa34419c.png[height=800]
+
+白治军两个快手：
+
+cb2646222680
+
+xb2646222680
+
+白治军快手：虎牙苏辰X
+
+
+
+== 白治军跑路历史：
+
+2018-苏辰工具箱和白治军魔改Flux跑路
+
+2019-Power跑路
+
+2020-SkyblockLite半跑路
+
+2021-PowerX跑路SkyblockLite彻底跑路
+
+2022-FoodByte半跑路
+
+===== **白治军爹妈跑路历史**
+
+2017-桂蓉育婴跑路
+
+2019-川渝重庆麻辣小面馆跑路
+
+===== **白治军后门历史：**
+
+Power中塞System.exit
+
+SkyblockLite疑似Logger
+
+FoodByte中塞ShellExcuteA
+
+== **白治军抄袭历史：**
+
+FoodByte在assets中有PowerX的图标但是客户端中并没有因用这个文件
+
+FoodByte的BlockMode照搬Rise部分
+
+FoodByte的Crasher照搬Rise还抄失败了
+
+FoodByte Speed抄袭（未知出处）
+
+Foodbyte暴击粒子照搬Rise
+
+FB中基本灰色的都是Skid失败了 RodAim为什么灰色是因为白治军抄不会失败了和Crasher一样是空壳
+
+
+== **白治军国服脑瘫历史：**
+
+询问自动疾跑怎么写
+
+PowerB16被破解 白治军为了保证自己的端不被泄漏 选择删除所有用户 重新售卖
+
+B17卖了五十多份 再次被泄漏破解 再次删除用户
+
+B18同样
+
+B18后出现PowerBeta卖1314块 用AAL宣称永不跑路 超级绕过 还需要邀请码
+
+Power之前做过一个叫Asu的Flux脑瘫魔改 如图
+
+image::https://user-images.githubusercontent.com/88377095/182654137-659b7aed-7566-44b5-b96f-97a704131f6d.png[height=800]
+
+== **补白治军妈妈和妹妹的最新大头：**
+
+image::https://user-images.githubusercontent.com/88377095/182654200-7c254549-5fea-4662-aaaa-0dbb39f62c5f.png[height=800]
+
+image::https://user-images.githubusercontent.com/88377095/182654217-52178836-1a5c-4447-a3c4-d8d36abfdfaf.png[height=800]
+
+== **白治军爹妈网购记录预览：**
+
+image::https://user-images.githubusercontent.com/88377095/182654248-8d1350e0-659f-4de5-aff1-9384eb36f9c1.png[height=800]
+
+== **更新日志：更新白治军妈妈qq号和补充说明内容**
+
+预计更新（排名按照我想更新的顺序和可能度和难易程度）：
+
+1.白治军爹妈的网购和外卖订单
+
+2.白治军女朋友户
+
+3.白治军爹妈开房
+
+4.白治军之前的学校和+同学对他的评价+老师对他的评价
+
+加群824053715获取最新治军消息和更新
+
+欢迎补充
+
+支持转发
+
