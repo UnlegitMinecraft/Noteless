@@ -10,7 +10,7 @@ public class WbxMain {
     public static String Name = "Noteless";
     public static String Rank = "";
     public static long playTimeStart = 0;
-    public static String version = "";
+    public static String version = "Build Test";
     public static String username;
     private final SideGui sideGui = new SideGui();
     private static WbxMain INSTANCE;

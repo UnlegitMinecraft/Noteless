@@ -202,8 +202,11 @@ class SessionEvent : Event()
 /**
  * Called when player is going to step
  */
-class StepEvent(var stepHeight: Float,var realHeight: Double,var state: Boolean) : Event()
-
+class StepEvent(var stepHeight: Float,var realHeight: Double,var state: Boolean,val eventState: EventState) : Event() {
+    fun isPre(): Boolean {
+        return eventState == EventState.PRE
+    }
+}
 /**
  * Called when player step is confirmed
  */

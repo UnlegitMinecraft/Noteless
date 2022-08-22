@@ -23,6 +23,7 @@ public class TransformerLoader implements IFMLLoadingPlugin {
         return new String[] {ForgeNetworkTransformer.class.getName(), AbstractJavaLinkerTransformer.class.getName()};
     }
 
+
     /**
      * Return a class name that implements "ModContainer" for injection into the mod list
      * The "getName" function should return a name that other mods can, if need be,

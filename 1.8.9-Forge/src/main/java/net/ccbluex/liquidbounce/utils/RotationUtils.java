@@ -30,7 +30,8 @@ public final class RotationUtils extends MinecraftInstance implements Listenable
     private static Random random = new Random();
 
     private static int keepLength;
-
+    private static final double RAD_TO_DEG = 180.0 / Math.PI;
+    private static final double DEG_TO_RAD = Math.PI / 180.0;
     public static Rotation targetRotation;
     public static Rotation serverRotation = new Rotation(0F, 0F);
 
@@ -40,6 +41,33 @@ public final class RotationUtils extends MinecraftInstance implements Listenable
         double z = ent.posZ;
         double y = ent.posY + (double)(ent.getEyeHeight() / 2.0f);
         return RotationUtils.getRotationFromPosition2(x, z, y);
+    }
+    public static Vec3 getDstVec(final Vec3 src,
+                                 final float yaw,
+                                 final float pitch,
+                                 final double reach) {
+        final Vec3 rotationVec = getPointedVec(yaw, pitch);
+        return src.addVector(rotationVec.xCoord * reach,
+                rotationVec.yCoord * reach,
+                rotationVec.zCoord * reach);
+    }
+    public static float calculateYawFromSrcToDst(final float yaw,
+                                                 final double srcX,
+                                                 final double srcZ,
+                                                 final double dstX,
+                                                 final double dstZ) {
+        final double xDist = dstX - srcX;
+        final double zDist = dstZ - srcZ;
+        final float var1 = (float) (StrictMath.atan2(zDist, xDist) * 180.0 / Math.PI) - 90.0F;
+        return yaw + MathHelper.wrapAngleTo180_float(var1 - yaw);
+    }
+    public static Vec3 getPointedVec(final float yaw,
+                                     final float pitch) {
+        final double theta = -Math.cos(-pitch * DEG_TO_RAD);
+
+        return new Vec3(Math.sin(-yaw * DEG_TO_RAD - Math.PI) * theta,
+                Math.sin(-pitch * DEG_TO_RAD),
+                Math.cos(-yaw * DEG_TO_RAD - Math.PI) * theta);
     }
     public static float[] getRotationFromPosition2(double x, double z, double y) {
         double xDiff = x - mc.thePlayer.posX;

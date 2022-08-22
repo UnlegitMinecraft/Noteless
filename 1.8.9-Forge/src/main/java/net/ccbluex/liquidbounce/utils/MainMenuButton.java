@@ -1,47 +1,59 @@
-/*
- * LiquidBounce Hacked Client
- * A free open source mixin-based injection hacked client for Minecraft using Minecraft Forge.
- * https://github.com/CCBlueX/LiquidBounce/
- */
 package net.ccbluex.liquidbounce.utils;
 
-import net.ccbluex.liquidbounce.ui.font.Fonts;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import org.lwjgl.opengl.GL11;
+
+import core.GuiMainMenu;
+import net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts;
+
+
 
 import java.awt.*;
 
-public class MainMenuButton extends GuiButton {
+public class MainMenuButton {
+    public GuiMainMenu parent;
+    public String icon;
+    public String text;
+    public Executor action;
+    public int buttonID;
+    public float x;
+    public float y;
+    public float textOffset;
+    public float yAnimation = 0.0F;
 
-    public MainMenuButton(final int buttonId, final int x, final int y, final int width, final int height, final String buttonText) {
-        super(buttonId, x, y, width, height, buttonText);
+    public MainMenuButton(GuiMainMenu parent, int id, String icon, String text, Executor action) {
+        this.parent = parent;
+        this.buttonID = id;
+        this.icon = icon;
+        this.text = text;
+        this.action = action;
+        this.textOffset = 0.0F;
     }
 
-    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
-        if (visible) {
-            Color color = new Color(180, 180, 180);
-            FontRenderer fontrenderer = Fonts.SFUI35;
-            hovered = (mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height);
+    public MainMenuButton(GuiMainMenu parent, int id, String icon, String text, Executor action, float yOffset) {
+        this.parent = parent;
+        this.buttonID = id;
+        this.icon = icon;
+        this.text = text;
+        this.action = action;
+        this.textOffset = yOffset;
+    }
 
-            RenderUtils.drawRoundedRect((double) xPosition, yPosition, xPosition + width, yPosition + height, 6, new Color(1,1,1,80).getRGB());
+    public void draw(float x, float y, int mouseX, int mouseY) {
+        this.x = x;
+        this.y = y;
+        Fonts.MAINMENU.MAINMENU30.MAINMENU30.drawString(this.icon, x + 25.0F - (float) Fonts.MAINMENU.MAINMENU30.MAINMENU30.stringWidth(this.icon) / 2.0F - 2.0F, y + 9.0F, Color.WHITE.getRGB(),false);
+        this.yAnimation = RenderUtils.smoothAnimation(this.yAnimation, RenderUtils.isHovering(mouseX, mouseY, x, y, x + 50.0F, y + 30.0F) ? 2.0F : 0.0F, 50.0F, 0.3F);
+        RenderUtils.drawGradientRect(x, y + 30.0F - this.yAnimation * 3.0F, x + 50.0F, y + 30.0F, 3453695, 2016719615);
+        RenderUtils.drawRect(x, y + 30.0F - this.yAnimation, x + 50.0F, y + 30.0F, -13323521);
+    }
 
-            if (hovered) {
-                GL11.glPushMatrix();
-                RenderUtils.color(color.darker().getRGB());
-                GL11.glPopMatrix();
-            }
-
-            mouseDragged(mc, mouseX, mouseY);
-            int stringColor = new Color(255,255,255,200).getRGB();
-
-            if (hovered)
-                stringColor = color.darker().getRGB();
-
-            drawCenteredString(fontrenderer, displayString.toUpperCase(), xPosition + width / 2, yPosition + (height - 6) / 2, stringColor);
+    public void mouseClick(int mouseX, int mouseY, int mouseButton) {
+        if (RenderUtils.isHovering(mouseX, mouseY, this.x, this.y, this.x + 50.0F, this.y + 30.0F) && this.action != null && mouseButton == 0) {
+            this.action.execute();
         }
+
     }
 
-    protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {}
+   public interface Executor {
+        void execute();
+    }
 }

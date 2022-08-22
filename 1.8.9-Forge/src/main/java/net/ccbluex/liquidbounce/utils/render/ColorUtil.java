@@ -1,6 +1,7 @@
 package net.ccbluex.liquidbounce.utils.render;
 
 import com.ibm.icu.text.NumberFormat;
+import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -22,6 +23,51 @@ public class ColorUtil {
         colors[1] = new Color(Color.HSBtoRGB(newHueSubtracted, hsb[1], hsb[2]));
 
         return colors;
+    }
+    public static int getClientColour() {
+        return ClickGUI.generateColor().getRGB();
+    }
+    public static int getSecondaryColour() {
+        return ClickGUI.generateColor().getRGB();
+    }
+    public static int secondaryColour = 0xFF00E4FF;
+    public static int clientColour = 0xFFCDFA00;
+    private static final int[] HEALTH_COLOURS = {
+            0xFF00FF59, // Green
+            0xFFFFFF00, // Yellow
+            0xFFFF8000, // Orange
+            0xFFFF0000, // Red
+            0xFF800000 // Dark-red
+    };
+    public static int blendColours(final int[] colours, final double progress) {
+        final int size = colours.length;
+        if (progress == 1.f) return colours[0];
+        else if (progress == 0.f) return colours[size - 1];
+        final double mulProgress = Math.max(0, (1 - progress) * (size - 1));
+        final int index = (int) mulProgress;
+        return fadeBetween(colours[index], colours[index + 1], mulProgress - index);
+    }
+    public static int fadeBetween(int startColour, int endColour, double progress) {
+        if (progress > 1) progress = 1 - progress % 1;
+        return fadeTo(startColour, endColour, progress);
+    }
+    public static int blendHealthColours(final double progress) {
+        return blendColours(HEALTH_COLOURS, progress);
+    }
+    public static int fadeTo(int startColour, int endColour, double progress) {
+        double invert = 1.0 - progress;
+        int r = (int) ((startColour >> 16 & 0xFF) * invert +
+                (endColour >> 16 & 0xFF) * progress);
+        int g = (int) ((startColour >> 8 & 0xFF) * invert +
+                (endColour >> 8 & 0xFF) * progress);
+        int b = (int) ((startColour & 0xFF) * invert +
+                (endColour & 0xFF) * progress);
+        int a = (int) ((startColour >> 24 & 0xFF) * invert +
+                (endColour >> 24 & 0xFF) * progress);
+        return ((a & 0xFF) << 24) |
+                ((r & 0xFF) << 16) |
+                ((g & 0xFF) << 8) |
+                (b & 0xFF);
     }
     private static final Pattern COLOR_PATTERN = Pattern.compile("(?i)§[0-9A-FK-OR]");
     public static String stripColor(final String text) {

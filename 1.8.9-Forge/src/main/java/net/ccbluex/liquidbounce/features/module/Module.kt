@@ -6,7 +6,7 @@
 package net.ccbluex.liquidbounce.features.module
 
 
-import core.Verify.GuiLogin
+
 import net.ccbluex.liquidbounce.LiquidBounce
 import net.ccbluex.liquidbounce.event.Listenable
 import net.ccbluex.liquidbounce.script.api.ScriptModule
@@ -42,14 +42,14 @@ open class Module : MinecraftInstance(), Listenable {
         set(keyBind) {arrayY
             field = keyBind
 
-            if (GuiLogin.login&&!LiquidBounce.isStarting)
+            if (!LiquidBounce.isStarting)
                 LiquidBounce.fileManager.saveConfig(LiquidBounce.fileManager.modulesConfig)
         }
     var array = true
         set(array) {
             field = array
 
-            if (GuiLogin.login &&!LiquidBounce.isStarting)
+            if (!LiquidBounce.isStarting)
                 LiquidBounce.fileManager.saveConfig(LiquidBounce.fileManager.modulesConfig)
         }
     private val canEnable: Boolean
@@ -93,7 +93,7 @@ open class Module : MinecraftInstance(), Listenable {
             }
 
             // Save module state
-            if (GuiLogin.login&&!LiquidBounce.isStarting)
+            if (!LiquidBounce.isStarting)
                 LiquidBounce.fileManager.saveConfig(LiquidBounce.fileManager.modulesConfig)
         }
 

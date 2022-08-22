@@ -68,9 +68,146 @@ public final class RenderUtils extends MinecraftInstance {
         GL11.glEnable(2929);
         GL11.glColor3d(1.0, 1.0, 1.0);
     }
+    public static void prepareScissorBox(float x, float y, float x2, float y2) {
+        ScaledResolution scale = new ScaledResolution(Minecraft.getMinecraft());
+        int factor = scale.getScaleFactor();
+        GL11.glScissor((int)(x * (float)factor), (int)(((float)scale.getScaledHeight() - y2) * (float)factor), (int)((x2 - x) * (float)factor), (int)((y2 - y) * (float)factor));
+    }
+    public static double getAnimationStateSmooth(double target, double current, double speed) {
+        boolean larger = target > current;
+        if (speed < 0.0) {
+            speed = 0.0;
+        } else if (speed > 1.0) {
+            speed = 1.0;
+        }
+
+        if (target == current) {
+            return target;
+        } else {
+            double dif = Math.max(target, current) - Math.min(target, current);
+            double factor = dif * speed;
+            if (factor < 0.1) {
+                factor = 0.1;
+            }
+
+            if (larger) {
+                if (current + factor > target) {
+                    current = target;
+                } else {
+                    current += factor;
+                }
+            } else if (current - factor < target) {
+                current = target;
+            } else {
+                current -= factor;
+            }
+
+            return current;
+        }
+    }
+    public static void glDrawFramebuffer(final int framebufferTexture, final int width, final int height) {
+        // Bind the texture of our framebuffer
+        glBindTexture(GL_TEXTURE_2D, framebufferTexture);
+        // Disable alpha testing so fading out outline works
+        GL11.glDisable(GL_ALPHA_TEST);
+        // Make sure blend is enabled
+        final boolean restore = glEnableBlend();
+        // Draw the frame buffer texture upside-down
+        glBegin(GL_QUADS);
+        {
+            glTexCoord2f(0, 1);
+            glVertex2f(0, 0);
+
+            glTexCoord2f(0, 0);
+            glVertex2f(0, height);
+
+            glTexCoord2f(1, 0);
+            glVertex2f(width, height);
+
+            glTexCoord2f(1, 1);
+            glVertex2f(width, 0);
+        }
+        glEnd();
+        // Restore blend
+        glRestoreBlend(restore);
+        // Restore alpha test
+        GL11.glEnable(GL_ALPHA_TEST);
+    }
+    public static void glDrawSidewaysGradientRect(final double x,
+                                                  final double y,
+                                                  final double width,
+                                                  final double height,
+                                                  final int startColour,
+                                                  final int endColour) {
+        // Enable blending
+        final boolean restore = glEnableBlend();
+        // Disable texture drawing
+        GL11.glDisable(GL_TEXTURE_2D);
+        // Enable vertex colour changing
+        glShadeModel(GL_SMOOTH);
+
+        // Begin rect
+        glBegin(GL_QUADS);
+        {
+            // Start fade
+            glColour(startColour);
+            glVertex2d(x, y);
+            glVertex2d(x, y + height);
+            // End fade
+            glColour(endColour);
+            glVertex2d(x + width, y + height);
+            glVertex2d(x + width, y);
+        }
+        // Draw the rect
+        glEnd();
+
+        // Restore shade model
+        glShadeModel(GL_FLAT);
+        // Re-enable texture drawing
+        GL11.glEnable(GL_TEXTURE_2D);
+        // Disable blending
+        glRestoreBlend(restore);
+    }
+    public static double animateProgress(final double current, final double target, final double speed) {
+        if (current < target) {
+            final double inc = 1.0 / Minecraft.getDebugFPS() * speed;
+            if (target - current < inc) {
+                return target;
+            } else {
+                return current + inc;
+            }
+        } else if (current > target) {
+            final double inc = 1.0 / Minecraft.getDebugFPS() * speed;
+            if (current - target < inc) {
+                return target;
+            } else {
+                return current - inc;
+            }
+        }
+
+        return current;
+    }
     public static int Astolfo(int var2, float bright, float st, int index, int offset, float client) {
         double rainbowDelay = Math.ceil(System.currentTimeMillis() + (long) (var2 * index)) / offset;
         return Color.getHSBColor((double) ((float) ((rainbowDelay %= client) / client)) < 0.5 ? -((float) (rainbowDelay / client)) : (float) (rainbowDelay / client), st, bright).getRGB();
+    }
+    public static void drawScaledCustomSizeModalRect(double x, double y, float u, float v, int uWidth, int vHeight, double width, double height, float tileWidth, float tileHeight) {
+        float f = 1.0F / tileWidth;
+        float f1 = 1.0F / tileHeight;
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos(x, y + height, 0.0D).tex(u * f, (v + (float) vHeight) * f1).endVertex();
+        worldrenderer.pos(x + width, y + height, 0.0D).tex((u + (float) uWidth) * f, (v + (float) vHeight) * f1).endVertex();
+        worldrenderer.pos(x + width, y, 0.0D).tex((u + (float) uWidth) * f, v * f1).endVertex();
+        worldrenderer.pos(x, y, 0.0D).tex(u * f, v * f1).endVertex();
+        tessellator.draw();
+    }
+    public static void glColour(final int color) {
+        glColor4ub((byte) (color >> 16 & 0xFF),
+                (byte) (color >> 8 & 0xFF),
+                (byte) (color & 0xFF),
+                (byte) (color >> 24 & 0xFF));
     }
     public static Color getGradientOffset(Color color1, Color color2, double gident) {
         if (gident > 1.0) {

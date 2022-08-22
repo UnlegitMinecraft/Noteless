@@ -7,10 +7,16 @@ package net.ccbluex.liquidbounce.utils;
 
 import antiskidderobfuscator.NativeMethod;
 import net.ccbluex.liquidbounce.event.MoveEvent;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
 import java.math.BigDecimal;
@@ -30,6 +36,9 @@ public final class MovementUtils extends MinecraftInstance {
     }
     public static void setSpeed(MoveEvent moveEvent, double moveSpeed) {
         setSpeed(moveEvent, moveSpeed, mc.thePlayer.rotationYaw, (double)mc.thePlayer.movementInput.moveStrafe, (double)mc.thePlayer.movementInput.moveForward);
+    }
+    public static Block getBlockUnderPlayer(EntityPlayer inPlayer, double height) {
+        return mc.theWorld.getBlockState(new BlockPos(inPlayer.posX, inPlayer.posY - height, inPlayer.posZ)).getBlock();
     }
     public static boolean isBlockUnder() {
         if (mc.thePlayer == null) return false;
@@ -172,7 +181,40 @@ public final class MovementUtils extends MinecraftInstance {
     public static boolean isMoving() {
         return mc.thePlayer != null && (mc.thePlayer.movementInput.moveForward != 0F || mc.thePlayer.movementInput.moveStrafe != 0F);
     }
+    public static final double WALK_SPEED = 0.221;
+    public static final double SNEAK_MOD = 0.3F;
 
+    public static final double SPRINTING_MOD = 1.0 / 1.3F;
+    private static final double SWIM_MOD = 0.115F / WALK_SPEED;
+    private static final double[] DEPTH_STRIDER_VALUES = {
+            1.0F,
+            0.1645F / SWIM_MOD / WALK_SPEED,
+            0.1995F / SWIM_MOD / WALK_SPEED,
+            1.0F / SWIM_MOD,
+    };
+    public static double getBaseMoveSpeed(final EntityPlayerSP player) {
+        double base = player.isSneaking() ? WALK_SPEED * SNEAK_MOD : mc.thePlayer.isSprinting() ? WALK_SPEED / SPRINTING_MOD : WALK_SPEED;
+
+        final PotionEffect speed = player.getActivePotionEffect(Potion.moveSpeed);
+        final int moveSpeedAmp = speed == null || speed.getDuration() < 3 ? 0 : speed.getAmplifier() + 1;
+
+        if (moveSpeedAmp > 0)
+            base *= 1.0 + 0.2 * moveSpeedAmp;
+
+        if (player.isInWater()) {
+            base *= SWIM_MOD;
+            final int depthStriderLevel = EnchantmentHelper.getDepthStriderModifier(player);
+            if (depthStriderLevel > 0) {
+                base *= DEPTH_STRIDER_VALUES[depthStriderLevel];
+            }
+
+            return base * SWIM_MOD;
+        } else if (player.isInLava()) {
+            return base * SWIM_MOD;
+        } else {
+            return base;
+        }
+    }
     public static double getBaseMoveSpeed() {
         double baseSpeed = 0.2875;
         if (mc.thePlayer.isPotionActive(Potion.moveSpeed)) {

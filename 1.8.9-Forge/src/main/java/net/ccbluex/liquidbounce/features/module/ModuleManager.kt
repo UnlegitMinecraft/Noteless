@@ -21,6 +21,7 @@ import net.ccbluex.liquidbounce.features.module.modules.world.*
 import net.ccbluex.liquidbounce.features.module.modules.world.Timer
 import net.ccbluex.liquidbounce.utils.ClientUtils
 import net.ccbluex.liquidbounce.utils.render.ColorMixer
+import skidunion.destiny.module.impl.player.ChatBypass
 import java.util.*
 
 
@@ -43,6 +44,7 @@ class ModuleManager : Listenable {
         registerModules(
             Criticals::class.java,
             AutoArmor::class.java,
+            ChatBypass::class.java,
             AutoLogin::class.java,
             AutoL::class.java,
             ResetVL::class.java,
@@ -77,7 +79,7 @@ class ModuleManager : Listenable {
             Fly::class.java,
             ClickGUI::class.java,
             HighJump::class.java,
-                InventoryMove::class.java,
+                InvMove::class.java,
             NoSlow::class.java,
             LiquidWalk::class.java,
             SafeWalk::class.java,

@@ -5,6 +5,7 @@ import net.ccbluex.liquidbounce.utils.block.BlockUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -34,6 +35,11 @@ public class PlayerUtil {
     }
     public static Block getBlock(final double offsetX, final double offsetY, final double offsetZ) {
         return mc.theWorld.getBlockState(new BlockPos(offsetX, offsetY, offsetZ)).getBlock();
+    }
+    public static double getJumpHeight(final EntityPlayerSP player) {
+        final double base = 0.42F;
+        final PotionEffect effect = player.getActivePotionEffect(Potion.jump);
+        return effect == null ? base : base + ((effect.getAmplifier() + 1) * 0.1F);
     }
     public static void damagePlayer() {
         for (int i = 0; i <= 3 * 15; ++i) {

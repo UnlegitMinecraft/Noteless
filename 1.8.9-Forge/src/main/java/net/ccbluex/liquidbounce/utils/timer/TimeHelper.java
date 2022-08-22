@@ -44,7 +44,17 @@ public class TimeHelper {
 	public boolean delay(float milliSec) {
 		return (float) (getTime() - this.prevMS) >= milliSec;
 	}
+	public boolean delay(float nextDelay, boolean reset) {
+		if ((float)(System.currentTimeMillis() - this.lastMs) >= nextDelay) {
+			if (reset) {
+				this.reset();
+			}
 
+			return true;
+		} else {
+			return false;
+		}
+	}
 	public long getTime() {
 		return System.nanoTime() / 1000000L;
 	}

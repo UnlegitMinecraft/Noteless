@@ -54,7 +54,7 @@ public class Fly extends Module {
 
             // Verus
             "Verus",
-
+            "DoMCer",
             "AAC5.2.0",
             "AAC5.2.0-Fast",
 
@@ -117,7 +117,7 @@ public class Fly extends Module {
     private boolean noPacketModify;
 
     private double aacJump;
-
+   int ticks;
     private int aac3delay;
     private int aac3glideDelay;
     private int aac4glideDelay;
@@ -171,7 +171,7 @@ public class Fly extends Module {
                 mc.thePlayer.handleStatusUpdate((byte) 2);
             }
         }
-
+        ticks = 0 ;
         flyTimer.reset();
         flyTick = 0;
         aac4glideDelay = 0;
@@ -270,7 +270,12 @@ public class Fly extends Module {
             mc.thePlayer.motionZ = 0;
         }
     }
-
+    @EventTarget
+    public void onBlockBB(final BlockBBEvent event) {
+        if (event.getBlock() instanceof BlockAir && event.getY() <= launchY) {
+            event.setBoundingBox(AxisAlignedBB.fromBounds(event.getX(), event.getY(), event.getZ(), event.getX() + 1.0, launchY, event.getZ() + 1.0));
+        }
+    }
     @EventTarget
     public void onUpdate(final UpdateEvent event) {
         final float vanillaSpeed = vanillaSpeedValue.get();
@@ -557,6 +562,33 @@ public class Fly extends Module {
                     event.setZ(mc.thePlayer.motionZ);
                 }
                 break;
+
+            case "domcer":{
+                if (ticks % 10 == 0 && mc.thePlayer.onGround) {
+                    MovementUtils.strafe(1f);
+                    event.setY(0.42);
+                    ticks = 0;
+                    mc.thePlayer.motionY = 0.0;
+                    mc.timer.timerSpeed = 4f;
+                } else {
+                    if (mc.gameSettings.keyBindJump.isKeyDown() && ticks % 2 == 1) {
+                        event.setY(0.5);
+                        MovementUtils.strafe(0.48f);
+                        launchY += 0.5;
+                        mc.timer.timerSpeed = 1f;
+                        return;
+                    }
+                    mc.timer.timerSpeed = 1f;
+                    if (mc.thePlayer.onGround) {
+                        MovementUtils.strafe(0.8f);
+                    } else {
+                        MovementUtils.strafe(0.72f);
+                    }
+                }
+                ticks++;
+                break;
+            }
+
             case "smooth": {
                 if (flyTick > 10 && (mc.thePlayer.isCollided || mc.thePlayer.onGround)) {
                     setState(false);
@@ -648,10 +680,6 @@ public class Fly extends Module {
 
     @EventTarget
     public void onJump(final JumpEvent e) {
-        final String mode = modeValue.get();
-
-        if (mode.equalsIgnoreCase("Hypixel") || mode.equalsIgnoreCase("watchdog") ||
-                mode.equalsIgnoreCase("Rewinside") || (mode.equalsIgnoreCase("Mineplex") && mc.thePlayer.inventory.getCurrentItem() == null))
             e.cancelEvent();
     }
 

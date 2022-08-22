@@ -108,14 +108,14 @@ class KillAura : Module() {
     private val keepDirectionValue = BoolValue("KeepDirection", true)
     private val keepDirectionTickValue = IntegerValue("KeepDirectionTick", 15, 1, 20)
     private val rotationSmoothModeValue = ListValue("SmoothMode", arrayOf("Custom", "Line", "Quad", "Sine", "QuadSine"), "Custom")
-    private val rotationModeValue = ListValue("RotationMode", arrayOf("None","LiquidBounce","Hypixel","Hypixel2","Exhibition","LockView", "OldMatrix"), "LiquidBounce")
+    private val rotationModeValue = ListValue("RotationMode", arrayOf("None","LiquidBounce","ForceCenter","Hypixel","Hypixel2","Exhibition","LockView", "OldMatrix"), "LiquidBounce")
     // Bypass
     private val swingValue = ListValue("Swing", arrayOf("Normal", "Packet", "None"), "Normal")
     private val keepSprintValue = BoolValue("KeepSprint", true)
     private val killLightningBoltValue = BoolValue("LightningBolt", true)
 
     // AutoBlock
-    val autoBlockValue = ListValue("AutoBlock", arrayOf("Range", "Fake","HytPit","Off"),"Off")
+    val autoBlockValue = ListValue("AutoBlock", arrayOf("Range", "Fake","HytPit","Hypixel","RightClick","Off"),"Off")
     private val verusAutoBlockValue = BoolValue("VerusAutoBlock", false)
     private val autoBlockRangeValue = object : FloatValue("AutoBlockRange", 2.5f, 0f, 8f) {
         override fun onChanged(oldValue: Float, newValue: Float) {
@@ -424,6 +424,27 @@ class KillAura : Module() {
             verusBlocking = false
             if (verusAutoBlockValue.get())
                 PacketUtils.sendPacketNoEvent(C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN))
+        }
+        if(autoBlockValue.equals("Hypixel")){
+            if(mc.thePlayer.heldItem != null && mc.thePlayer.heldItem.item is ItemSword){
+           if (mc.thePlayer.swingProgressInt === -1) {
+                PacketUtils.sendPacketNoEvent(C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos(-1, -1, -1), EnumFacing.DOWN))
+            } else if (mc.thePlayer.swingProgressInt < 0.5 && mc.thePlayer.swingProgressInt !== -1) {
+                PacketUtils.sendPacketNoEvent(C08PacketPlayerBlockPlacement(BlockPos(-1, -1, -1), 255, mc.thePlayer.heldItem, 0F, 0F, 0F))
+                //mc.thePlayer.sendQueue.addToSendQueue(new C02PacketUseEntity(target, new Vec3((double)MathUtil.getRandomFloat(-50, 50)/100, (double)MathUtil.getRandomFloat(0, 200)/100, (double)MathUtil.getRandomFloat(-50, 50)/100)));
+                //mc.thePlayer.sendQueue.addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.INTERACT)); mc.playerController.syncCurrentPlayItem();
+                mc.thePlayer.sendQueue.addToSendQueue(C08PacketPlayerBlockPlacement(mc.thePlayer.inventory.getCurrentItem()))
+            }
+            }
+        }
+        if(autoBlockValue.equals("RightClick")){
+            if (mc.thePlayer.currentEquippedItem.item is ItemSword) {
+                if (target != null) {
+                    mc.gameSettings.keyBindUseItem.pressed = true
+                } else {
+                    mc.gameSettings.keyBindUseItem.pressed = false
+                }
+            }
         }
         if(target== null && autoBlockValue.get().equals("hytpit")){
             unblock()

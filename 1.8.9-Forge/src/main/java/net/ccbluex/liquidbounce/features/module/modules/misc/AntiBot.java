@@ -32,7 +32,7 @@ import java.util.Map;
 
 import static net.minecraft.network.play.server.S38PacketPlayerListItem.Action.ADD_PLAYER;
 
-@ModuleInfo(name = "BotKiller", description = "Prevents KillAura from attacking AntiCheat bots.", category = ModuleCategory.WORLD, fakeName = "Bot Killer")
+@ModuleInfo(name = "AntiBot", description = "Prevents KillAura from attacking AntiCheat bots.", category = ModuleCategory.WORLD, fakeName = "Bot Killer")
 public final class AntiBot extends Module {
     public static final ListValue modeValue = new ListValue("Mode", new String[] {"Normal", "AntiCheat","Hypixel","Mineplex","Syuu","TestMatrix","Matrix"}, "Normal");
     private final BoolValue tabValue = new BoolValue("Tab", true);

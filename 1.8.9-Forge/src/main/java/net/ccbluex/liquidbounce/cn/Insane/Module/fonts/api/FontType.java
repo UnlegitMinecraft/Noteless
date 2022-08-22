@@ -14,6 +14,8 @@ public enum FontType {
 	Check("check.ttf"),
 	TenacityBold("Tenacity.ttf"),
 	SF("SF.ttf"),
+	GENSHIN("GENSHIN.ttf"),
+	MAINMENU("mainmenu.ttf"),
 	SFBOLD("SFBOLD.ttf"),
 	CHINESE("black.ttf"),
 	Tahoma("Tahoma.ttf"),

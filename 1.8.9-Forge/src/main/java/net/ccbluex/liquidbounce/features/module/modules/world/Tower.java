@@ -24,12 +24,14 @@ import net.ccbluex.liquidbounce.value.ListValue;
 import net.minecraft.block.BlockAir;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C0APacketAnimation;
+import net.minecraft.potion.Potion;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
@@ -44,7 +46,7 @@ public class Tower extends Module {
      */
 
     private final ListValue modeValue = new ListValue("Mode", new String[] {
-            "Jump", "Motion", "ConstantMotion", "MotionTP","Packet", "Teleport", "AAC3.3.9", "AAC3.6.4"
+            "Jump", "Motion", "ConstantMotion", "MotionTP","Hypixel", "Teleport", "AAC3.3.9", "AAC3.6.4"
     }, "Motion");
     private final BoolValue autoBlockValue = new BoolValue("AutoBlock", true);
     private final BoolValue stayAutoBlock = new BoolValue("StayAutoBlock", false);
@@ -70,17 +72,15 @@ public class Tower extends Module {
     private final IntegerValue teleportDelayValue = new IntegerValue("TeleportDelay", 0, 0, 20);
     private final BoolValue teleportGroundValue = new BoolValue("TeleportGround", true);
     private final BoolValue teleportNoMotionValue = new BoolValue("TeleportNoMotion", false);
-
     // Render
-    private final BoolValue counterDisplayValue = new BoolValue("Counter", true);
-
+    private final BoolValue tower_move = new BoolValue("tower_move", true);
     /**
      * MODULE
      */
 
     // Target block
     private PlaceInfo placeInfo;
-
+    private BlockPos blockBelow;
     // Rotation lock
     private Rotation lockRotation;
 
@@ -145,13 +145,57 @@ public class Tower extends Module {
             }
         }
     }
+    private boolean towerMoving() {
+        return tower_move.get() && Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode()) && MovementUtils.isMoving();
+    }
+    @EventTarget
+    public void onPreUpdate(MotionEvent event) {
+        if (event.isPre()) {
+            if (towerMoving()) {
+                towerMove();
+            }
 
+            if (towering() || towerMoving()) {
+                mc.thePlayer.cameraPitch = 0.0F;
+                mc.thePlayer.cameraYaw = 0.0F;
+            } else if (getDistanceY(blockBelow.getY()) == 1.0) {
+                mc.thePlayer.cameraYaw = 0.1F;
+                mc.thePlayer.onGround = true;
+                mc.thePlayer.motionY = 0.0;
+            }
+        }
+    }
+    public double getDistanceY(double y) {
+        double d1 = mc.thePlayer.posY - y;
+        return MathHelper.sqrt_double(d1 * d1);
+    }
     //Send jump packets, bypasses Hypixel.
     private void fakeJump() {
         mc.thePlayer.isAirBorne = true;
         mc.thePlayer.triggerAchievement(StatList.jumpStat);
     }
-    
+    private boolean towering() {
+        return  !MovementUtils.isMoving() && Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode()) && !mc.thePlayer.isPotionActive(Potion.jump);
+    }
+    private void towerMove() {
+        if (MovementUtils.isOnGround(0.76) && !MovementUtils.isOnGround(0.75) && mc.thePlayer.motionY > 0.23 && mc.thePlayer.motionY < 0.25) {
+            mc.thePlayer.motionY = Math.round(mc.thePlayer.posY) - mc.thePlayer.posY;
+        }
+
+        if (MovementUtils.isOnGround(0.0001)) {
+            mc.thePlayer.motionY = 0.41999998688698;
+            MovementUtils.setMotion(0.9);
+
+        } else if (mc.thePlayer.posY >= Math.round(mc.thePlayer.posY) - 0.0001 && mc.thePlayer.posY <= Math.round(mc.thePlayer.posY) + 0.0001 && !Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
+            mc.thePlayer.motionY = 0.0;
+        }
+    }
+
+    private void tower() {
+        mc.thePlayer.setSprinting(false);
+        MovementUtils.setMotion(0);
+        towerMove();
+    }
     /**
      * Move player
      */
@@ -212,6 +256,9 @@ public class Tower extends Module {
                     jumpGround = mc.thePlayer.posY;
                 }
                 break;
+            case "hypixel":
+                tower();
+                return;
             case "aac3.3.9":
                 if (mc.thePlayer.onGround) {
                     fakeJump();

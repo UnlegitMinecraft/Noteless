@@ -165,7 +165,26 @@ public interface Fonts {
 			}
 		}
 	}
+	interface GENSHIN {
+		FontFamily GENSHIN = FONT_MANAGER.fontFamily(FontType.GENSHIN);
+		final class GENSHIN25 {
+			public static final FontRenderer GENSHIN25 = GENSHIN.ofSize(25);
 
+			private GENSHIN25() {
+			}
+		}
+
+	}
+	interface MAINMENU {
+		FontFamily MAINMENU = FONT_MANAGER.fontFamily(FontType.MAINMENU);
+		final class MAINMENU30 {
+			public static final FontRenderer MAINMENU30 = MAINMENU.ofSize(30);
+
+			private MAINMENU30() {
+			}
+		}
+
+	}
 	interface SF {
 
 		FontFamily SF = FONT_MANAGER.fontFamily(FontType.SF);

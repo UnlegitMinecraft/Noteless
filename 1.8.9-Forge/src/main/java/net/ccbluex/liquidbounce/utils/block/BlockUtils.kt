@@ -41,8 +41,29 @@ object BlockUtils : MinecraftInstance() {
 
         return true
     }
-
-
+    @JvmStatic
+    fun isInLiquid(): Boolean {
+        val par1AxisAlignedBB: AxisAlignedBB = mc.thePlayer.entityBoundingBox.contract(0.001, 0.001,
+                0.001)
+        val var4 = MathHelper.floor_double(par1AxisAlignedBB.minX)
+        val var5 = MathHelper.floor_double(par1AxisAlignedBB.maxX + 1.0)
+        val var6 = MathHelper.floor_double(par1AxisAlignedBB.minY)
+        val var7 = MathHelper.floor_double(par1AxisAlignedBB.maxY + 1.0)
+        val var8 = MathHelper.floor_double(par1AxisAlignedBB.minZ)
+        val var9 = MathHelper.floor_double(par1AxisAlignedBB.maxZ + 1.0)
+        for (var11 in var4 until var5) {
+            for (var12 in var6 until var7) {
+                for (var13 in var8 until var9) {
+                    val pos = BlockPos(var11, var12, var13)
+                    val var14: Block = mc.theWorld.getBlockState(pos).block
+                    if (var14 is BlockLiquid) {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
 
 
     @JvmStatic

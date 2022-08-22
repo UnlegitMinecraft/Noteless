@@ -7,7 +7,6 @@ package net.ccbluex.liquidbounce.features.module.modules.render;
 
 
 import cn.WbxMain;
-import core.Verify.GuiLogin;
 import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.event.*;
 import net.ccbluex.liquidbounce.features.module.Module;
@@ -62,7 +61,7 @@ public class HUD extends Module {
     private final IntegerValue colorGreenValue = new IntegerValue("G", 255, 0, 255);
     private final IntegerValue colorBlueValue = new IntegerValue("B", 255, 0, 255);
     private final BoolValue blurValue = new BoolValue("Blur", false);
-    public final BoolValue hueInterpolation = new BoolValue("hueInterpolation", false);
+    public static final BoolValue hueInterpolation = new BoolValue("hueInterpolation", false);
     public final BoolValue movingcolors = new BoolValue("MovingColors", false);
     public final BoolValue playTimeValue = new BoolValue("PlayTime", true);
     private int startTime;
@@ -135,8 +134,6 @@ public class HUD extends Module {
         ScaledResolution sr = new ScaledResolution(mc);
         float width = sr.getScaledWidth();
         float height = sr.getScaledHeight();
-        String username = GuiLogin.uid;
-        if (username == null) username = mc.thePlayer.getName();
         if(test1.get() && !timer.hasTimePassed(5000L)){
             net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_50.SFBOLD_50.drawString("VICTORY!",sr.getScaledWidth() / 2F - net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_50.SFBOLD_50.stringWidth("Victory!") / 2F, (BossStatus.bossName != null && BossStatus.statusBarTime > 0) ? 47 : 30, Color.YELLOW.getRGB(),true);
             net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_35.SFBOLD_35.drawString("You were the last man standing!",sr.getScaledWidth() / 2F - net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts.SFBOLD.SFBOLD_35.SFBOLD_35.stringWidth("You were the last man standing!") / 2F, (BossStatus.bossName != null && BossStatus.statusBarTime > 0) ? 47 : 60, Color.GRAY.getRGB(),true);

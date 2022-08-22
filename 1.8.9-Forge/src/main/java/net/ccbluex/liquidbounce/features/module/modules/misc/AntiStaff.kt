@@ -20,7 +20,7 @@ class AntiStaff : Module() {
     private var detected = false
     override fun onEnable() {
         try {
-            obStaffs = HttpUtils.get("https://gitee.com/insaneNMSL/bmcstaff/raw/master/stafflist")
+            obStaffs = HttpUtils.get("https://wysi-foundation.github.io/LiquidCloud/LiquidBounce/staffs.txt")
             println("[Staff list] $obStaffs")
         } catch (e: Exception) {
             // ignore fr fr

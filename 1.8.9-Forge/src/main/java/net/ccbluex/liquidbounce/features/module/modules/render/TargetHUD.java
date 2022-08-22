@@ -1,8 +1,10 @@
 package net.ccbluex.liquidbounce.features.module.modules.render;
 
 import antiskidderobfuscator.NativeMethod;
+import com.sun.jna.platform.unix.X11;
 import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts;
+import net.ccbluex.liquidbounce.cn.Insane.newdropdown.DropdownClickGui;
 import net.ccbluex.liquidbounce.event.EventTarget;
 import net.ccbluex.liquidbounce.event.Render2DEvent;
 import net.ccbluex.liquidbounce.features.module.Module;
@@ -15,6 +17,7 @@ import net.ccbluex.liquidbounce.value.IntegerValue;
 import net.ccbluex.liquidbounce.value.ListValue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import net.minecraft.client.gui.ScaledResolution;
@@ -28,19 +31,26 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static net.ccbluex.liquidbounce.ui.font.Fonts.tahoma35;
+import static net.ccbluex.liquidbounce.utils.render.BlendUtils.getHealthColor;
 import static net.ccbluex.liquidbounce.utils.render.RenderUtils.*;
 import static net.ccbluex.liquidbounce.utils.render.RenderUtils3.drawFastRoundedRect;
+import static net.minecraft.client.gui.Gui.drawScaledCustomSizeModalRect;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glTranslated;
 
 @ModuleInfo(name = "TargetHUD", description = "Lnk.", category = ModuleCategory.RENDER, array = false)
 public class TargetHUD extends Module {
@@ -48,8 +58,10 @@ public class TargetHUD extends Module {
             "Moon",
             "Flux",
             "Remix",
-            "Exhibition"
-    }, "Remix");
+            "Exhibition",
+            "Ketamine",
+            "Hanabi"
+    }, "Hanabi");
     private final IntegerValue customX = new IntegerValue("X", -150, -500, 500);
     private final IntegerValue customY = new IntegerValue("Y", 80, -500, 500);
 
@@ -59,8 +71,16 @@ public class TargetHUD extends Module {
 
 
     private EntityLivingBase lasttarget;
+    private double xPos, yPos;
+    private double width, height;
+    private double healthBarWidth;
+    private boolean dragon;
+    private DecimalFormat format = new DecimalFormat("0.0");
+    private DecimalFormat format0 = new DecimalFormat("0");
+    boolean nulltarget = false;
 
-
+    private double healthBarWidth2;
+    private double hudHeight;
 
     @EventTarget
     public void onRender2D(Render2DEvent event) {
@@ -151,6 +171,180 @@ public class TargetHUD extends Module {
                     GlStateManager.resetColor();
                 }
             }
+        }
+        if(mode.get().equals("Ketamine")) {
+            KillAura killAura = (KillAura) LiquidBounce.moduleManager.getModule(KillAura.class);
+
+            EntityLivingBase target = killAura.getTarget();
+
+            if (target == null && mc.currentScreen instanceof GuiChat) {
+                target = mc.thePlayer;
+            }
+
+            if (target == null) {
+                return;
+            }
+
+
+
+            double hpClamped = target.getHealth() / target.getMaxHealth();
+            hpClamped = MathHelper.clamp_double(hpClamped, 0.0, 1.0);
+
+            final double hpWidth = 80 * hpClamped;
+            healthBarWidth = RenderUtils.animateProgress(healthBarWidth, hpWidth, 75.f);
+            double healthAnimatedPercent = 20.0 * (healthBarWidth / 80.0) * 5.0;
+
+            final int startColour = ColorUtil.fadeBetween(ColorUtil.getClientColour(), ColorUtil.getSecondaryColour(), 0);
+            final int endColour = ColorUtil.fadeBetween(ColorUtil.getSecondaryColour(), ColorUtil.getClientColour(), 250);
+
+            double x = customX.get();
+            double y = customY.get();
+            double margin = 2.0f;
+
+
+
+
+
+            double heightBounds = Fonts.SF.SF_20.SF_20.getHeight();
+
+            double width = 85 + margin * 2.0f;
+            double height = heightBounds + margin * 2.0f;
+
+            this.width = width + 70;
+            this.height = height + 30;
+
+
+            // Draw TargetHud
+            {
+
+                // Top Gradient Bar
+                RenderUtils.glDrawSidewaysGradientRect(x, y, width + 70, 1, startColour, endColour);
+
+                // Background Rounded Rect - 60% Opacity
+                RenderUtils.glDrawFilledQuad(x, y + 1, (float) width + 70, (float) (height + 28), 0x60 << 24);
+
+                // Draw Face
+                if (target instanceof EntityPlayer) {
+                    drawFace(x + 3, y + 5, 33, 33, (AbstractClientPlayer) target);
+                }
+
+                // Target Name
+                mc.fontRendererObj.drawStringWithShadow(target.getName(), (float) (x + 39f), (float) (y + 6f), 0xFFFFFFFF);
+                // Genshin Moment
+                String[] parts = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
+                int[] partIndex = {0xC8C9CB, 0xC8C9CB, 0xC8C9CB, 0xC8C9CB, 0xC8C9CB, 0xC8C9CB, 0xC8C9CB, 0xC8C9CB, 0xC8C9CB};
+
+                boolean isArmor = target.getTotalArmorValue() > 0;
+                boolean isInLiquid = target.isInWater();
+                boolean isBurner = target.isBurning();
+                boolean onGround = target.onGround;
+                boolean canSee = target.canEntityBeSeen(mc.thePlayer);
+                boolean isHeal =  target.getActivePotionEffect(Potion.regeneration) != null;
+                boolean speed = target.getActivePotionEffect(Potion.moveSpeed) != null;
+
+                if (isArmor)
+                    partIndex[0] = 0xEFC434;
+                if (isInLiquid)
+                    partIndex[1] = 0x04ACE2;
+                if (isBurner)
+                    partIndex[2] = 0xF97824;
+                if (onGround)
+                    partIndex[3] = 0xBA9243;
+                if (canSee)
+                    partIndex[4] = 0xA776D4;
+                if (isHeal)
+                    partIndex[5] = 0x9AD019;
+                if (speed)
+                    partIndex[6] = 0x76E2A9;
+
+                for (int i = 0; i < 7; i++)
+                Fonts.GENSHIN.GENSHIN25.GENSHIN25.drawString(parts[i], x + 39f + (i * (Fonts.GENSHIN.GENSHIN25.GENSHIN25.stringWidth(parts[i])) + 1), y + 17f, partIndex[i], true);
+
+                // Health Bar
+                RenderUtils.glDrawSidewaysGradientRect(x + 39, y + 30, (float) healthBarWidth, 6.75f, startColour, endColour);
+                // Draw Health Value
+                Fonts.SF.SF_20.SF_20.drawString(format.format(healthAnimatedPercent) + "%", x + healthBarWidth + hpClamped + 41, y + 30, 0xFFFFFFFF,true);
+            }
+        }
+        if (mode.get().equals("Hanabi")) {
+            int blackcolor2;
+            int blackcolor = (new Color(0, 0, 0, 180)).getRGB();
+            blackcolor2 = (new Color(200, 200, 200, 160)).getRGB();
+            ScaledResolution sr2 = new ScaledResolution(mc);
+            float scaledWidth = (float)sr2.getScaledWidth();
+            float scaledHeight = (float)sr2.getScaledHeight();
+            float x;
+            float y;
+            float diff;
+            KillAura killAura = (KillAura) LiquidBounce.moduleManager.getModule(KillAura.class);
+            EntityLivingBase target = killAura.getTarget();
+            this.nulltarget = target == null;
+
+            x = scaledWidth / 2.0F - 50.0F;
+            y = scaledHeight / 2.0F + 32.0F;
+            double hpPercentage;
+            Color hurt;
+            int healthColor;
+            String healthStr;
+            if (this.nulltarget) {
+                diff = 0.0F;
+                hpPercentage = (double)(diff / 20.0F);
+                hurt = Color.getHSBColor(0.8333333F, 0.0F, 1.0F);
+                healthStr = String.valueOf(0.0F);
+                healthColor = getHealthColor(0.0F, 20.0F).getRGB();
+            } else {
+                diff = target.getHealth();
+                hpPercentage = (double)(diff / target.getMaxHealth());
+                hurt = Color.getHSBColor(0.8611111F, (float)target.hurtTime / 10.0F, 1.0F);
+                healthStr = String.valueOf((float)((int)target.getHealth()) / 2.0F);
+                healthColor = getHealthColor(target.getHealth(), target.getMaxHealth()).getRGB();
+            }
+
+            hpPercentage = MathHelper.clamp_double(hpPercentage, 0.0, 1.0);
+            double hpWidth = 140.0 * hpPercentage;
+            if (this.nulltarget) {
+                this.healthBarWidth2 = RenderUtils.getAnimationStateSmooth(0.0, this.healthBarWidth2, (double)(6.0F / (float)Minecraft.getDebugFPS()));
+                this.healthBarWidth = RenderUtils.getAnimationStateSmooth(0.0, this.healthBarWidth, (double)(14.0F / (float)Minecraft.getDebugFPS()));
+                this.hudHeight = RenderUtils.getAnimationStateSmooth(0.0, this.hudHeight, (double)(8.0F / (float)Minecraft.getDebugFPS()));
+            } else {
+                this.healthBarWidth2 = (double)AnimationUtils.moveUD((float)this.healthBarWidth2, (float)hpWidth, 6.0F / (float)Minecraft.getDebugFPS(), 3.0F / (float)Minecraft.getDebugFPS());
+                this.healthBarWidth = RenderUtils.getAnimationStateSmooth(hpWidth, this.healthBarWidth, (double)(14.0F / (float)Minecraft.getDebugFPS()));
+                this.hudHeight = RenderUtils.getAnimationStateSmooth(40.0, this.hudHeight, (double)(8.0F / (float)Minecraft.getDebugFPS()));
+            }
+
+            if (this.hudHeight == 0.0) {
+                this.healthBarWidth2 = 140.0;
+                this.healthBarWidth = 140.0;
+            }
+
+            GL11.glEnable(3089);
+            RenderUtils.prepareScissorBox(x, (float)((double)y + 40.0 - this.hudHeight), x + 140.0F, (float)((double)y + 40.0));
+            RenderUtils.drawRect(x, y, x + 140.0F, y + 40.0F, blackcolor);
+            RenderUtils.drawRect(x, y + 37.0F, x + 140.0F, y + 40.0F, (new Color(0, 0, 0, 49)).getRGB());
+            RenderUtils.drawRect(x, y + 37.0F, (float)((double)x + this.healthBarWidth2), y + 40.0F, (new Color(255, 0, 213, 220)).getRGB());
+            RenderUtils.drawGradientSideways((double)x, (double)(y + 37.0F), (double)x + this.healthBarWidth, (double)(y + 40.0F), (new Color(0, 81, 179)).getRGB(), healthColor);
+            Fonts.SF.SF_16.SF_16.drawString(healthStr, x + 40.0F + 85.0F - (float)  Fonts.SF.SF_16.SF_16.stringWidth(healthStr) / 2.0F + (float)mc.fontRendererObj.getStringWidth("❤") / 1.9F, y + 29.0F, blackcolor2,true);
+             mc.fontRendererObj.drawStringWithShadow("❤", x + 40.0F + 85.0F - (float)  Fonts.SF.SF_16.SF_16.stringWidth(healthStr) / 2.0F - (float)mc.fontRendererObj.getStringWidth("❤") / 1.9F, y + 26.5F, hurt.getRGB());
+
+            if (this.nulltarget) {
+               Fonts.SF.SF_14.SF_14.drawString("XYZ:0 0 0 | Hurt: false", x + 37.0F, y + 15.0F, Colors.WHITE.c,true);
+                Fonts.SF.SF_16.SF_16.drawString("(No target)", x + 36.0F, y + 5.0F, Colors.WHITE.c,true);
+            } else {
+                Fonts.SF.SF_14.SF_14.drawString("XYZ : " + (int)target.posX + " " + (int)target.posY + " " + (int)target.posZ + " | Hurt: " + (target.hurtTime > 0), x + 37.0F, y + 17.0F, Colors.WHITE.c,true);
+                if (target instanceof EntityPlayer) {
+                    Fonts.SF.SF_14.SF_14.drawString("Block: " + (((EntityPlayer)target).isBlocking() ? "True" : "False"), x + 37.0F, y + 27.0F, Colors.WHITE.c,true);
+                }
+
+                mc.fontRendererObj.drawStringWithShadow(target.getName(), x + 36.0F, y + 4.0F, Colors.WHITE.c);
+                if (target instanceof EntityPlayer) {
+                    GlStateManager.resetColor();
+                    mc.getTextureManager().bindTexture(((AbstractClientPlayer)target).getLocationSkin());
+                    GlStateManager.color(1.0F, 1.0F, 1.0F);
+                    Gui.drawScaledCustomSizeModalRect((int)x + 3, (int)y + 3, 8.0F, 8.0F, 8, 8, 32, 32, 64.0F, 64.0F);
+                }
+            }
+
+            GL11.glDisable(3089);
         }
         if(mode.get().equals("Flux")) {
             final KillAura ka = (KillAura) LiquidBounce.moduleManager.getModule(KillAura.class);
@@ -362,6 +556,7 @@ public class TargetHUD extends Module {
             GlStateManager.popMatrix();
         }
     }
+
     private void 太子党关系网络(final int x, final int y) {
         final KillAura ka = (KillAura) LiquidBounce.moduleManager.getModule(KillAura.class);
         EntityLivingBase target = ka.getTarget();
@@ -570,6 +765,80 @@ public class TargetHUD extends Module {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         rectangle(x + width, y1 - width, x1 - width, y1, borderColor);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+    private void drawFace(double x, double y, double width, double height, AbstractClientPlayer target) {
+        ResourceLocation skin = target.getLocationSkin();
+        mc.getTextureManager().bindTexture(skin);
+        glEnable(GL_BLEND);
+        glColor4f(255, 255, 255, 1);
+
+        final float hurtTimePercentage = (target.hurtTime - mc.timer.renderPartialTicks) / target.maxHurtTime;
+
+        if (hurtTimePercentage > 0) {
+            x += 1 * hurtTimePercentage;
+            y += 1 * hurtTimePercentage;
+            height -= 2 * hurtTimePercentage;
+            width -= 2 * hurtTimePercentage;
+        }
+
+        RenderUtils.drawScaledCustomSizeModalRect(x, y, 8, 8, 8, 8, width, height, 64, 64);
+
+        if (hurtTimePercentage > 0.0) {
+            glTranslated(x, y, 0);
+            glDisable(GL_TEXTURE_2D);
+            final boolean restore = RenderUtils.glEnableBlend();
+            glShadeModel(GL_SMOOTH);
+            glDisable(GL_ALPHA_TEST);
+
+            final float lineWidth = 10.f;
+            glLineWidth(lineWidth);
+
+            final int fadeOutColour = ColorUtil.fadeTo(0x00000000, ColorUtil.blendHealthColours(target.getHealth() / target.getMaxHealth()), hurtTimePercentage);
+
+            glBegin(GL_QUADS);
+            {
+                // Left
+                RenderUtils.glColour(fadeOutColour);
+                glVertex2d(0, 0);
+                glVertex2d(0, height);
+                RenderUtils.glColour(0x00FF0000);
+                glVertex2d(lineWidth, height - lineWidth);
+                glVertex2d(lineWidth, lineWidth);
+
+                // Right
+                RenderUtils.glColour(0x00FF0000);
+                glVertex2d(width - lineWidth, lineWidth);
+                glVertex2d(width - lineWidth, height - lineWidth);
+                RenderUtils.glColour(fadeOutColour);
+                glVertex2d(width, height);
+                glVertex2d(width, 0);
+
+                // Top
+                RenderUtils.glColour(fadeOutColour);
+                glVertex2d(0, 0);
+                RenderUtils.glColour(0x00FF0000);
+                glVertex2d(lineWidth, lineWidth);
+                glVertex2d(width - lineWidth, lineWidth);
+                RenderUtils.glColour(fadeOutColour);
+                glVertex2d(width, 0);
+
+                // Bottom
+                RenderUtils.glColour(0x00FF0000);
+                glVertex2d(lineWidth, height - lineWidth);
+                RenderUtils.glColour(fadeOutColour);
+                glVertex2d(0, height);
+                glVertex2d(width, height);
+                RenderUtils.glColour(0x00FF0000);
+                glVertex2d(width - lineWidth, height - lineWidth);
+            }
+            glEnd();
+
+            glEnable(GL_ALPHA_TEST);
+            glShadeModel(GL_FLAT);
+            RenderUtils.glRestoreBlend(restore);
+            glEnable(GL_TEXTURE_2D);
+            glTranslated(-x, -y, 0);
+        }
     }
     public static void 习馒头(int x, int y, float u, float v, int uWidth, int vHeight, int width,
                                                      int height, float tileWidth, float tileHeight) {

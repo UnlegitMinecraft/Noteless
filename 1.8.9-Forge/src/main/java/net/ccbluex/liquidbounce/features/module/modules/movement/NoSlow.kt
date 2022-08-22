@@ -27,7 +27,7 @@ import kotlin.math.sqrt
 
 @ModuleInfo(name = "NoSlow", category = ModuleCategory.MOVEMENT, description = "fdp")
 class NoSlow : Module() {
-    private val modeValue = ListValue("PacketMode", arrayOf("Vanilla", "LiquidBounce", "Watchdog","Custom", "NCP", "AAC4", "AAC5", "Matrix", "Vulcan"), "Vanilla")
+    private val modeValue = ListValue("PacketMode", arrayOf("Vanilla", "LiquidBounce","BlocksMC","Watchdog","Custom", "NCP", "AAC4", "AAC5", "Matrix", "Vulcan"), "Vanilla")
     private val blockForwardMultiplier = FloatValue("BlockForwardMultiplier", 1.0F, 0.2F, 1.0F)
     private val blockStrafeMultiplier = FloatValue("BlockStrafeMultiplier", 1.0F, 0.2F, 1.0F)
     private val consumeForwardMultiplier = FloatValue("ConsumeForwardMultiplier", 1.0F, 0.2F, 1.0F)
@@ -131,6 +131,20 @@ class NoSlow : Module() {
                 }
                 "liquidbounce" -> {
                     sendPacket(event, true, true, false, 0, false)
+                }
+                "blocksmc" ->{
+                    if(event.eventState == EventState.PRE){
+                        if(isUsingFood()){
+                            return
+                        }
+                    }
+                    if(LiquidBounce.combatManager.target != null || !mc.thePlayer.isBlocking || !PlayerUtil.isMoving() || !MovementUtils.isOnGround(0.42))
+                        return
+                    if(event.eventState == EventState.POST){
+                        if(LiquidBounce.combatManager.target != null && !mc.thePlayer.isBlocking || !PlayerUtil.isMoving() || !MovementUtils.isOnGround(0.42)){
+                            mc.netHandler.addToSendQueue(C08PacketPlayerBlockPlacement(BlockPos(-1,-1,-1),255, mc.thePlayer.inventory.getCurrentItem(), 0f, 0f, 0f))
+                        }
+                    }
                 }
                 "watchdog" -> {
                     if(event.eventState == EventState.PRE){
