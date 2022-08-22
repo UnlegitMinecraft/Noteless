@@ -1,7 +1,5 @@
 [[baizhijun-d0xx1ng]]
 = baizhijun-d0xx1ng (白治军信息总和)
-:china-dictatorship-media-base: https://raw.githubusercontent.com/cirosantilli/china-dictatorship-media/master
-:china-dictatorship-media-base-ignore: {china-dictatorship-media-base}
 :docinfo:
 :idprefix:
 :idseparator: -
