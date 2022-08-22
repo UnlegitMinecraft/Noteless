@@ -12,7 +12,7 @@
 :toc-title:
 https://github.com/Dimples1337/baizhijun1337[github (规范链接 canonical)] |
 
-
+image::https://user-images.githubusercontent.com/88377095/185939415-014259ad-c575-49cc-8743-89eebc7e21c1.png[height=800]
 
 反白治军宣传库。Anti-baozhijun propaganda.
 
