@@ -38,6 +38,13 @@ public final class InventoryUtils extends MinecraftInstance implements Listenabl
         }
         return -1;
     }
+    public static boolean isFull() {
+        return !Arrays.asList(mc.thePlayer.inventory.mainInventory).contains((Object)null);
+    }
+
+    public static int armorSlotToNormalSlot(int armorSlot) {
+        return 8 - armorSlot;
+    }
     public static boolean isBestAxe(ItemStack stack) {
         Item item = stack.getItem();
         if (!(item instanceof ItemAxe))
