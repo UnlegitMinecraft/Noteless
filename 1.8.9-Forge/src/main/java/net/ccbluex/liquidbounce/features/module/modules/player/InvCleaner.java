@@ -246,7 +246,7 @@ public class InvCleaner extends Module {
     public void onEnable() {
         super.onEnable();
         this.currentSlot = 9;
-        this.handitemAttackValue = getSwordAttackDamage(mc.thePlayer.getHeldItem());
+
     }
 
     @EventTarget
