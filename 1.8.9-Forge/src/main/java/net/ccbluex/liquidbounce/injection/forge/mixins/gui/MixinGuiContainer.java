@@ -6,7 +6,7 @@
 package net.ccbluex.liquidbounce.injection.forge.mixins.gui;
 
 import net.ccbluex.liquidbounce.features.module.modules.combat.KillAura;
-import net.ccbluex.liquidbounce.features.module.modules.player.InvManager;
+import net.ccbluex.liquidbounce.features.module.modules.player.InvCleaner;
 import net.ccbluex.liquidbounce.features.module.modules.render.BlockAnimations;
 import net.ccbluex.liquidbounce.features.module.modules.render.HUD;
 import net.ccbluex.liquidbounce.features.module.modules.world.ChestStealer;
@@ -63,7 +63,7 @@ public abstract class MixinGuiContainer extends GuiScreen {
                 LiquidBounce.moduleManager.getModule(KillAura.class).setState(false);
             }
             if (var52.mousePressed(this.mc, mouseX, mouseY) && var52.id == 11120) {
-                LiquidBounce.moduleManager.getModule(InvManager.class).setState(false);
+                LiquidBounce.moduleManager.getModule(InvCleaner.class).setState(false);
             }
             if (var52.mousePressed(this.mc, mouseX, mouseY) && var52.id == 11130) {
                 LiquidBounce.moduleManager.getModule(ChestStealer.class).setState(false);

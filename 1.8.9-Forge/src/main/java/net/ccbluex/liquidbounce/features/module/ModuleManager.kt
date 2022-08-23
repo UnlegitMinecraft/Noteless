@@ -151,6 +151,7 @@ class ModuleManager : Listenable {
             NoFOV::class.java,
             FastStairs::class.java,
             SwingAnimation::class.java,
+            VClip::class.java,
             InvCleaner::class.java,
             TrueSight::class.java,
             AntiBlind::class.java,

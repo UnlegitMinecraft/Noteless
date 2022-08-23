@@ -111,7 +111,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;checkGLError(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.AFTER))
     private void startame(CallbackInfo callbackInfo) throws AccessDeniedException {
-        Display.setTitle("Noteless - 220821");
+        Display.setTitle("Noteless - 220823");
         Client.getInstance().dropDownGUI = new DropdownGUI();
         LiquidBounce.INSTANCE.startClient();
 
