@@ -255,7 +255,7 @@ public class InvCleaner extends Module {
             if (!(Boolean)this.noMove.get() || !MovementUtils.isMoving()) {
                 if (this.currentSlot >= 45) {
                     this.currentSlot = 9;
-                    if (mc.thePlayer.ticksExisted % 40 == 0 || (Boolean)this.toggle.get()) {
+                    if (mc.thePlayer.ticksExisted % 40 == 0 || this.toggle.get()) {
                         InventoryUtils.getBestAxe();
                         InventoryUtils.getBestPickaxe();
                         InventoryUtils.getBestShovel();
