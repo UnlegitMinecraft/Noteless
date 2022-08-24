@@ -27,4 +27,6 @@ class ChatBypass : Module() {
             packet.message = stringBuilder.toString()
         }
     }
+    override val tag: String
+        get() = "Instant"
 }

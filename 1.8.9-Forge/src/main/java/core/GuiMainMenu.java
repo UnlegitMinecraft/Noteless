@@ -2,6 +2,7 @@ package core;
 
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -9,6 +10,7 @@ import cn.WbxMain;
 import net.ccbluex.liquidbounce.cn.Insane.Module.fonts.impl.Fonts;
 import net.ccbluex.liquidbounce.ui.client.altmanager.GuiAltManager;
 import net.ccbluex.liquidbounce.utils.MainMenuButton;
+import net.ccbluex.liquidbounce.utils.misc.QQUtils;
 import net.ccbluex.liquidbounce.utils.render.BlurUtils;
 import net.ccbluex.liquidbounce.utils.render.ParticleUtils;
 import net.ccbluex.liquidbounce.utils.render.RenderUtils;
@@ -19,8 +21,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSelectWorld;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.GuiModList;
+
+import javax.imageio.ImageIO;
 
 public class GuiMainMenu extends GuiScreen {
     public ArrayList butt = new ArrayList();
@@ -68,6 +73,9 @@ public class GuiMainMenu extends GuiScreen {
 
         GlStateManager.translate(-this.currentX / 30.0F, -this.currentY / 15.0F, 0.0F);
         ParticleUtils.drawParticles(mouseX, mouseY);
+
+
+
 
         BlurUtils.blurArea(200,202,res.getScaledWidth()-305, res.getScaledHeight()-200,10f);
         RenderUtils.drawRect((float)this.width / 2.0F - 50.0F * ((float)this.butt.size() / 2.0F), (float)this.height / 2.0F - 50.0F, (float)this.width / 2.0F + 50.0F * ((float)this.butt.size() / 2.0F), (float)this.height / 2.0F + 50.0F, 2097152000);

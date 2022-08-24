@@ -60,8 +60,6 @@
     "render.MixinTileEntityRendererDispatcher",
     "render.MixinVisGraph",
     "resources.MixinSkinManager",
-    "splash.MixinSplashProgress",
-    "splash.MixinSplashProgressRunnable",
     "world.MixinChunk",
     "world.MixinWorld",
     "world.MixinWorldClient",

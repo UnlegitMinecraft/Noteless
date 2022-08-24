@@ -5,9 +5,11 @@
  */
 package net.ccbluex.liquidbounce.injection.forge.mixins.gui;
 
+import cn.WbxMain;
 import net.ccbluex.liquidbounce.LiquidBounce;
 import net.ccbluex.liquidbounce.features.module.modules.render.HUD;
 import net.ccbluex.liquidbounce.ui.client.GuiBackground;
+import net.ccbluex.liquidbounce.utils.misc.QQUtils;
 import net.ccbluex.liquidbounce.utils.render.ParticleUtils;
 import net.ccbluex.liquidbounce.utils.render.RenderUtils;
 import net.ccbluex.liquidbounce.utils.render.shader.shaders.BackgroundShader;
@@ -17,11 +19,13 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,7 +34,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
@@ -96,10 +102,20 @@ public abstract class MixinGuiScreen {
         try {
             GlStateManager.disableLighting();
             GlStateManager.disableFog();
-            mc.getTextureManager().bindTexture(LiquidBounce.INSTANCE.getBackGround());
+            try {
+                if (!WbxMain.got) {
+                    mc.getTextureManager().loadTexture(
+                            new ResourceLocation("sb"),
+                            new DynamicTexture(ImageIO.read(new URL("https://api.ixiaowai.cn/gqapi/gqapi.php"))));
+                    WbxMain.got = true;
+                }
+            }catch(final Throwable throwable) {
+
+            }
+            mc.getTextureManager().bindTexture(new ResourceLocation("sb"));
             GlStateManager.color(1F, 1F, 1F, 1F);
             Gui.drawScaledCustomSizeModalRect(0, 0, 0.0F, 0.0F, width, height, width, height, width, height);
-            RenderUtils.drawRect(0, 0, width, height, new Color(255, 255, 255, 120).getRGB());
+
         } catch(final Exception ignored) {
         } finally {
             callbackInfo.cancel();

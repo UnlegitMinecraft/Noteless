@@ -1,6 +1,8 @@
 
 package net.ccbluex.liquidbounce.injection.forge.mixins.gui;
 
+import net.ccbluex.liquidbounce.features.module.modules.render.ClickGUI;
+import net.ccbluex.liquidbounce.features.module.modules.render.HUD;
 import net.ccbluex.liquidbounce.ui.font.Fonts;
 import net.ccbluex.liquidbounce.utils.render.EaseUtils;
 import net.ccbluex.liquidbounce.utils.render.RenderUtils;
@@ -75,12 +77,12 @@ public abstract class MixinGuiButton extends Gui {
       }
 
       double percent = EaseUtils.easeInOutQuad(animation);
-      RenderUtils.drawRect(this.xPosition,this.yPosition,this.xPosition + width,this.yPosition + height, new Color(31,31,31,150).getRGB());
+      RenderUtils.drawRect(this.xPosition,this.yPosition,this.xPosition + width,this.yPosition + height, new Color(31,31,31,100).getRGB());
       double half=this.width / 2.0;
       double center=this.xPosition + half;
       if(enabled)
-         RenderUtils.drawRect(center - percent*(half), this.yPosition + this.height - 1, center + percent*(half), this.yPosition + this.height, Color.WHITE.getRGB());
-      Fonts.font35.drawCenteredString(this.displayString,this.xPosition + this.width / 2F,this.yPosition+this.height/2F-Fonts.font40.getHeight()/2F+1,visible?Color.WHITE.getRGB():Color.GRAY.getRGB(),false);
+         RenderUtils.drawRect(center - percent*(half), this.yPosition + this.height - 1, center + percent*(half), this.yPosition + this.height, ClickGUI.generateColor().getRGB());
+      Fonts.SFUI35.drawCenteredString(this.displayString,this.xPosition + this.width / 2F,this.yPosition+this.height/2F-Fonts.font40.getHeight()/2F+1,visible?Color.WHITE.getRGB():Color.GRAY.getRGB(),false);
       lastUpdate=time;
    }
 }

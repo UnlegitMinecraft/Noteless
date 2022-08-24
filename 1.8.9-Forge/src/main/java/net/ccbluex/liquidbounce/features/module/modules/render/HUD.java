@@ -14,6 +14,7 @@ import net.ccbluex.liquidbounce.features.module.ModuleCategory;
 import net.ccbluex.liquidbounce.features.module.ModuleInfo;
 import net.ccbluex.liquidbounce.ui.client.hud.designer.GuiHudDesigner;
 import net.ccbluex.liquidbounce.ui.font.Fonts;
+import net.ccbluex.liquidbounce.utils.misc.SoundFxPlayer;
 import net.ccbluex.liquidbounce.utils.render.ColorUtil;
 import net.ccbluex.liquidbounce.utils.render.GradientUtil;
 import net.ccbluex.liquidbounce.utils.render.RenderUtils;
@@ -25,6 +26,7 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.boss.BossStatus;
+import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -118,6 +120,7 @@ public class HUD extends Module {
         double bps = (Math.hypot(mc.thePlayer.posX - mc.thePlayer.prevPosX, mc.thePlayer.posZ - mc.thePlayer.prevPosZ) * mc.timer.timerSpeed) * 20;
         return Math.round(bps * 100.0) / 100.0;
     }
+
     @EventTarget
     public void onRender2D(final Render2DEvent event) {
 

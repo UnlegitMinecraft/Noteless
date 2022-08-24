@@ -61,7 +61,7 @@ class ModuleManager : Listenable {
             TPAura::class.java,
             NoRender::class.java,
             AutoPit::class.java,
-            AntiFall::class.java,
+            AntiVoid::class.java,
             PacketGraph::class.java,
             AutoHead::class.java,
             PointerESP::class.java,

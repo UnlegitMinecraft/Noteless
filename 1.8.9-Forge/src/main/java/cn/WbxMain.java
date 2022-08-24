@@ -14,7 +14,7 @@ public class WbxMain {
     public static String username;
     private final SideGui sideGui = new SideGui();
     private static WbxMain INSTANCE;
-
+    public static boolean got = false;
     public  SideGui getSideGui() {
         return sideGui;
     }
